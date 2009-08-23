@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  from: 2009-08-23
+  to: 2009-08-23
+  timeToCount: MyString
+  val: 1.5
+  remarks: MyString
+  cp_detail_id: 1
+
+two:
+  from: 2009-08-23
+  to: 2009-08-23
+  timeToCount: MyString
+  val: 1.5
+  remarks: MyString
+  cp_detail_id: 1

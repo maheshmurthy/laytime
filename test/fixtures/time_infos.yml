@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  days: 1
+  hours: 1
+  mins: 1
+  type: MyString
+  port_detail_id: 1
+
+two:
+  days: 1
+  hours: 1
+  mins: 1
+  type: MyString
+  port_detail_id: 1

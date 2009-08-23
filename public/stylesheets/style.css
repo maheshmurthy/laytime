@@ -1,0 +1,65 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#page-container {
+    width: 1000px;
+    margin: auto;
+}
+
+label {
+    float: left;
+    width: 10em;  
+    margin-right: 1em; 
+    text-align: right;
+}
+
+.textbox {
+    height: 30px;
+    font-size: 20px;
+    padding: 3px 2px 4px 4px;
+    width: 250px;
+}
+
+fieldset {  
+    margin: auto;
+    padding: 0; 
+    border-style: none; 
+    background-color: #F2EFE9;
+    width: 800px;
+} 
+
+#softable {
+    width: 1000px;
+    margin: auto;
+}
+
+fieldset ol {  
+    padding: 1em 1em 0 1em;  
+    list-style: none; 
+} 
+
+fieldset li {  
+    padding-bottom: 1em; 
+    list-style: none; 
+} 
+
+#submit {
+    width: 800px;
+    margin: auto;
+}
+
+.submit {
+    float: right;
+}
+
+#sofgroup {
+  width: 1000px;
+  list-style: none;
+}
+
+#sofgroup li {
+  padding-bottom: 15px;
+}

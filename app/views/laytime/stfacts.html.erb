@@ -1,0 +1,34 @@
+<h1>Statement of Facts</h1>
+<% form_for @fact, :url => { :action => "result" } do |f| %>
+  <ul id="sofgroup">
+    <li>
+    <table id="softable">
+    <tr style="padding-bottom: 15px">
+      <th width="200">
+      From 
+      </th> 
+      <th width="200">
+      To  
+      </th> 
+      <th width="120">
+      Time To Count 
+      </th> 
+      <th width="50">
+      pct/val
+      </th> 
+      <th width="350">
+      Remarks     
+      </th> 
+    </tr>
+    </table>
+    </li>
+    <li style="margin-right: 500px;">
+    <a href="#" onclick="addRow();">Add row</a>
+    </li>
+    <li>
+    <div id="submit">
+      <%= f.submit "Calculate", :class => "submit" %>
+    </div>
+    </li>
+  </ul>
+<% end %>

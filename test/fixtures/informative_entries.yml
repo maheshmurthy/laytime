@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  entrydate: 2009-08-23
+  remarks: MyString
+  port_detail_id: 1
+
+two:
+  entrydate: 2009-08-23
+  remarks: MyString
+  port_detail_id: 1
