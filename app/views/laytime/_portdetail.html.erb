@@ -1,0 +1,67 @@
+<% count = portdetail_counter.to_s %>
+<fieldset>
+<% if portdetail_counter == 0 %>
+  <ol id="loading">
+  <% else %>
+  <ol id="discharging">
+<% end %>
+    <li>
+    <%= label_tag :location, 'Location' %>
+    <%= text_field_tag 'location'+ count, portdetail.location, :class => 'textbox', :maxlength => 50 %>
+    </li>
+    <li>
+    <%= label_tag :cargo, 'Cargo' %>
+    <%= select 'cargo' + count, "", %w[mts], {},{:index => nil} %>
+    </li>
+    <li>
+    <%= label_tag :quantity, 'Quantity' %>
+    <%= text_field_tag 'quantity'+count, portdetail.quantity, :class => 'textbox', :maxlength => 50 %>
+    </li>
+    <li>
+    <%= label_tag :description, 'Description' %>
+    <%= text_field_tag 'description'+count, portdetail.description, :class => 'textbox', :maxlength => 50 %>
+    </li>
+    <li>
+    <%= label_tag :allowanceType, 'AllowanceType' %>
+    <%= select 'allowanceType'+count, "", %w[mts/day], {},{:index => nil} %>
+    </li>
+    <li>
+    <%= label_tag :allowance, 'Allowance' %>
+    <%= text_field_tag 'allowance'+count, portdetail.allowance, :class => 'textbox', :maxlength => 50 %>
+    </li>
+    <li>
+    <%= label_tag :demurrage, 'Demurrage' %>
+    <%= text_field_tag 'demurrage'+count, portdetail.demurrage, :class => 'textbox', :maxlength => 25 %>
+    </li>
+    <li>
+    <%= label_tag :despatch, 'Despatch' %>
+    <%= text_field_tag 'despatch'+count, portdetail.despatch, :class => 'textbox' , :maxlength => 25 %>
+    </li>
+    <li>
+    <%= label_tag :commission_pct, 'Commission on demurrage(%)' %>
+    <%= text_field_tag 'commission_pct'+count, portdetail.commission_pct, :class => 'textbox' , :maxlength => 25 %>
+    </li>
+    <li>
+    <%= label_tag :time_start, 'Start time' %>
+    <%= text_field_tag 'time_start'+count, portdetail.time_start, :class => 'textbox' , :maxlength => 25 %>
+    </li>
+    <li>
+    <%= label_tag :time_end, 'End time' %>
+    <%= text_field_tag 'time_end'+count, portdetail.time_end, :class => 'textbox' , :maxlength => 25 %>
+    </li>
+    <li>
+    <%= label_tag :calculation_type, 'Calculate this port' %>
+    </li>
+    <li>
+    Normal <%= radio_button_tag 'calculation_type'+count,  "normal", :checked => true %>
+    Customary quick despatch <%= radio_button_tag 'calculation_type'+count, "customary" %>
+    </li>
+    <li>
+    <%= label_tag :calculation_time_saved, 'Calculate time saved' %>
+    </li>
+    <li>
+    Working time saved <%= radio_button_tag 'calculation_time_saved'+count, "working", :checked => true %>
+    All time saved <%= radio_button_tag 'calculation_time_saved'+count, "all" %>
+    </li>
+  </ol>
+  </fieldset>
