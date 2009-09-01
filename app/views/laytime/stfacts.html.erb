@@ -1,34 +1,68 @@
+<style text="text/css">
+.row {
+  width: 1000px;
+  padding-bottom: 10px;
+}
+
+.loc {
+  width: 200px;
+  margin-left: 10px;
+}
+
+.ttc {
+  width: 200px;
+  margin-left: 10px;
+}
+
+.pct {
+  width: 50px;
+  margin-left: 10px;
+}
+
+.rem {
+  width: 250px;
+  margin-left: 10px;
+}
+
+.lab {
+    width: 130px;
+}
+
+.laba {
+    width: 190px;
+}
+
+.labc {
+    width: 190px;
+}
+
+.labd {
+    width: 120px;
+}
+
+
+</style>
 <h1>Statement of Facts</h1>
-<% form_for @fact, :url => { :action => "result" } do |f| %>
-  <ul id="sofgroup">
-    <li>
-    <table id="softable">
-    <tr style="padding-bottom: 15px">
-      <th width="200">
-      From 
-      </th> 
-      <th width="200">
-      To  
-      </th> 
-      <th width="120">
-      Time To Count 
-      </th> 
-      <th width="50">
-      pct/val
-      </th> 
-      <th width="350">
-      Remarks     
-      </th> 
-    </tr>
-    </table>
-    </li>
-    <li style="margin-right: 500px;">
-    <a href="#" onclick="addRow();">Add row</a>
-    </li>
-    <li>
-    <div id="submit">
+<% form_for @facts, :url => { :action => "result" } do |f| %>
+    <div id="set">
+    <div class="row">
+        <label class="lab">From</label>
+        <label class="laba">To</label>
+        <label class="labc">Time To Count</label>
+        <label class="labd">Value (%)</label>
+        <label class="labe">Remarks </label>
+    </div>
+
+    <% @facts.each do |fact| %>
+      <% f.fields_for :facts do |fact_form| %>
+        <div class="row">
+          <%= fact_form.text_field :from, :class => 'loc', :name => 'fact_list[][from]' %><%= fact_form.text_field :to, :class => 'loc', :name => 'fact_list[][to]'   %><%= fact_form.text_field :timeToCount, :class => 'ttc', :name => 'fact_list[][pct]'   %><%= fact_form.text_field :val, :class => 'pct', :name => 'fact_list[][val]'   %><%= fact_form.text_field :remarks, :class => 'rem', :name => 'fact_list[][remarks]'   %>
+        </div>
+        <% end %>
+    <% end %>
+    </div>
+    <a href="#" onclick="addrow();">add row </a>
+    <div id="submit" style="padding-top:30px;">
       <%= f.submit "Calculate", :class => "submit" %>
     </div>
-    </li>
-  </ul>
 <% end %>

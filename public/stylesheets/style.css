@@ -17,10 +17,9 @@ label {
 }
 
 .textbox {
-    height: 30px;
-    font-size: 20px;
-    padding: 3px 2px 4px 4px;
-    width: 250px;
+    height: 32px;
+    font-size: 18px;
+    padding: 2px 2px 2px 4px;
 }
 
 fieldset {  
@@ -32,7 +31,8 @@ fieldset {
 } 
 
 #softable {
-    width: 1000px;
+    width: 100%;
+    table-layout: fixed;
     margin: auto;
 }
 
@@ -60,6 +60,37 @@ fieldset li {
   list-style: none;
 }
 
-#sofgroup li {
-  padding-bottom: 15px;
+.typea {
+  width: 200px;
+}
+
+.typeb {
+  width: 10px;
+}
+
+.typec {
+  width: 30px;
+}
+
+.row {
+  width: 1000px;
+}
+
+.loc {
+  width: 200px;
+}
+
+.ttc {
+  width: 200px;
+  padding-left: 10px;
+}
+
+.pct {
+  width: 50px;
+  padding-left: 10px;
+}
+
+.rem {
+  width: 300px;
+  padding-left: 10px;
 }

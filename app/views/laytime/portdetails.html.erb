@@ -1,42 +1,24 @@
+<style> 
+  .tab {
+    display: inline;
+  }
+</style>
+<script type="text/javascript">
+  document.observe('dom:loaded',function(){
+    new Control.Tabs('port_tab');
+  });
+</script>
+
 <h1>PortDetails</h1>
-<% form_for @portdetail, :url => { :action => "stfacts" } do |f| %>
-  <fieldset>
-  <ol>
-    <li>
-    <%= f.label :location, 'location' %>
-    <%= f.text_field :location, :class => 'textbox', :maxlength => 50 %>
-    </li>
-    <li>
-    <%= f.label :cargo, 'Cargo' %>
-    <%= f.text_field :cargo, :class => 'textbox', :maxlength => 50 %>
-    </li>
-    <li>
-    <%= f.label :quantity, 'Quantity' %>
-    <%= f.text_field :quantity, :class => 'textbox', :maxlength => 50 %>
-    </li>
-    <li>
-    <%= f.label :description, 'Description' %>
-    <%= f.text_field :description, :class => 'textbox', :maxlength => 50 %>
-    </li>
-    <li>
-    <%= f.label :allowanceType, 'AllowanceType' %>
-    <%= f.text_field :allowanceType, :class => 'textbox', :maxlength => 50 %>
-    </li>
-    <li>
-    <%= f.label :allowance, 'Allowance' %>
-    <%= f.text_field :allowance, :class => 'textbox', :maxlength => 50 %>
-    </li>
-    <li>
-    <%= f.label :demurrage, 'Demurrage' %>
-    <%= f.text_field :demurrage, :class => 'textbox', :maxlength => 25 %>
-    </li>
-    <li>
-    <%= f.label :despatch, 'Despatch' %>
-    <%= f.text_field :despatch, :class => 'textbox' , :maxlength => 25 %>
-    </li>
+<% form_for @portdetails, :url => { :action => "stfacts" } do |f| %>
+  <fieldset id="port_tab">
+  <ol class="tab">
+    <li><a href="#loading">Loading</a></li>
+    <li><a href="#discharging">Discharging</a></li>
   </ol>
   </fieldset>
-  <div id="submit">
+    <%= render :partial => 'portdetail', :collection => @portdetails %>
+    <div id="submit">
     <%= f.submit "Statement of Facts", :class => "submit" %>
   </div>
 <% end %>
