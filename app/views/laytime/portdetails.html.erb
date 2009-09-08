@@ -17,7 +17,7 @@
     <li><a href="#discharging">Discharging</a></li>
   </ol>
   </fieldset>
-    <%= render :partial => 'portdetail', :collection => @portdetails %>
+    <%= render :partial => 'portdetail', :locals => {:f => f}, :collection => @portdetails %>
     <div id="submit">
     <%= f.submit "Statement of Facts", :class => "submit" %>
   </div>

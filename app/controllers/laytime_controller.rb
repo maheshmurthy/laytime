@@ -1,4 +1,3 @@
-require 'factlist'
 
 class LaytimeController < ApplicationController
   def cpdetails
@@ -30,10 +29,16 @@ class LaytimeController < ApplicationController
 
   def addRow
     session[:facts] << Fact.new
-    redirect_to :back
   end
 
   def result
+    @cpdetail = session[:cp_detail]
+      if @cpdetail.save
+        logger.info "Saved!"
+      else
+        logger.info "Failed to save!"
+        logger.info @cpdetail.vessel
+      end
     session[:cp_detail] = nil
     session[:port_details] = nil
     session[:facts] = nil
