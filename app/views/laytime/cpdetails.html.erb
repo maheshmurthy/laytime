@@ -1,7 +1,11 @@
-
+<%= error_messages_for :cpdetail, :header_message => 'Please correct the following errors and try again' %>
 <% form_for @cpdetail, :url => { :action => "portdetails" } do |f| %>
   <fieldset>
   <ol>
+  <li>
+    <%= label :dated, 'Date' %>
+    <%= text_field_tag 'dated', display_date, :class => 'textbox', :maxlength => 20, :disabled => true  %>
+  </li>
   <li>
     <%= f.label :cpName, 'Form' %>
     <%= f.text_field :cpName, :class => 'textbox', :maxlength => 40 %>
@@ -9,10 +13,6 @@
   <li>
     <%= f.label :number, 'No.' %>
     <%= f.text_field :number, :class => 'textbox', :maxlength => 5 %>
-  </li>
-  <li>
-    <%= f.label :dated, 'Date' %>
-    <%= f.text_field :dated, :class => 'textbox', :maxlength => 10 %>
   </li>
   <li>
     <%= f.label :currency, 'Currency' %>

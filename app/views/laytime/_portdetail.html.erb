@@ -10,7 +10,7 @@
     </li>
     <li>
     <%= f.label :cargo, 'Cargo' %>
-    <%= f.select 'cargo', %w{mts} %>
+    <%= select 'portdetail', 'cargo', %w{mts}, {}, {:index => nil} %>
     </li>
     <li>
     <%= f.label :quantity, 'Quantity' %>
@@ -22,7 +22,7 @@
     </li>
     <li>
     <%= f.label :allowanceType, 'AllowanceType' %>
-    <%= select 'allowanceType', "", %w[mts/day], {},{:index => nil} %>
+    <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
     </li>
     <li>
     <%= f.label :allowance, 'Allowance' %>

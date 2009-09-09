@@ -1,4 +1,3 @@
-
 class LaytimeController < ApplicationController
   def cpdetails
     @cpdetail = session[:cp_detail] || CpDetail.new
@@ -6,12 +5,16 @@ class LaytimeController < ApplicationController
 
   def portdetails
     session[:cp_detail] = CpDetail.new(params[:cp_detail])
-    if session[:port_details]
-      @portdetails = session[:port_details]
+    if session[:cp_detail].invalid?
+        redirect_to :back
     else
-      @portdetails = Array.new
-      @portdetails << PortDetail.new
-      @portdetails << PortDetail.new
+      if session[:port_details]
+        @portdetails = session[:port_details]
+      else
+        @portdetails = Array.new
+        @portdetails << PortDetail.new
+        @portdetails << PortDetail.new
+      end
     end
   end
 

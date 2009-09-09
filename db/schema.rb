@@ -9,13 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090823175221) do
+ActiveRecord::Schema.define(:version => 20090909012728) do
 
   create_table "cp_details", :force => true do |t|
     t.string   "partner"
     t.string   "cpName"
     t.integer  "number"
-    t.date     "dated"
     t.string   "vessel"
     t.string   "from"
     t.string   "to"
@@ -75,4 +74,5 @@ ActiveRecord::Schema.define(:version => 20090823175221) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
 end
