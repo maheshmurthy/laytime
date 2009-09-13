@@ -9,6 +9,14 @@
   });
 </script>
 
+<% if !@portdetails[0].errors.empty?  %>
+  There are errors in loading
+<% end %>
+
+<% if !@portdetails[1].errors.empty?  %>
+  There are errors in discharging
+<% end %>
+
 <h1>PortDetails</h1>
 <% form_for @portdetails, :url => { :action => "stfacts" } do |f| %>
   <fieldset id="port_tab">

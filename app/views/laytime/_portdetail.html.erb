@@ -1,12 +1,16 @@
 <fieldset>
 <% if portdetail_counter == 0 %>
   <ol id="loading">
+    <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
   <% else %>
   <ol id="discharging">
+    <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
+<% Rails.logger.info portdetail.errors.inspect %>
 <% end %>
+  <%= f.hidden_field :operation, :name => 'portdetail[][operation]', :value => portdetail.operation %>
     <li>
     <%= f.label :location, 'Location' %>
-    <%= f.text_field 'location', :name => 'portdetail[][location]', :class => 'textbox', :maxlength => 50 %>
+    <%= f.text_field 'location', :name => 'portdetail[][location]', :class => 'textbox', :maxlength => 50, :value => portdetail.location %>
     </li>
     <li>
     <%= f.label :cargo, 'Cargo' %>
@@ -14,11 +18,11 @@
     </li>
     <li>
     <%= f.label :quantity, 'Quantity' %>
-    <%= f.text_field 'quantity', :name => 'portdetail[][quantity]', :class => 'textbox', :maxlength => 50 %>
+    <%= f.text_field 'quantity', :name => 'portdetail[][quantity]', :class => 'textbox', :maxlength => 50, :value => portdetail.quantity %>
     </li>
     <li>
     <%= f.label :description, 'Description' %>
-    <%= f.text_field 'description', :name => 'portdetail[][description]', :class => 'textbox', :maxlength => 50 %>
+    <%= f.text_field 'description', :name => 'portdetail[][description]', :class => 'textbox', :maxlength => 50, :value => portdetail.description %>
     </li>
     <li>
     <%= f.label :allowanceType, 'AllowanceType' %>
@@ -26,27 +30,27 @@
     </li>
     <li>
     <%= f.label :allowance, 'Allowance' %>
-    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'textbox', :maxlength => 50 %>
+    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'textbox', :maxlength => 50, :value => portdetail.allowance %>
     </li>
     <li>
     <%= f.label :demurrage, 'Demurrage' %>
-    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'textbox', :maxlength => 25 %>
+    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'textbox', :maxlength => 25, :value => portdetail.demurrage %>
     </li>
     <li>
     <%= f.label :despatch, 'Despatch' %>
-    <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'textbox' , :maxlength => 25 %>
+    <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'textbox' , :maxlength => 25, :value => portdetail.despatch %>
     </li>
     <li>
     <%= f.label :commission_pct, 'Commission on demurrage(%)' %>
-    <%= f.text_field 'commission_pct', :name => 'portdetail[][commission_pct]', :class => 'textbox' , :maxlength => 25 %>
+    <%= f.text_field 'commission_pct', :name => 'portdetail[][commission_pct]', :class => 'textbox' , :maxlength => 25, :value => portdetail.commission_pct %>
     </li>
     <li>
     <%= f.label :time_start, 'Start time' %>
-    <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'textbox' , :maxlength => 25 %>
+    <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_start %>
     </li>
     <li>
     <%= f.label :time_end, 'End time' %>
-    <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'textbox' , :maxlength => 25 %>
+    <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_end %>
     </li>
     <li>
     <%= f.label :calculation_type, 'Calculate this port' %>
