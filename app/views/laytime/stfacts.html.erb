@@ -40,10 +40,9 @@
     width: 120px;
 }
 
-
 </style>
 <h1>Statement of Facts</h1>
-<% form_for @facts, :url => { :action => "result" } do |f| %>
+<% form_for @facts, :url => { :action => "result" }, :html =>{ :onsubmit => 'return isValidFacts();' } do |f| %>
     <div id="set">
     <div class="row">
         <label class="lab">From</label>
@@ -56,7 +55,9 @@
     <% @facts.each do |fact| %>
       <% f.fields_for :facts do |fact_form| %>
         <div class="row">
-          <%= fact_form.text_field :from, :class => 'loc', :name => 'fact_list[][from]' %><%= fact_form.text_field :to, :class => 'loc', :name => 'fact_list[][to]'   %><%= fact_form.text_field :timeToCount, :class => 'ttc', :name => 'fact_list[][pct]'   %><%= fact_form.text_field :val, :class => 'pct', :name => 'fact_list[][val]'   %><%= fact_form.text_field :remarks, :class => 'rem', :name => 'fact_list[][remarks]'   %>
+          <script>
+          addrow();
+          </script>
         </div>
         <% end %>
     <% end %>

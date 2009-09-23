@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090909012728) do
+ActiveRecord::Schema.define(:version => 20090922001152) do
 
   create_table "cp_details", :force => true do |t|
     t.string   "partner"
@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(:version => 20090909012728) do
   end
 
   create_table "facts", :force => true do |t|
-    t.date     "from"
-    t.date     "to"
+    t.datetime "from"
+    t.datetime "to"
     t.string   "timeToCount"
     t.float    "val"
     t.string   "remarks"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20090909012728) do
   end
 
   create_table "informative_entries", :force => true do |t|
-    t.date     "entrydate"
+    t.datetime "entrydate"
     t.string   "remarks"
     t.integer  "port_detail_id"
     t.datetime "created_at"
@@ -58,9 +58,9 @@ ActiveRecord::Schema.define(:version => 20090909012728) do
     t.string   "calculation_type"
     t.string   "calculation_time_saved"
     t.float    "commission_pct"
-    t.date     "pre_advise_date"
-    t.date     "time_start"
-    t.date     "time_end"
+    t.datetime "pre_advise_date"
+    t.datetime "time_start"
+    t.datetime "time_end"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

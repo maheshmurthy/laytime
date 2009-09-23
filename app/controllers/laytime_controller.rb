@@ -10,10 +10,7 @@ class LaytimeController < ApplicationController
     end
 
     if session[:port_details]
-    # XXX Fix this block
       @portdetails = session[:port_details]
-      logger.info @portdetails[0].errors.inspect
-      @portdetail = @portdetails[0]
     else
       @portdetails = Array.new
 
@@ -25,10 +22,6 @@ class LaytimeController < ApplicationController
       portdetail.operation = "discharging"
       @portdetails << portdetail
 
-      logger.info "***********************"
-      logger.info @portdetails[0].operation
-      logger.info @portdetails[1].operation
-      logger.info "***********************"
     end
   end
 
@@ -40,6 +33,7 @@ class LaytimeController < ApplicationController
 
     if session[:facts]
       @facts = session[:facts]
+      logger.info @facts.inspect
     else
       @facts = Array.new
       @facts <<  Fact.new
@@ -54,9 +48,35 @@ class LaytimeController < ApplicationController
   end
 
   def result
+#    unless is_facts_valid
+#      redirect_to :action => 'stfacts'
+#      return
+#    end
+    fact_list = Array.new
+    params['fact_list'].each do |fact|
+      fact_obj = Fact.new(fact)
+      fact_list << fact_obj
+    end
+    
+    session[:facts] = fact_list
+ 
     @cpdetail = session[:cp_detail]
       if @cpdetail.save
         logger.info "Saved!"
+        logger.info @cpdetail.id
+        @portdetail = session[:port_details][0]
+        @portdetail.cp_detail_id = @cpdetail.id
+        @portdetail.save
+        @portdetail = session[:port_details][1]
+        @portdetail.cp_detail_id = @cpdetail.id
+        @portdetail.save
+        session[:facts].each do |fact|
+          logger.info "***********************"
+          fact.cp_detail_id = @cpdetail.id
+          fact.inspect
+          fact.save
+          logger.info "***********************"
+        end
       else
         logger.info "Failed to save!"
       end
@@ -76,7 +96,6 @@ class LaytimeController < ApplicationController
 
     if session[:cp_detail].invalid?
       # redirect to cp detail page instead of back
-      logger.info "Redirecting to cpdetail"
       return false
     end
     
@@ -107,12 +126,21 @@ class LaytimeController < ApplicationController
     if validity0 || validity1
       return false
     end
-    #if session[:port_details][0].invalid?
-    #  return false
-    #end
-    #if session[:port_details][1].invalid?
-    #  return false
-    #end
     return true
+  end
+
+  def is_facts_valid
+    fact_list = Array.new
+    params['fact_list'].each do |fact|
+      fact_obj = Fact.new(fact)
+      fact_list << fact_obj
+    end
+    
+    session[:facts] = fact_list
+    is_valid = true
+    session[:facts].each do |fact|
+      is_valid &&= fact.valid?
+    end
+    return is_valid
   end
 end
