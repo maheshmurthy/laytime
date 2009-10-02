@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090922001152) do
+ActiveRecord::Schema.define(:version => 20090927233852) do
 
   create_table "cp_details", :force => true do |t|
     t.string   "partner"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(:version => 20090922001152) do
     t.string   "currency"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ports_to_calculate"
+    t.string   "once_on_demurrage"
   end
 
   create_table "facts", :force => true do |t|
@@ -31,9 +33,9 @@ ActiveRecord::Schema.define(:version => 20090922001152) do
     t.string   "timeToCount"
     t.float    "val"
     t.string   "remarks"
-    t.integer  "cp_detail_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "port_detail_id"
   end
 
   create_table "informative_entries", :force => true do |t|

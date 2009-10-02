@@ -9,24 +9,24 @@
   });
 </script>
 
-<% if !@portdetails[0].errors.empty?  %>
+<% unless @portdetails[0].errors.empty?  %>
   There are errors in loading
 <% end %>
 
-<% if !@portdetails[1].errors.empty?  %>
+<% unless @portdetails[1].errors.empty?  %>
   There are errors in discharging
 <% end %>
 
 <h1>PortDetails</h1>
-<% form_for @portdetails, :url => { :action => "stfacts" } do |f| %>
+<% form_for @portdetails, :url => { :action => "result" } do |f| %>
   <fieldset id="port_tab">
   <ol class="tab">
     <li><a href="#loading">Loading</a></li>
     <li><a href="#discharging">Discharging</a></li>
   </ol>
   </fieldset>
-    <%= render :partial => 'portdetail', :locals => {:f => f}, :collection => @portdetails %>
+  <%= render :partial => 'portdetail', :locals => {:f => f, :loading_facts => @loading_facts, :discharging_facts => @discharging_facts}, :collection => @portdetails %>
     <div id="submit">
-    <%= f.submit "Statement of Facts", :class => "submit" %>
+    <%= f.submit "Calculate", :class => "submit" %>
   </div>
 <% end %>

@@ -1,4 +1,13 @@
 class LaytimeController < ApplicationController
+  def index
+      session[:cp_detail] = nil
+      session[:port_details] = nil
+      session[:loading_facts] = nil
+      session[:discharging_facts] = nil
+      session[:loading] = nil
+      session[:discharging] = nil
+  end
+
   def cpdetails
     @cpdetail = session[:cp_detail] || CpDetail.new
   end
@@ -23,43 +32,42 @@ class LaytimeController < ApplicationController
       @portdetails << portdetail
 
     end
+
+    if session[:loading_facts]
+      @loading_facts = session[:loading_facts]
+    else
+      @loading_facts = Array.new
+      @loading_facts <<  Fact.new
+      @loading_facts << Fact.new
+      # Need this for addRow method
+      session[:loading_facts] = @loading_facts
+    end
+
+    if session[:discharging_facts]
+      @discharging_facts = session[:discharging_facts]
+    else
+      @discharging_facts = Array.new
+      @discharging_facts <<  Fact.new
+      @discharging_facts << Fact.new
+      # Need this for addRow method
+      session[:discharging_facts] = @discharging_facts
+    end
+
   end
 
-  def stfacts
+  def result
     unless is_portdetails_valid
       redirect_to :action => 'portdetails'
       return
     end
-
-    if session[:facts]
-      @facts = session[:facts]
-      logger.info @facts.inspect
-    else
-      @facts = Array.new
-      @facts <<  Fact.new
-      @facts << Fact.new
-      # Need this for addRow method
-      session[:facts] = @facts
-    end
+    save_to_db
   end
 
   def addRow
     session[:facts] << Fact.new
   end
 
-  def result
-#    unless is_facts_valid
-#      redirect_to :action => 'stfacts'
-#      return
-#    end
-    fact_list = Array.new
-    params['fact_list'].each do |fact|
-      fact_obj = Fact.new(fact)
-      fact_list << fact_obj
-    end
-    
-    session[:facts] = fact_list
- 
+  def save_to_db
     @cpdetail = session[:cp_detail]
       if @cpdetail.save
         logger.info "Saved!"
@@ -67,12 +75,20 @@ class LaytimeController < ApplicationController
         @portdetail = session[:port_details][0]
         @portdetail.cp_detail_id = @cpdetail.id
         @portdetail.save
+        session[:loading_facts].each do |fact|
+          logger.info "***********************"
+          fact.port_detail_id = @portdetail.id
+          fact.inspect
+          fact.save
+          logger.info "***********************"
+        end
+
         @portdetail = session[:port_details][1]
         @portdetail.cp_detail_id = @cpdetail.id
         @portdetail.save
-        session[:facts].each do |fact|
+        session[:discharging_facts].each do |fact|
           logger.info "***********************"
-          fact.cp_detail_id = @cpdetail.id
+          fact.port_detail_id = @portdetail.id
           fact.inspect
           fact.save
           logger.info "***********************"
@@ -82,7 +98,8 @@ class LaytimeController < ApplicationController
       end
     session[:cp_detail] = nil
     session[:port_details] = nil
-    session[:facts] = nil
+    session[:loading_facts] = nil
+    session[:discharging_facts] = nil
   end
 
   private 
@@ -116,31 +133,47 @@ class LaytimeController < ApplicationController
       portdetails << port_detail
       session[:port_details] = portdetails
     end
-    validity0 = session[:port_details][0].invalid?
-    validity1 = session[:port_details][1].invalid?
+    port_validity0_invalid = session[:port_details][0].invalid?
+    port_validity1_invalid = session[:port_details][1].invalid?
 
     # The reason I did it this way is because I want to call
     # invalid method on both objects. If I do an or directly,
     # if the first one satisfies, it wouldn't even go to the
     # second object's invalid method
-    if validity0 || validity1
+    
+    # Do Statement of Facts validation as well here because both of them
+    # are in the same page.
+
+    loading_facts_invalid = is_facts_invalid('loading')
+    discharging_facts_invalid = is_facts_invalid('discharging')
+
+    if port_validity0_invalid || port_validity1_invalid || loading_facts_invalid || discharging_facts_invalid
       return false
     end
     return true
   end
 
-  def is_facts_valid
+  def is_facts_invalid(operation)
     fact_list = Array.new
-    params['fact_list'].each do |fact|
+    params[operation].each do |fact|
       fact_obj = Fact.new(fact)
+      logger.info fact_obj.inspect
       fact_list << fact_obj
     end
     
-    session[:facts] = fact_list
-    is_valid = true
-    session[:facts].each do |fact|
-      is_valid &&= fact.valid?
+    is_invalid = false
+    if(operation == 'loading')
+      session[:loading_facts] = fact_list
+      session[:loading_facts].each do |fact|
+        is_invalid ||= fact.invalid?
+      end
+    else
+      session[:discharging_facts] = fact_list
+      session[:discharging_facts].each do |fact|
+        is_invalid ||= fact.invalid?
+      end
     end
-    return is_valid
+    logger.info "Validity is " + is_invalid.to_s
+    return is_invalid
   end
 end

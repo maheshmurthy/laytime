@@ -1,5 +1,6 @@
-function addrow() {
-     var  set = document.getElementById('set');
+function addrow(operation) {
+     var operationType = document.getElementById(operation);
+     var set = operationType.getElementsByClassName('sof')[0];
 
      var row = document.createElement('div')
      row.setAttribute('class','row');
@@ -7,34 +8,34 @@ function addrow() {
      var input = document.createElement('input')
      input.setAttribute('class','loc');
      input.setAttribute('type','textbox');
-     input.setAttribute('name','fact_list[][from]');
+     input.setAttribute('name',operation+'[][from]');
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','loc');
      input.setAttribute('type','textbox');
-     input.setAttribute('name','fact_list[][to]');
+     input.setAttribute('name',operation+'[][to]');
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','ttc');
      input.setAttribute('type','textbox');
-     input.setAttribute('name','fact_list[][timeToCount]');
+     input.setAttribute('name',operation+'[][timeToCount]');
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','pct');
      input.setAttribute('type','textbox');
-     input.setAttribute('name','fact_list[][val]');
+     input.setAttribute('name',operation+'[][val]');
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','rem');
      input.setAttribute('type','textbox');
-     input.setAttribute('name','fact_list[][remarks]');
+     input.setAttribute('name',operation+'[][remarks]');
      row.appendChild(input);
-
      set.appendChild(row);
+     row.scrollTop = row.scrollHeight;
 }
 
 function isValidFacts() {

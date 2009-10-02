@@ -1,11 +1,18 @@
 <fieldset>
 <% if portdetail_counter == 0 %>
+  <% 
+    facts = loading_facts 
+    type = "loading"
+  %>
   <ol id="loading">
     <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
   <% else %>
+  <% 
+    facts = discharging_facts 
+    type = "discharging"
+  %>
   <ol id="discharging">
     <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
-<% Rails.logger.info portdetail.errors.inspect %>
 <% end %>
   <%= f.hidden_field :operation, :name => 'portdetail[][operation]', :value => portdetail.operation %>
     <li>
@@ -46,11 +53,11 @@
     </li>
     <li>
     <%= f.label :time_start, 'Start time' %>
-    <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_start %>
+    <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_start_string %>
     </li>
     <li>
     <%= f.label :time_end, 'End time' %>
-    <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_end %>
+    <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_end_string %>
     </li>
     <li>
     <%= f.label :calculation_type, 'Calculate this port' %>
@@ -66,5 +73,32 @@
     Working time saved <%= radio_button_tag('calculation_time_saved' + portdetail_counter.to_s, value="working", :checked => true) %>
     All time saved <%= radio_button_tag('calculation_time_saved' + portdetail_counter.to_s, "all") %>
     </li>
+    <li>
+    <h2>Statement of Facts</h2>
+    </li>
+    <div class="sof">
+    <% facts.each do  |fact|
+      if portdetail_counter == 0 %>
+      <%= text_field_tag 'from', fact.from, :name => 'loading[][from]', :class =>'loc' %>
+      <%= text_field_tag 'to', fact.to, :name => 'loading[][to]', :class =>'loc' %>
+      <%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %>
+      <%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct' %>
+      <%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
+      <% else %>
+      <%= text_field_tag 'from', fact.from, :name => 'discharging[][from]', :class =>'loc' %>
+      <%= text_field_tag 'to', fact.to, :name => 'discharging[][to]', :class =>'loc' %>
+      <%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %>
+      <%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %>
+      <%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
+      <% end %>
+    <% end %>
+    </div>
+    <li>
+      <% if portdetail_counter == 0 %>
+      <a href="#" onclick="addrow('loading');">Add Fact</a>
+      <% else %>
+      <a href="#" onclick="addrow('discharging');">Add Fact</a>
+      <% end %> 
+    </li>
   </ol>
-  </fieldset>
+</fieldset>
