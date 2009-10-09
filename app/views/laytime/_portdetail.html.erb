@@ -3,6 +3,8 @@
   <% 
     facts = loading_facts 
     type = "loading"
+    additional_time_allowance = additional_time[0]
+    pre_advise = after_pre_advise[0]
   %>
   <ol id="loading">
     <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
@@ -10,15 +12,13 @@
   <% 
     facts = discharging_facts 
     type = "discharging"
+    additional_time_allowance = additional_time[1]
+    pre_advise = after_pre_advise[1]
   %>
   <ol id="discharging">
     <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
 <% end %>
   <%= f.hidden_field :operation, :name => 'portdetail[][operation]', :value => portdetail.operation %>
-    <li>
-    <%= f.label :location, 'Location' %>
-    <%= f.text_field 'location', :name => 'portdetail[][location]', :class => 'textbox', :maxlength => 50, :value => portdetail.location %>
-    </li>
     <li>
     <%= f.label :cargo, 'Cargo' %>
     <%= select 'portdetail', 'cargo', %w{mts}, {}, {:index => nil} %>
@@ -36,8 +36,36 @@
     <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
     </li>
     <li>
-    <%= f.label :allowance, 'Allowance' %>
-    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'textbox', :maxlength => 50, :value => portdetail.allowance %>
+    <%= label_tag 'Additional Days' %>
+    <%= text_field_tag 'add_allowance[][days]', additional_time_allowance.days, :class => 'textbox', :maxlength => 20 %>
+    </li>
+    <li>
+    <%= label_tag 'Additional Hours' %>
+    <%= text_field_tag 'add_allowance[][hours]', additional_time_allowance.hours, :class => 'textbox', :maxlength => 20 %>
+    </li>
+    <li>
+    <%= label_tag 'Additional Mins' %>
+    <%= text_field_tag 'add_allowance[][mins]', additional_time_allowance.mins, :class => 'textbox', :maxlength => 20%>
+    </li>
+    <li>
+    <%= label_tag 'Pre-advise given' %>
+    <%= text_field_tag 'pre_advise_given_first', additional_time_allowance.mins, :class => 'textbox', :maxlength => 20%>
+    </li>
+    <li>
+    <%= label_tag 'Pre-advise given' %>
+    <%= text_field_tag 'pre_advise_given_second', additional_time_allowance.mins, :class => 'textbox', :maxlength => 20%>
+    </li>
+    <li>
+    <%= label_tag 'Begin Laytime Counting days' %>
+    <%= text_field_tag 'pre_advise[][days]', pre_advise.days, :class => 'textbox', :maxlength => 20%>
+    </li>
+    <li>
+    <%= label_tag 'Begin Laytime Counting hours' %>
+    <%= text_field_tag 'pre_advise[][hours]', pre_advise.hours, :class => 'textbox', :maxlength => 20%>
+    </li>
+    <li>
+    <%= label_tag 'Begin Laytime Counting mins' %>
+    <%= text_field_tag 'pre_advise[][mins]', pre_advise.mins, :class => 'textbox', :maxlength => 20%>
     </li>
     <li>
     <%= f.label :demurrage, 'Demurrage' %>

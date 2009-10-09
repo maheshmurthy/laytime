@@ -21,11 +21,11 @@
 <% form_for @portdetails, :url => { :action => "result" } do |f| %>
   <fieldset id="port_tab">
   <ol class="tab">
-    <li><a href="#loading">Loading</a></li>
-    <li><a href="#discharging">Discharging</a></li>
+    <li><a href="#loading">Loading at <%= session[:cp_detail].from %></a></li>
+    <li><a href="#discharging">Discharging at <%= session[:cp_detail].to %></a></li>
   </ol>
   </fieldset>
-  <%= render :partial => 'portdetail', :locals => {:f => f, :loading_facts => @loading_facts, :discharging_facts => @discharging_facts}, :collection => @portdetails %>
+  <%= render :partial => 'portdetail', :locals => {:f => f, :loading_facts => @loading_facts, :discharging_facts => @discharging_facts, :additional_time => @additional_time, :after_pre_advise => @after_pre_advise}, :collection => @portdetails %>
     <div id="submit">
     <%= f.submit "Calculate", :class => "submit" %>
   </div>

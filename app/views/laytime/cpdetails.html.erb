@@ -39,6 +39,20 @@
     <%= f.text_field :details, :class => 'textbox' , :maxlength => 25 %>
   </li>
   <li>
+    <%= f.label :ports_to_calculate, 'Ports to be calculated' %>
+    <%= f.radio_button :ports_to_calculate, 'R' %>Reversible
+    <%= f.check_box :ports_to_calculate %>All Ports reversible
+    <%= f.check_box :ports_to_calculate %>Loading Ports reversible
+    <%= f.check_box :ports_to_calculate %>Discharge Ports reversible
+    <%= f.radio_button :ports_to_calculate, 'NR', :checked => true %>Non reversible
+    <%= f.radio_button :ports_to_calculate, 'A' %>Averaged
+  </li>
+  <li>
+    <%= f.label :once_on_demurrage, 'Once on demurrage' %>
+    <%= f.radio_button :once_on_demurrage, 'A', :checked => true %>Always on demurrage
+    <%= f.radio_button :once_on_demurrage, 'NA' %>Not always on demurrage
+  </li>
+  <li>
     <%= f.label :remarks, 'Remarks' %>
     <%= f.text_area :remarks, :rows => 10, :cols => 30 %>
   </li>

@@ -4,7 +4,6 @@ one:
   partner: MyString
   cpName: MyString
   number: 1
-  dated: 2009-08-23
   vessel: MyString
   from: MyString
   to: MyString
@@ -16,7 +15,6 @@ two:
   partner: MyString
   cpName: MyString
   number: 1
-  dated: 2009-08-23
   vessel: MyString
   from: MyString
   to: MyString
