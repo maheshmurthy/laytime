@@ -1,2 +1,16 @@
-<%= error_messages_for :cpdetail, :header_message => 'Please correct the following errors and try again' %>
-
+Loading:
+<br/>
+Total Available Time 
+<%= @report.loading_time_available.days %> days, <%= @report.loading_time_available.hours %> hours, <%= @report.loading_time_available.mins %> mins
+<br/>
+Total Time Used
+<%= @report.loading_time_used.days %> days, <%= @report.loading_time_used.hours %> hours, <%= @report.loading_time_used.mins %> mins
+<br/>
+<br/>
+Discharging:
+<br/>
+Total Available Time
+<%= @report.discharging_time_available.days %> days, <%= @report.discharging_time_available.hours %> hours, <%= @report.discharging_time_available.mins %> mins
+<br/>
+Total Time Used
+<%= @report.discharging_time_used.days %> days, <%= @report.discharging_time_used.hours %> hours, <%= @report.discharging_time_used.mins %> mins

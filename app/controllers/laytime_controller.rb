@@ -19,7 +19,28 @@ class LaytimeController < ApplicationController
     end
   end
 
-  def generate_report
+  def load
+    clear_session
+    session[:cp_detail] = CpDetail.find(81)
+    session[:port_details] = PortDetail.find(:all, :conditions => {:cp_detail_id => 81})
+    session[:loading_facts] = Fact.find(:all, :conditions => {:port_detail_id => 31})
+    session[:discharging_facts] = Fact.find(:all, :conditions => {:port_detail_id => 32})
+
+    info = Array.new
+    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 31, :time_info_type => 'add_allowance'})
+    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 32, :time_info_type => 'add_allowance'})
+    session[:additional_time] = info.flatten
+
+
+    info = Array.new
+    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 31, :time_info_type => 'pre_advise'})
+    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 32, :time_info_type => 'pre_advise'})
+    session[:after_pre_advise] = info.flatten
+
+    redirect_to :action => 'cpdetails'
+  end
+
+  def generate_report(loading_facts, discharging_facts, additional_time, loading_demurrage, loading_despatch, discharging_demurrage, discharging_despatch)
     #Calculate demurrage/despatch for loading
     #Calculate demurrage/despatch for discharging 
     #Sum up both
@@ -27,23 +48,22 @@ class LaytimeController < ApplicationController
     reset_time_info(loading_time_used)
     discharging_time_used = TimeInfo.new
     reset_time_info(discharging_time_used)
-    session[:loading_facts].each do |fact|
-      add_time_used(fact, loading_time_used)
+
+    report = Report.new
+    report.loading_time_used = loading_time_used
+    report.discharging_time_used = discharging_time_used
+
+    loading_facts.each do |fact|
+      add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, loading_time_used)
     end
 
-    session[:discharging_facts].each do |fact|
-      add_time_used(fact, discharging_time_used)
+    discharging_facts.each do |fact|
+      add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, discharging_time_used)
     end
 
-    logger.info "****************************"
-    logger.info loading_time_used.days
-    logger.info loading_time_used.hours
-    logger.info loading_time_used.mins
-    logger.info "****************************"
-    logger.info discharging_time_used.days
-    logger.info discharging_time_used.hours
-    logger.info discharging_time_used.mins
-    logger.info "****************************"
+    report.loading_time_available, report.discharging_time_available = additional_time
+
+    return report
   end
 
   def cpdetails
@@ -70,7 +90,6 @@ class LaytimeController < ApplicationController
       portdetail.operation = "discharging"
       portdetail.location = session[:cp_detail].to
       @portdetails << portdetail
-
     end
 
     if session[:loading_facts]
@@ -116,7 +135,14 @@ class LaytimeController < ApplicationController
       return
     end
     save_to_db
-    generate_report
+    @report = generate_report(session[:loading_facts], 
+                              session[:discharging_facts], 
+                              session[:additional_time],
+                              session[:port_details][0].demurrage,
+                              session[:port_details][0].despatch,
+                              session[:port_details][1].demurrage,
+                              session[:port_details][1].despatch)
+                              
     clear_session
   end
 
@@ -138,11 +164,10 @@ class LaytimeController < ApplicationController
         @portdetail.save
         session[:loading_facts].each do |fact|
           fact.port_detail_id = @portdetail.id
-          fact.inspect
           fact.save
         end
 
-        save_time_info(@portdetail.id, session[:pre_advise_invalid][0])
+        save_time_info(@portdetail.id, session[:after_pre_advise][0])
         save_time_info(@portdetail.id, session[:additional_time][0])
 
         @portdetail = session[:port_details][1]
@@ -150,11 +175,10 @@ class LaytimeController < ApplicationController
         @portdetail.save
         session[:discharging_facts].each do |fact|
           fact.port_detail_id = @portdetail.id
-          fact.inspect
           fact.save
         end
 
-        save_time_info(@portdetail.id, session[:pre_advise_invalid][1])
+        save_time_info(@portdetail.id, session[:after_pre_advise][1])
         save_time_info(@portdetail.id, session[:additional_time][1])
       else
         logger.info "Failed to save!"
@@ -182,11 +206,13 @@ class LaytimeController < ApplicationController
     unless(session[:port_details] && session[:port_details][0].errors && session[:port_details][1].errors && session[:port_details][0].errors.empty? && session[:port_details][1].errors.empty?)
       portdetails = Array.new
       port_detail = PortDetail.new(params['portdetail'][0])
+      port_detail.location = session[:cp_detail].from
       port_detail.calculation_type = params['calculation_type0']
       port_detail.calculation_time_saved = params['calculation_time_saved0']
       portdetails << port_detail
 
       port_detail = PortDetail.new(params['portdetail'][1])
+      port_detail.location = session[:cp_detail].to
       port_detail.calculation_type = params['calculation_type1']
       port_detail.calculation_time_saved = params['calculation_time_saved1']
       portdetails << port_detail
@@ -194,6 +220,7 @@ class LaytimeController < ApplicationController
     end
     port_validity0_invalid = session[:port_details][0].invalid?
     port_validity1_invalid = session[:port_details][1].invalid?
+
 
     # The reason I did it this way is because I want to call
     # invalid method on both objects. If I do an or directly,
@@ -215,23 +242,56 @@ class LaytimeController < ApplicationController
     return true
   end
 
-  def is_time_info_invalid(time_info_type)
-    time_info_list = Array.new
-    params[time_info_type].each do |time_info|
-      info = TimeInfo.new(time_info)
+  def build_time_info(time_infos, time_info_type)
+    is_invalid = false
+
+    time_infos.each do |time_info|
+      # User does not fill they type which is why is done below.
+      time_info.time_info_type = time_info_type
       # If there are any errors, info object will have errors field set
-      info.invalid?
-      time_info_list << info
+      is_invalid ||= time_info.invalid?
     end
+      return is_invalid
+  end
+
+  def is_time_info_invalid(time_info_type)
+    is_invalid = false
 
     if(time_info_type == 'add_allowance')
-      session[:additional_time] = time_info_list
+      unless(session[:additional_time] && session[:additional_time][0].errors.empty? && session[:additional_time][1].errors.empty?)
+        session[:additional_time] = Array.new
+        params[time_info_type].each do |info|
+          session[:additional_time] << TimeInfo.new(info)
+        end
+        #session[:additional_time] = time_info_list
+      end
+      is_invalid = build_time_info(session[:additional_time], 'add_allowance')
     else
-      session[:after_pre_advise] = time_info_list
+      unless(session[:after_pre_advise] && session[:after_pre_advise][0].errors.empty? && session[:after_pre_advise][1].errors.empty?)
+        session[:after_pre_advise] = Array.new
+        params[time_info_type].each do |info|
+          session[:after_pre_advise]  << TimeInfo.new(info)
+        end
+      end
+      is_invalid = build_time_info(session[:after_pre_advise], 'pre_advise')
     end
+    return is_invalid
+  end
+
+  def read_from_params(facts)
+    read_from_params = false
+    if(facts)
+      facts.each do |fact|
+        read_from_params ||= !fact.errors.empty?
+      end
+    else
+      read_from_params = true
+    end
+    return read_from_params
   end
 
   def is_facts_invalid(operation)
+
     fact_list = Array.new
     params[operation].each do |fact|
       fact_obj = Fact.new(fact)
@@ -240,12 +300,16 @@ class LaytimeController < ApplicationController
     
     is_invalid = false
     if(operation == 'loading')
-      session[:loading_facts] = fact_list
+      if(read_from_params(session[:loading_facts]))
+        session[:loading_facts] = fact_list
+      end
       session[:loading_facts].each do |fact|
         is_invalid ||= fact.invalid?
       end
     else
-      session[:discharging_facts] = fact_list
+      if(read_from_params(session[:discharging_facts]))
+        session[:discharging_facts] = fact_list
+      end
       session[:discharging_facts].each do |fact|
         is_invalid ||= fact.invalid?
       end
@@ -259,17 +323,17 @@ class LaytimeController < ApplicationController
     time_info.mins = 0
   end
 
-  def add_time_used(fact, time_used)
-    pct = fact.val
-    days = fact.to.day - fact.from.day
-    hours = fact.to.hour = fact.from.hour
-    mins = fact.to.min - fact.from.min
+  def add_time_used(from, to, pct, time_used)
+    days = ((to - from)).to_i
+    hours =((to - from) * 24).to_i % 24
+    mins =((to - from) * 24 * 60).to_i % 60
     total_count_in_mins = ((days*24*60 + hours*60 + mins) * (pct/100)).to_i
-    time_used.mins += total_count_in_mins % 60
+    total_count_in_mins_accounted = ((time_used.days*24*60 + time_used.hours*60 + time_used.mins)).to_i
+    total_count_in_mins += total_count_in_mins_accounted
+
+    time_used.mins = total_count_in_mins % 60
     rem_hours = (total_count_in_mins/60).to_i
-    time_used.hours += rem_hours % 24
-    time_used.days += (rem_hours/24).to_i
+    time_used.hours = rem_hours % 24
+    time_used.days = (rem_hours/24).to_i
   end
-
-
 end

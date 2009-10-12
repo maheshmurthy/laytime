@@ -1,6 +1,6 @@
 class CpDetail < ActiveRecord::Base
    validates_presence_of :cpName, :message => 'can\'t be blank'
-   validates_presence_of :partner, :number, :vessel, :from, :to, :details, :currency
+   validates_presence_of :partner, :number, :vessel, :from, :to, :currency
    has_many :port_details
 
    HUMANIZED_COLLUMNS = {:cpName => "Form name"}

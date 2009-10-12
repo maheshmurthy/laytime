@@ -36,6 +36,10 @@
     <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
     </li>
     <li>
+    <%= f.label :allowance, 'Allowance' %>
+    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'textbox', :maxlength => 50, :value => portdetail.allowance %>
+    </li>
+    <li>
     <%= label_tag 'Additional Days' %>
     <%= text_field_tag 'add_allowance[][days]', additional_time_allowance.days, :class => 'textbox', :maxlength => 20 %>
     </li>

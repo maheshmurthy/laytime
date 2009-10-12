@@ -4,12 +4,12 @@ one:
   days: 1
   hours: 1
   mins: 1
-  type: MyString
+  time_info_type: MyString
   port_detail_id: 1
 
 two:
   days: 1
   hours: 1
   mins: 1
-  type: MyString
+  time_info_type: MyString
   port_detail_id: 1

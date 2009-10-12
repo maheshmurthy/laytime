@@ -28,9 +28,9 @@ development:
 test:
   adapter: mysql
   encoding: utf8
-  database: mmurthyc_starttest
-  username: mmurthyc_mahesh
-  password: gotIt123
+  database: mmurthyc_laytimetest
+  username: mmurthyc_laybabs
+  password: liveIlife12
   socket: /tmp/mysql.sock
 
 production:
