@@ -9,6 +9,84 @@ html, body {
     margin: auto;
 }
 
+#title {
+  color: #444444;
+  font-style: italic;
+}
+
+#port-tab, #mainset, .summary, .summary-alt {
+    margin: auto;
+    padding: 0; 
+    border-style: none; 
+    background-color: #F2EFE9;
+    width: 800px;
+    margin-bottom: 20px;
+}
+
+.summary-heading {
+  font-style: italic;
+  font-size: 20px;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+
+.summary-alt {
+    background-color: #F2E7E9;
+}
+
+#port-tab {
+  background-color: #F2EFE9;
+}
+
+#mainset ol {  
+    padding: 1em 1em 0 1em;  
+    list-style: none; 
+} 
+
+#mainset li {
+    padding-bottom: 1em; 
+    list-style: none; 
+} 
+
+.summary li, .summary-alt li {
+    padding-bottom: 2px; 
+    list-style: none; 
+    padding-left: 10px;
+} 
+
+.stitle {
+    font-weight: bold; 
+    float: left;
+    width: 200px;
+}
+
+.datelabel {
+  float: right;
+}
+
+.stdlabel {
+  float: left;
+}
+
+.stdtextbox {
+  height: 32px;
+  font-size: 18px;
+}
+
+.ports-to-calc {
+  padding-left: 200px;
+}
+
+
+
+
+
+
+
+
+
+
+
 label {
     float: left;
     width: 10em;  
@@ -22,29 +100,11 @@ label {
     padding: 2px 2px 2px 4px;
 }
 
-fieldset {  
-    margin: auto;
-    padding: 0; 
-    border-style: none; 
-    background-color: #F2EFE9;
-    width: 800px;
-} 
-
 #softable {
     width: 100%;
     table-layout: fixed;
     margin: auto;
 }
-
-fieldset ol {  
-    padding: 1em 1em 0 1em;  
-    list-style: none; 
-} 
-
-fieldset li {  
-    padding-bottom: 1em; 
-    list-style: none; 
-} 
 
 #submit {
     width: 800px;

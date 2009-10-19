@@ -1,4 +1,5 @@
 class LaytimeController < ApplicationController
+  include TimeUtil
   def index
     clear_session
   end
@@ -12,7 +13,7 @@ class LaytimeController < ApplicationController
       session[:after_pre_advise] = nil
   end
 
-  def generate
+  def generate_pdf
     @cpdetails = CpDetail.find(:all)
     respond_to do |format|
       format.pdf {render :layout => false}
@@ -40,30 +41,51 @@ class LaytimeController < ApplicationController
     redirect_to :action => 'cpdetails'
   end
 
-  def generate_report(loading_facts, discharging_facts, additional_time, loading_demurrage, loading_despatch, discharging_demurrage, discharging_despatch)
+  def generate_report(loading_facts, discharging_facts, loading_avail, discharging_avail, loading, discharging, cp_detail)
     #Calculate demurrage/despatch for loading
     #Calculate demurrage/despatch for discharging 
     #Sum up both
+    #TODO Override the new method to do this?
     loading_time_used = TimeInfo.new
     reset_time_info(loading_time_used)
     discharging_time_used = TimeInfo.new
     reset_time_info(discharging_time_used)
 
-    report = Report.new
-    report.loading_time_used = loading_time_used
-    report.discharging_time_used = discharging_time_used
-
     loading_facts.each do |fact|
-      add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, loading_time_used)
+      loading_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, loading_time_used)
     end
 
     discharging_facts.each do |fact|
-      add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, discharging_time_used)
+      discharging_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, discharging_time_used)
     end
 
-    report.loading_time_available, report.discharging_time_available = additional_time
+    report = Report.new
+    report.loading_time_used = loading_time_used
+    report.discharging_time_used = discharging_time_used
+    report.loading_time_available = loading_avail
+    report.discharging_time_available = discharging_avail
+    report.loading_diff = loading_avail.diff(loading_time_used)
+    report.discharging_diff = discharging_avail.diff(discharging_time_used)
+
+    report.loading_amt = demurrage_despatch(report.loading_time_available, loading_time_used, loading.despatch, loading.demurrage)
+    report.discharging_amt = demurrage_despatch(report.discharging_time_available, discharging_time_used, discharging.despatch, discharging.demurrage)
+
+    report.cp_detail = cp_detail
+    report.loading = loading
+    report.discharging = discharging
 
     return report
+  end
+
+  def demurrage_despatch(available, used, despatch, demurrage)
+    diff_days = (available.diff(used)).to_days
+    if(available.greater_than(used))
+      # despatch calculation
+      return ((despatch * diff_days * 10**2).round.to_f)/(10**2)
+    else
+      # demurrage calculation
+      return ((demurrage * diff_days * 10**2).round.to_f)/(10**2)
+    end
   end
 
   def cpdetails
@@ -135,15 +157,32 @@ class LaytimeController < ApplicationController
       return
     end
     save_to_db
-    @report = generate_report(session[:loading_facts], 
+
+    # Do whatever calculations you need to do and then send only those to generate report
+    # which are required for display
+    
+    port = session[:port_details][0]
+    loading_avail = calculate_available_time(port.cargo, port.quantity, port.allowanceType, port.allowance)
+    port = session[:port_details][1]
+    discharging_avail = calculate_available_time(port.cargo, port.quantity, port.allowanceType, port.allowance)
+
+    @report = generate_report(session[:loading_facts],
                               session[:discharging_facts], 
-                              session[:additional_time],
-                              session[:port_details][0].demurrage,
-                              session[:port_details][0].despatch,
-                              session[:port_details][1].demurrage,
-                              session[:port_details][1].despatch)
-                              
-    clear_session
+                              loading_avail,
+                              discharging_avail,
+                              session[:port_details][0],
+                              session[:port_details][1],
+                              session[:cp_detail])
+    #TODO Uncomment this.
+    #clear_session
+  end
+
+  def calculate_available_time(unit, quantity, allowance_type, allowance)
+    #For now this is super simple. Figure out if unit and allowance type can be 
+    #different? IF so, calculation becomes much more complicated.
+    total = quantity/allowance
+    mins = (total * 24 * 60).to_i
+    info = to_time_info(mins)
   end
 
   def addRow
@@ -324,16 +363,10 @@ class LaytimeController < ApplicationController
   end
 
   def add_time_used(from, to, pct, time_used)
-    days = ((to - from)).to_i
-    hours =((to - from) * 24).to_i % 24
-    mins =((to - from) * 24 * 60).to_i % 60
-    total_count_in_mins = ((days*24*60 + hours*60 + mins) * (pct/100)).to_i
-    total_count_in_mins_accounted = ((time_used.days*24*60 + time_used.hours*60 + time_used.mins)).to_i
-    total_count_in_mins += total_count_in_mins_accounted
-
-    time_used.mins = total_count_in_mins % 60
-    rem_hours = (total_count_in_mins/60).to_i
-    time_used.hours = rem_hours % 24
-    time_used.days = (rem_hours/24).to_i
+    total_mins =((to - from) * 24 * 60).to_i
+    total_count_in_mins = (total_mins * (pct/100)).to_i
+    total_count_in_mins += time_used.to_mins
+    time_used = to_time_info(total_count_in_mins)
+    return time_used
   end
 end

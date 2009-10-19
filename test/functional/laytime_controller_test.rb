@@ -92,17 +92,38 @@ class LaytimeControllerTest < ActionController::TestCase
     fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from"=>"2009-06-15 18:30:00 UTC", "to"=>"2009-06-17 04:00:00 UTC")
     discharging_facts << fact
 
-    additional_time_infos = Array.new
-    additional_time_infos << TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
-    additional_time_infos << TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
+    loading_avail = TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
+    discharging_avail = TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
 
-    report = @controller.generate_report(loading_facts, discharging_facts, additional_time_infos, 50000, 25000, 50000, 25000)
+    report = @controller.generate_report(loading_facts, discharging_facts, loading_avail, discharging_avail, 50000.0, 25000.0, 0.0, 50000.0, 25000.0, 0.0)
     assert_equal 4, report.loading_time_used.days
     assert_equal 5, report.loading_time_used.hours
     assert_equal 8, report.loading_time_used.mins
 
+    assert_equal 0, report.loading_diff.days
+    assert_equal 16, report.loading_diff.hours
+    assert_equal 58, report.loading_diff.mins
+
     assert_equal 3, report.discharging_time_used.days
     assert_equal 1, report.discharging_time_used.hours
     assert_equal 30,report.discharging_time_used.mins
+
+    assert_equal 0, report.discharging_diff.days
+    assert_equal 10, report.discharging_diff.hours
+    assert_equal 40, report.discharging_diff.mins
+  end
+
+  test "available calculation time" do
+    info = @controller.calculate_available_time('mts', 55000.0, 'mts/day', 10000.0)
+    assert_equal 5, info.days
+    assert_equal 12, info.hours
+    assert_equal 0, info.mins
+  end
+
+  test "demurrage despatch calculation" do
+    available = TimeInfo.new("hours" => 12, "days" => 5, "mins" => 0, "type" => "add_allowance")
+    used = TimeInfo.new("hours" => 5, "days" => 4, "mins" => 8, "type" => "add_allowance")
+    amount = @controller.demurrage_despatch(available, used, 25000.0, 50000.0)
+    assert_equal amount, 32152.78 
   end
 end

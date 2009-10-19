@@ -1,11 +1,12 @@
 <style> 
   .tab {
-    display: inline;
+    list-style: none;
   }
+
 </style>
 <script type="text/javascript">
   document.observe('dom:loaded',function(){
-    new Control.Tabs('port_tab');
+    new Control.Tabs('port-tab');
   });
 </script>
 
@@ -19,7 +20,7 @@
 
 <h1>PortDetails</h1>
 <% form_for @portdetails, :url => { :action => "result" } do |f| %>
-  <fieldset id="port_tab">
+  <fieldset id="port-tab">
   <ol class="tab">
     <li><a href="#loading">Loading at <%= session[:cp_detail].from %></a></li>
     <li><a href="#discharging">Discharging at <%= session[:cp_detail].to %></a></li>

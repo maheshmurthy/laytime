@@ -1,59 +1,62 @@
 <%= error_messages_for :cpdetail, :header_message => 'Please correct the following errors and try again' %>
 <% form_for @cpdetail, :url => { :action => "portdetails" } do |f| %>
-  <fieldset>
+  <fieldset id="mainset">
   <ol>
   <li>
-    <%= label :dated, 'Date' %>
-    <%= text_field_tag 'dated', display_date, :class => 'textbox', :maxlength => 20, :disabled => true  %>
+  <%= f.label :dated, display_date, :class => 'datelabel' %>
   </li>
   <li>
-    <%= f.label :cpName, 'Form' %>
-    <%= f.text_field :cpName, :class => 'textbox', :maxlength => 40 %>
+  <%= f.label :cpName, 'Form', :class => 'stdlabel' %>
+  <%= f.text_field :cpName, :class => 'stdtextbox' %>
   </li>
   <li>
-    <%= f.label :number, 'No.' %>
-    <%= f.text_field :number, :class => 'textbox', :maxlength => 5 %>
+    <%= f.label :number, 'No.', :class => 'stdlabel'  %>
+    <%= f.text_field :number, :class => 'stdtextbox' %>
   </li>
   <li>
-    <%= f.label :currency, 'Currency' %>
-    <%= f.text_field :currency, :class => 'textbox', :maxlength => 10 %>
+    <%= f.label :currency, 'Currency', :class => 'stdlabel'  %>
+    <%= f.text_field :currency, :class => 'stdtextbox' %>
   </li>
   <li>
-    <%= f.label :vessel, 'Vessel' %>
-    <%= f.text_field :vessel, :class => 'textbox', :maxlength => 15 %>
+    <%= f.label :vessel, 'Vessel', :class => 'stdlabel'  %>
+    <%= f.text_field :vessel, :class => 'stdtextbox' %>
   </li>
   <li>
-    <%= f.label :partner, 'Partner' %>
-    <%= f.text_field :partner, :class => 'textbox', :maxlength => 10 %>
+    <%= f.label :partner, 'Partner', :class => 'stdlabel'  %>
+    <%= f.text_field :partner, :class => 'stdtextbox' %>
   </li>
   <li>
-    <%= f.label :from, 'From' %>
-    <%= f.text_field :from, :class => 'textbox', :maxlength => 10 %>
+  <%= f.label :from, 'From / To', :class => 'stdlabel'%>
+    <%= f.text_field :from, :class => 'stdtextbox', :maxlength => 14 %>
+    /
+    <%= f.text_field :to, :class => 'stdtextbox', :maxlength => 14 %>
   </li>
   <li>
-    <%= f.label :to, 'To' %>
-    <%= f.text_field :to, :class => 'textbox', :maxlength => 15 %>
+    <%= f.label :details, 'Details', :class => 'stdlabel'  %>
+    <%= f.text_field :details, :class => 'stdtextbox' %>
   </li>
   <li>
-    <%= f.label :details, 'Details' %>
-    <%= f.text_field :details, :class => 'textbox' , :maxlength => 25 %>
-  </li>
-  <li>
-    <%= f.label :ports_to_calculate, 'Ports to be calculated' %>
+    <%= f.label :ports_to_calculate, 'Ports to be calculated', :class => 'stdlabel'  %>
+    <li class="ports-to-calc">
     <%= f.radio_button :ports_to_calculate, 'R' %>Reversible
     <%= f.check_box :ports_to_calculate %>All Ports reversible
     <%= f.check_box :ports_to_calculate %>Loading Ports reversible
     <%= f.check_box :ports_to_calculate %>Discharge Ports reversible
+    </li>
+    <li class="ports-to-calc">
     <%= f.radio_button :ports_to_calculate, 'NR', :checked => true %>Non reversible
+    </li>
+    <li class="ports-to-calc">
     <%= f.radio_button :ports_to_calculate, 'A' %>Averaged
+    </li>
   </li>
   <li>
-    <%= f.label :once_on_demurrage, 'Once on demurrage' %>
+    <%= f.label :once_on_demurrage, 'Once on demurrage', :class => 'stdlabel'  %>
     <%= f.radio_button :once_on_demurrage, 'A', :checked => true %>Always on demurrage
     <%= f.radio_button :once_on_demurrage, 'NA' %>Not always on demurrage
   </li>
   <li>
-    <%= f.label :remarks, 'Remarks' %>
+    <%= f.label :remarks, 'Remarks', :class => 'stdlabel'  %>
     <%= f.text_area :remarks, :rows => 10, :cols => 30 %>
   </li>
   </ol>

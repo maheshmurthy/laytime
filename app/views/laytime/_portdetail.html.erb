@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset id="mainset">
 <% if portdetail_counter == 0 %>
   <% 
     facts = loading_facts 
@@ -20,76 +20,66 @@
 <% end %>
   <%= f.hidden_field :operation, :name => 'portdetail[][operation]', :value => portdetail.operation %>
     <li>
-    <%= f.label :cargo, 'Cargo' %>
+    <%= f.label :cargo, 'Cargo Quantity' %>
+    <%= f.text_field 'quantity', :name => 'portdetail[][quantity]', :class => 'stdtextbox', :value => portdetail.quantity, :maxlength => 10 %>
     <%= select 'portdetail', 'cargo', %w{mts}, {}, {:index => nil} %>
     </li>
     <li>
-    <%= f.label :quantity, 'Quantity' %>
-    <%= f.text_field 'quantity', :name => 'portdetail[][quantity]', :class => 'textbox', :maxlength => 50, :value => portdetail.quantity %>
-    </li>
-    <li>
     <%= f.label :description, 'Description' %>
-    <%= f.text_field 'description', :name => 'portdetail[][description]', :class => 'textbox', :maxlength => 50, :value => portdetail.description %>
+    <%= f.text_field 'description', :name => 'portdetail[][description]', :class => 'stdtextbox', :value => portdetail.description %>
     </li>
-    <li>
-    <%= f.label :allowanceType, 'AllowanceType' %>
-    <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
-    </li>
+
     <li>
     <%= f.label :allowance, 'Allowance' %>
-    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'textbox', :maxlength => 50, :value => portdetail.allowance %>
+    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'stdtextbox', :value => portdetail.allowance, :maxlength => 10 %>
+    <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
     </li>
+
     <li>
-    <%= label_tag 'Additional Days' %>
-    <%= text_field_tag 'add_allowance[][days]', additional_time_allowance.days, :class => 'textbox', :maxlength => 20 %>
-    </li>
-    <li>
-    <%= label_tag 'Additional Hours' %>
-    <%= text_field_tag 'add_allowance[][hours]', additional_time_allowance.hours, :class => 'textbox', :maxlength => 20 %>
-    </li>
-    <li>
-    <%= label_tag 'Additional Mins' %>
-    <%= text_field_tag 'add_allowance[][mins]', additional_time_allowance.mins, :class => 'textbox', :maxlength => 20%>
-    </li>
-    <li>
-    <%= label_tag 'Pre-advise given' %>
-    <%= text_field_tag 'pre_advise_given_first', additional_time_allowance.mins, :class => 'textbox', :maxlength => 20%>
+    <%= label_tag 'Additional time' %>
+    <%= text_field_tag 'add_allowance[][days]', additional_time_allowance.days, :class => 'stdtextbox', :size => 5 %>
+    days
+    <%= text_field_tag 'add_allowance[][hours]', additional_time_allowance.hours, :class => 'stdtextbox', :size => 2  %>
+    hrs
+    <%= text_field_tag 'add_allowance[][mins]', additional_time_allowance.mins, :class => 'stdtextbox', :size => 2  %>
+    mins
     </li>
     <li>
     <%= label_tag 'Pre-advise given' %>
-    <%= text_field_tag 'pre_advise_given_second', additional_time_allowance.mins, :class => 'textbox', :maxlength => 20%>
+    <%= text_field_tag 'pre_advise_given_first', additional_time_allowance.mins, :class => 'stdtextbox' %>
     </li>
     <li>
-    <%= label_tag 'Begin Laytime Counting days' %>
-    <%= text_field_tag 'pre_advise[][days]', pre_advise.days, :class => 'textbox', :maxlength => 20%>
+    <%= label_tag 'Pre-advise given' %>
+    <%= text_field_tag 'pre_advise_given_second', additional_time_allowance.mins, :class => 'stdtextbox' %>
     </li>
     <li>
-    <%= label_tag 'Begin Laytime Counting hours' %>
-    <%= text_field_tag 'pre_advise[][hours]', pre_advise.hours, :class => 'textbox', :maxlength => 20%>
-    </li>
-    <li>
-    <%= label_tag 'Begin Laytime Counting mins' %>
-    <%= text_field_tag 'pre_advise[][mins]', pre_advise.mins, :class => 'textbox', :maxlength => 20%>
+    <%= label_tag 'Begin Laytime Counting' %>
+    <%= text_field_tag 'pre_advise[][days]', pre_advise.days, :class => 'stdtextbox', :size => 5 %>
+    days
+    <%= text_field_tag 'pre_advise[][hours]', pre_advise.hours, :class => 'stdtextbox', :size => 2 %>
+    hrs
+    <%= text_field_tag 'pre_advise[][mins]', pre_advise.mins, :class => 'stdtextbox', :size => 2 %>
+    mins
     </li>
     <li>
     <%= f.label :demurrage, 'Demurrage' %>
-    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'textbox', :maxlength => 25, :value => portdetail.demurrage %>
+    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage %>
     </li>
     <li>
     <%= f.label :despatch, 'Despatch' %>
-    <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'textbox' , :maxlength => 25, :value => portdetail.despatch %>
+    <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'stdtextbox', :value => portdetail.despatch %>
     </li>
     <li>
     <%= f.label :commission_pct, 'Commission on demurrage(%)' %>
-    <%= f.text_field 'commission_pct', :name => 'portdetail[][commission_pct]', :class => 'textbox' , :maxlength => 25, :value => portdetail.commission_pct %>
+    <%= f.text_field 'commission_pct', :name => 'portdetail[][commission_pct]', :class => 'stdtextbox', :value => portdetail.commission_pct %>
     </li>
     <li>
     <%= f.label :time_start, 'Start time' %>
-    <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_start_string %>
+    <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'stdtextbox', :value => portdetail.time_start_string %>
     </li>
     <li>
     <%= f.label :time_end, 'End time' %>
-    <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'textbox' , :maxlength => 25, :value => portdetail.time_end_string %>
+    <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'stdtextbox', :value => portdetail.time_end_string %>
     </li>
     <li>
     <%= f.label :calculation_type, 'Calculate this port' %>
