@@ -9,5 +9,7 @@ class Report
                 :discharging_amt,
                 :cp_detail,
                 :loading,
-                :discharging
+                :discharging,
+                :loading_fact_report_list,
+                :discharging_fact_report_list
 end

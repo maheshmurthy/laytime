@@ -95,7 +95,22 @@ class LaytimeControllerTest < ActionController::TestCase
     loading_avail = TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
     discharging_avail = TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
 
-    report = @controller.generate_report(loading_facts, discharging_facts, loading_avail, discharging_avail, 50000.0, 25000.0, 0.0, 50000.0, 25000.0, 0.0)
+    loading_port_detail = PortDetail.new(:location => "Jorong",  :demurrage => "50000", :commission_pct =>"0", :despatch =>"25000", :quantity =>"55000", :description =>"Coal", :cargo =>"mts", :allowanceType =>"mts/day", :allowance => 10000, :operation =>"loading", :time_end =>"2009-06-09 04:30:00 UTC", :time_start =>"2009-06-04 21:12:00 UTC")
+
+    discharging_port_detail = PortDetail.new(:location => "Cochin",  :demurrage =>"50000", :commission_pct =>"0", :despatch =>"25000", :quantity =>"55000", :description =>"Coal", :cargo =>"mts", :allowanceType =>"mts/day", :allowance => 10000, :operation =>"discharging", :time_end =>"2009-06-17 04:00:00 UTC", :time_start =>"2009-06-14 01:30:00 UTC")
+
+    cp_detail = CpDetail.new(:partner => "Banpu",
+                        :cpName => "coal mining corp",
+                        :number => "1234",
+                        :vessel => "My vessel",
+                        :from => "Jorong",
+                        :to => "Cochin",
+                        :currency => "USD",
+                        :ports_to_calculate => "A",
+                        :once_on_demurrage => "A")
+
+ 
+    report = @controller.generate_report(loading_facts, discharging_facts, loading_avail, discharging_avail, loading_port_detail, discharging_port_detail, cp_detail)
     assert_equal 4, report.loading_time_used.days
     assert_equal 5, report.loading_time_used.hours
     assert_equal 8, report.loading_time_used.mins
@@ -125,5 +140,59 @@ class LaytimeControllerTest < ActionController::TestCase
     used = TimeInfo.new("hours" => 5, "days" => 4, "mins" => 8, "type" => "add_allowance")
     amount = @controller.demurrage_despatch(available, used, 25000.0, 50000.0)
     assert_equal amount, 32152.78 
+  end
+
+  test "fact report is built correctly" do
+    from = DateTime.new(2009, 9, 5, 22, 0, 0)
+    to = DateTime.new(2009, 9, 7, 11, 0, 0)
+    fact_report_list = @controller.build_fact_report(from, to, 100.0, 'Full/Normal', 0)
+    assert_equal 3, fact_report_list.length
+
+    date1 = DateTime.new(2009, 9, 6, 0, 0)
+    date2 = DateTime.new(2009, 9, 7, 0, 0)
+
+    fact_report = fact_report_list[0]
+    assert_equal fact_report.fact.from, from
+    assert_equal fact_report.fact.to, date1
+    assert_equal 120, fact_report.time_used
+
+    time_info = TimeInfo.new(:days => 0, :hours => 2, :mins => 0)
+    assert_equal time_info.attributes, fact_report.running_total.attributes
+
+    fact_report = fact_report_list[1]
+    assert_equal fact_report.fact.from, date1
+    assert_equal fact_report.fact.to, date2
+    assert_equal 1440, fact_report.time_used
+
+    time_info = TimeInfo.new(:days => 1, :hours => 2, :mins => 0)
+    assert_equal time_info.attributes, fact_report.running_total.attributes
+
+    fact_report = fact_report_list[2]
+    assert_equal fact_report.fact.from, date2
+    assert_equal fact_report.fact.to, to
+    assert_equal 660, fact_report.time_used
+
+    time_info = TimeInfo.new(:days => 1, :hours => 13, :mins => 0)
+    assert_equal time_info.attributes, fact_report.running_total.attributes
+
+    fact_report_list.each do |fact_report|
+      assert_equal 'Full/Normal', fact_report.fact.remarks
+      assert_equal 100.0, fact_report.fact.val
+    end
+
+  end
+
+  test "fact report for within a day" do
+    from = DateTime.new(2009, 9, 5, 21, 0, 0)
+    to = DateTime.new(2009, 9, 5, 23, 59, 0)
+    fact_report_list = @controller.build_fact_report(from, to, 0.0, 'Rain', 0)
+    assert_equal 1, fact_report_list.length
+
+    fact_report = fact_report_list[0]
+    assert_equal fact_report.fact.from, from
+    assert_equal fact_report.fact.to, to
+    assert_equal 0.0, fact_report.fact.val
+    assert_equal 'Rain', fact_report.fact.remarks
+    assert_equal 179, fact_report.time_used
   end
 end

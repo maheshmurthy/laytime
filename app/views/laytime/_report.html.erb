@@ -1,0 +1,39 @@
+  <li>
+    <span class="stitle">Cargo</span>
+    <%= port_details.quantity.to_s %>
+    <%= port_details.cargo %>
+    <%= port_details.description %>
+  </li>
+  <li>
+    <span class="stitle">Allowance</span>
+    <%= port_details.allowance.to_s %>
+    <%= port_details.allowanceType%>
+  </li>
+  <li>
+    <span class="stitle">Demurrage Rate</span>
+    <%= port_details.demurrage %>
+  </li>
+  <li>
+    <span class="stitle">Despatch Rate</span>
+    <%= port_details.despatch %>
+  </li>
+  <li>
+    <div>
+    </div>
+  </li>
+  <li>
+    <span class="stitle">Time Allowed</span>
+    <%= time_available.days %> days <%= pad(time_available.hours) %>:<%= pad(time_available.mins) %> mins
+  </li>
+  <li>
+    <span class="stitle">Time Used</span>
+    <%= time_used.days %> days <%= pad(time_used.hours) %>:<%= pad(time_used.mins) %> mins
+  </li>
+  <li>
+    <span class="stitle">Time Saved</span>
+    <%= diff.days %> days <%= pad(diff.hours) %>:<%= pad(diff.mins) %> mins
+  </li>
+  <li>
+    <span class="stitle">Despatch Due</span>
+    <%= amt %> 
+  </li>

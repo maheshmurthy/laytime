@@ -12,82 +12,11 @@
 
 <fieldset class='summary-alt'>
   <div class="summary-heading">Loading at <%= @report.cp_detail.from %></div>
-  <li>
-    <span class="stitle">Cargo</span>
-    <%= @report.loading.quantity.to_s %>
-    <%= @report.loading.cargo %>
-    <%= @report.loading.description %>
-  </li>
-  <li>
-    <span class="stitle">Allowance</span>
-    <%= @report.loading.allowance.to_s %>
-    <%= @report.loading.allowanceType%>
-  </li>
-  <li>
-    <span class="stitle">Demurrage Rate</span>
-    <%= @report.loading.demurrage %>
-  </li>
-  <li>
-    <span class="stitle">Despatch Rate</span>
-    <%= @report.loading.despatch %>
-  </li>
-  <li>
-    <div>
-    </div>
-  </li>
-  <li>
-    <span class="stitle">Time Allowed</span>
-    <%= @report.loading_time_available.days %> days <%= pad(@report.loading_time_available.hours) %>:<%= pad(@report.loading_time_available.mins) %> mins
-  </li>
-  <li>
-    <span class="stitle">Time Used</span>
-    <%= @report.loading_time_used.days %> days <%= pad(@report.loading_time_used.hours) %>:<%= pad(@report.loading_time_used.mins) %> mins
-  </li>
-  <li>
-    <span class="stitle">Time Saved</span>
-    <%= @report.loading_diff.days %> days <%= pad(@report.loading_diff.hours) %>:<%= pad(@report.loading_diff.mins) %> mins
-  </li>
-  <li>
-    <span class="stitle">Despatch Due</span>
-    <%= @report.loading_amt %> 
-  </li>
+  <%= render :partial => 'report', :locals => {:port_details => @report.loading, :time_available => @report.loading_time_available, :time_used => @report.loading_time_used, :diff => @report.loading_diff, :amt => @report.loading_amt } %>
 </fieldset>
 
 <fieldset class='summary'>
+
   <div class="summary-heading">Discharging at <%= @report.cp_detail.to %></div>
-  <li>
-    <span class="stitle">Cargo</span>
-    <%= @report.discharging.quantity.to_s %>
-    <%= @report.discharging.cargo %>
-    <%= @report.discharging.description %>
-  </li>
-  <li>
-    <span class="stitle">Allowance</span>
-    <%= @report.discharging.allowance.to_s %>
-    <%= @report.discharging.allowanceType%>
-  </li>
-  <li>
-    <span class="stitle">Demurrage Rate</span>
-    <%= @report.discharging.demurrage %>
-  </li>
-  <li>
-    <span class="stitle">Despatch Rate</span>
-    <%= @report.discharging.despatch %>
-  </li>
-  <li>
-    <span class="stitle">Time Allowed</span>
-    <%= @report.discharging_time_available.days %> days <%= pad(@report.discharging_time_available.hours) %>:<%= pad(@report.discharging_time_available.mins) %> mins
-  </li>
-  <li>
-    <span class="stitle">Time Used</span>
-    <%= @report.discharging_time_used.days %> days <%= pad(@report.discharging_time_used.hours) %>:<%= pad(@report.discharging_time_used.mins) %> mins
-  </li>
-  <li>
-    <span class="stitle">Time Saved</span>
-    <%= @report.discharging_diff.days %> days <%= pad(@report.discharging_diff.hours) %>:<%= pad(@report.discharging_diff.mins) %> mins
-  </li>
-  <li>
-    <span class="stitle">Despatch Due</span>
-    <%= @report.discharging_amt %> 
-  </li>
+  <%= render :partial => 'report', :locals => {:port_details => @report.discharging, :time_available => @report.discharging_time_available, :time_used => @report.discharging_time_used, :diff => @report.discharging_diff, :amt => @report.discharging_amt } %>
 </fieldset>

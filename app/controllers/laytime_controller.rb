@@ -51,21 +51,32 @@ class LaytimeController < ApplicationController
     discharging_time_used = TimeInfo.new
     reset_time_info(discharging_time_used)
 
-    loading_facts.each do |fact|
-      loading_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, loading_time_used)
-    end
+    loading_fact_report_list = build_fact_report_list(loading_facts)
+    discharging_fact_report_list = build_fact_report_list(discharging_facts)
 
-    discharging_facts.each do |fact|
-      discharging_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, discharging_time_used)
-    end
+#    loading_facts.each do |fact|
+#      loading_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, loading_time_used)
+#    end
+
+#    discharging_facts.each do |fact|
+#      discharging_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, discharging_time_used)
+#    end
+
+    # This is asking for trouble
+    report_list = loading_fact_report_list[loading_fact_report_list.length - 1]
+    loading_time_used = report_list[report_list.length - 1].running_total
+
+    report_list = discharging_fact_report_list[discharging_fact_report_list.length - 1]
+    discharging_time_used = report_list[report_list.length - 1].running_total
 
     report = Report.new
-    report.loading_time_used = loading_time_used
-    report.discharging_time_used = discharging_time_used
     report.loading_time_available = loading_avail
     report.discharging_time_available = discharging_avail
     report.loading_diff = loading_avail.diff(loading_time_used)
     report.discharging_diff = discharging_avail.diff(discharging_time_used)
+
+    report.loading_time_used = loading_time_used
+    report.discharging_time_used = discharging_time_used
 
     report.loading_amt = demurrage_despatch(report.loading_time_available, loading_time_used, loading.despatch, loading.demurrage)
     report.discharging_amt = demurrage_despatch(report.discharging_time_available, discharging_time_used, discharging.despatch, discharging.demurrage)
@@ -73,6 +84,10 @@ class LaytimeController < ApplicationController
     report.cp_detail = cp_detail
     report.loading = loading
     report.discharging = discharging
+
+    report.loading_fact_report_list = loading_fact_report_list
+    report.discharging_fact_report_list = discharging_fact_report_list
+
 
     return report
   end
@@ -224,6 +239,64 @@ class LaytimeController < ApplicationController
       end
   end
 
+  def build_fact_report_list(facts)
+    fact_report_list = Array.new
+    running_total = 0
+    facts.each do |fact|
+      fact_reports = build_fact_report(fact.from.to_datetime, fact.to.to_datetime, fact.val, fact.remarks, running_total)
+      running_total = fact_reports[fact_reports.length - 1].running_total.to_mins
+      fact_report_list << fact_reports
+    end
+    return fact_report_list
+  end
+
+  def build_fact_report(from, to, pct, remarks, running_total)
+    pct_val = (pct/100).to_i
+    fact_report_list = Array.new
+    fact_report = FactReport.new
+    total_mins =((to - from) * 24 * 60).to_i
+    if(total_mins < 1440) 
+      fact_report.fact = build_fact(from, to, pct, remarks)
+      fact_report.time_used = total_mins
+      running_total = (total_mins * pct_val) + running_total
+      fact_report.running_total = to_time_info(running_total)
+      # Fill in other things
+      fact_report_list << fact_report
+      return fact_report_list
+    end
+    # Spans over multiple days
+    end_of_day = DateTime.new(from.year, from.month, from.day, 24, 0, 0)
+    mins_to_end_of_day = ((end_of_day - from) * 24 * 60).to_i
+    running_total += (mins_to_end_of_day * pct_val)
+    fact_report.fact = build_fact(from, end_of_day, pct, remarks)
+    fact_report.time_used = mins_to_end_of_day
+    fact_report.running_total = to_time_info(running_total)
+    # Fill in other things
+    fact_report_list << fact_report
+    total_mins -= mins_to_end_of_day
+
+    while total_mins > 1440 do
+      running_total += (1440*pct_val)
+      fact_report = FactReport.new
+      fact_report.fact = build_fact(end_of_day, end_of_day + 1, pct, remarks)
+      fact_report.time_used = 1440
+      fact_report.running_total = to_time_info(running_total)
+      end_of_day += 1
+      # Fill in other things
+      fact_report_list << fact_report
+      total_mins -= 1440
+    end
+
+    fact_report = FactReport.new
+    fact_report.fact = build_fact(end_of_day, to, pct, remarks)
+    fact_report.time_used = ((to - end_of_day) * 24 * 60).to_i
+    running_total += (fact_report.time_used * pct_val)
+    fact_report.running_total = to_time_info(running_total)
+    # Fill in other things
+    fact_report_list << fact_report
+    return fact_report_list
+  end
+
   private 
 
   def is_cpdetails_valid
@@ -368,5 +441,9 @@ class LaytimeController < ApplicationController
     total_count_in_mins += time_used.to_mins
     time_used = to_time_info(total_count_in_mins)
     return time_used
+  end
+
+  def build_fact(from, to, pct, remarks)
+    return Fact.new(:from => from, :to => to, :val => pct, :remarks => remarks)
   end
 end
