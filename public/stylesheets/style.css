@@ -10,7 +10,7 @@ html, body {
 }
 
 #title {
-  color: #646060;
+  color: #333333;
 }
 
 #port-tab, #mainset, .summary, .summary-alt {
@@ -65,6 +65,10 @@ html, body {
 
 .stdlabel {
   float: left;
+  width: 10em;  
+  margin-right: 1em; 
+  text-align: right;
+  color: #333333;
 }
 
 .stdtextbox {
@@ -81,33 +85,24 @@ html, body {
   margin-bottom: 15px;
 }
 
-
-
-
-
-
-
-
-
-
-
-label {
-    float: left;
-    width: 10em;  
-    margin-right: 1em; 
-    text-align: right;
+.row {
+  width: 765;
 }
 
-.textbox {
-    height: 32px;
-    font-size: 18px;
-    padding: 2px 2px 2px 4px;
+.time-info-text {
+  width: 175px;
 }
 
-#softable {
-    width: 100%;
-    table-layout: fixed;
-    margin: auto;
+.ttc {
+  width: 130px;
+}
+
+.pct {
+  width: 50px;
+}
+
+.rem {
+  width: 200px;
 }
 
 #submit {
@@ -117,44 +112,4 @@ label {
 
 .submit {
     float: right;
-}
-
-#sofgroup {
-  width: 1000px;
-  list-style: none;
-}
-
-.typea {
-  width: 200px;
-}
-
-.typeb {
-  width: 10px;
-}
-
-.typec {
-  width: 30px;
-}
-
-.row {
-  width: 1000px;
-}
-
-.loc {
-  width: 200px;
-}
-
-.ttc {
-  width: 200px;
-  padding-left: 10px;
-}
-
-.pct {
-  width: 50px;
-  padding-left: 10px;
-}
-
-.rem {
-  width: 300px;
-  padding-left: 10px;
 }

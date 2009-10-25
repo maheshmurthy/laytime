@@ -20,23 +20,23 @@
 <% end %>
   <%= f.hidden_field :operation, :name => 'portdetail[][operation]', :value => portdetail.operation %>
     <li>
-    <%= f.label :cargo, 'Cargo Quantity' %>
+    <%= f.label :cargo, 'Cargo Quantity', :class => 'stdlabel' %>
     <%= f.text_field 'quantity', :name => 'portdetail[][quantity]', :class => 'stdtextbox', :value => portdetail.quantity, :maxlength => 10 %>
     <%= select 'portdetail', 'cargo', %w{mts}, {}, {:index => nil} %>
     </li>
     <li>
-    <%= f.label :description, 'Description' %>
+    <%= f.label :description, 'Description', :class => 'stdlabel'  %>
     <%= f.text_field 'description', :name => 'portdetail[][description]', :class => 'stdtextbox', :value => portdetail.description %>
     </li>
 
     <li>
-    <%= f.label :allowance, 'Allowance' %>
+    <%= f.label :allowance, 'Allowance', :class => 'stdlabel'  %>
     <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'stdtextbox', :value => portdetail.allowance, :maxlength => 10 %>
     <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
     </li>
 
     <li>
-    <%= label_tag 'Additional time' %>
+    <%= label_tag 'Additional time','Additional time',{:class => 'stdlabel'}  %>
     <%= text_field_tag 'add_allowance[][days]', additional_time_allowance.days, :class => 'stdtextbox', :size => 5 %>
     days
     <%= text_field_tag 'add_allowance[][hours]', additional_time_allowance.hours, :class => 'stdtextbox', :size => 2  %>
@@ -45,15 +45,15 @@
     mins
     </li>
     <li>
-    <%= label_tag 'Pre-advise given' %>
+    <%= label_tag '', 'Pre-advise given', {:class => 'stdlabel'} %>
     <%= text_field_tag 'pre_advise_given_first', additional_time_allowance.mins, :class => 'stdtextbox' %>
     </li>
     <li>
-    <%= label_tag 'Pre-advise given' %>
+    <%= label_tag '', 'Pre-advise given', {:class => 'stdlabel'} %>
     <%= text_field_tag 'pre_advise_given_second', additional_time_allowance.mins, :class => 'stdtextbox' %>
     </li>
     <li>
-    <%= label_tag 'Begin Laytime Counting' %>
+    <%= label_tag '', 'Begin Laytime Counting', {:class => 'stdlabel'} %>
     <%= text_field_tag 'pre_advise[][days]', pre_advise.days, :class => 'stdtextbox', :size => 5 %>
     days
     <%= text_field_tag 'pre_advise[][hours]', pre_advise.hours, :class => 'stdtextbox', :size => 2 %>
@@ -62,34 +62,34 @@
     mins
     </li>
     <li>
-    <%= f.label :demurrage, 'Demurrage' %>
+    <%= f.label :demurrage, 'Demurrage', :class => 'stdlabel'  %>
     <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage %>
     </li>
     <li>
-    <%= f.label :despatch, 'Despatch' %>
+    <%= f.label :despatch, 'Despatch', :class => 'stdlabel'  %>
     <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'stdtextbox', :value => portdetail.despatch %>
     </li>
     <li>
-    <%= f.label :commission_pct, 'Commission on demurrage(%)' %>
+    <%= f.label :commission_pct, 'Commission on demurrage(%)', :class => 'stdlabel'  %>
     <%= f.text_field 'commission_pct', :name => 'portdetail[][commission_pct]', :class => 'stdtextbox', :value => portdetail.commission_pct %>
     </li>
     <li>
-    <%= f.label :time_start, 'Start time' %>
+    <%= f.label :time_start, 'Start time', :class => 'stdlabel'  %>
     <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'stdtextbox', :value => portdetail.time_start_string %>
     </li>
     <li>
-    <%= f.label :time_end, 'End time' %>
+    <%= f.label :time_end, 'End time', :class => 'stdlabel'  %>
     <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'stdtextbox', :value => portdetail.time_end_string %>
     </li>
     <li>
-    <%= f.label :calculation_type, 'Calculate this port' %>
+    <%= f.label :calculation_type, 'Calculate this port', :class => 'stdlabel'  %>
     </li>
     <li>
     Normal <%= radio_button_tag('calculation_type' + portdetail_counter.to_s,  value="normal", :checked => true) %>
     Customary quick despatch <%= radio_button_tag('calculation_type' + portdetail_counter.to_s,  value="customary") %>
     </li>
     <li>
-    <%= f.label :calculation_time_saved, 'Calculate time saved' %>
+    <%= f.label :calculation_time_saved, 'Calculate time saved', :class => 'stdlabel'  %>
     </li>
     <li>
     Working time saved <%= radio_button_tag('calculation_time_saved' + portdetail_counter.to_s, value="working", :checked => true) %>
@@ -98,21 +98,42 @@
     <li>
     <h2>Statement of Facts</h2>
     </li>
+    <li>
+    <div class="row">
+    <span style="margin-left:75px; margin-right: 75px">
+    From 
+    </span>
+    <span style="margin-left:75px; margin-right: 75px">
+    To 
+    </span>
+    <span style="margin-left:10px; margin-right: 20px;">
+    Time To Count
+    </span>
+    <span style="margin-left: 15px; margin-right: 30px;">
+    Pct 
+    </span>
+    <span style="margin-left: 50px; margin-right: 30px;">
+    Remarks
+    </span>
+    </div>
+    </li>
     <div class="sof">
-    <% facts.each do  |fact|
-      if portdetail_counter == 0 %>
-      <%= text_field_tag 'from', fact.from, :name => 'loading[][from]', :class =>'loc' %>
-      <%= text_field_tag 'to', fact.to, :name => 'loading[][to]', :class =>'loc' %>
+    <% facts.each do  |fact| %>
+    <div class="row">
+     <% if portdetail_counter == 0 %>
+      <%= text_field_tag 'from', fact.from, :name => 'loading[][from]', :class =>'time-info-text' %>
+      <%= text_field_tag 'to', fact.to, :name => 'loading[][to]', :class =>'time-info-text' %>
       <%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %>
       <%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct' %>
       <%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
       <% else %>
-      <%= text_field_tag 'from', fact.from, :name => 'discharging[][from]', :class =>'loc' %>
-      <%= text_field_tag 'to', fact.to, :name => 'discharging[][to]', :class =>'loc' %>
+      <%= text_field_tag 'from', fact.from, :name => 'discharging[][from]', :class =>'time-info-text' %>
+      <%= text_field_tag 'to', fact.to, :name => 'discharging[][to]', :class =>'time-info-text' %>
       <%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %>
       <%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %>
       <%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
       <% end %>
+      </div>
     <% end %>
     </div>
     <li>
