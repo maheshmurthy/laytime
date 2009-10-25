@@ -10,8 +10,7 @@ html, body {
 }
 
 #title {
-  color: #444444;
-  font-style: italic;
+  color: #646060;
 }
 
 #port-tab, #mainset, .summary, .summary-alt {
@@ -31,7 +30,7 @@ html, body {
 }
 
 .summary-alt {
-    background-color: #F2E7E9;
+    background-color: #F2F2F2;
 }
 
 #port-tab {
@@ -75,6 +74,11 @@ html, body {
 
 .ports-to-calc {
   padding-left: 200px;
+}
+
+.seperator {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 

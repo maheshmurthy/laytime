@@ -8,15 +8,25 @@
   <li>
   <span class="stitle">C/P</span> <%= @report.cp_detail.cpName %>
   </li>
+  <li>
+  <span class="stitle">Vessel</span> <%= @report.cp_detail.vessel%>
+  </li>
 </fieldset>
 
 <fieldset class='summary-alt'>
-  <div class="summary-heading">Loading at <%= @report.cp_detail.from %></div>
-  <%= render :partial => 'report', :locals => {:port_details => @report.loading, :time_available => @report.loading_time_available, :time_used => @report.loading_time_used, :diff => @report.loading_diff, :amt => @report.loading_amt } %>
+  <div class="summary-heading" style="background-color: #808080; color: white;font-weight: bold">Loading at <%= @report.cp_detail.from %></div>
+  <%= render :partial => 'report', :locals => {:port_details => @report.loading, :time_available => @report.loading_time_available, :time_used => @report.loading_time_used, :diff => @report.loading_diff, :amt => @report.loading_amt, :facts_report => @report.loading_fact_report_list } %>
 </fieldset>
 
 <fieldset class='summary'>
 
-  <div class="summary-heading">Discharging at <%= @report.cp_detail.to %></div>
-  <%= render :partial => 'report', :locals => {:port_details => @report.discharging, :time_available => @report.discharging_time_available, :time_used => @report.discharging_time_used, :diff => @report.discharging_diff, :amt => @report.discharging_amt } %>
+  <div class="summary-heading" style="background-color: #5F2A2F; color: white;font-weight: bold">Discharging at <%= @report.cp_detail.to %></div>
+  <%= render :partial => 'report', :locals => {:port_details => @report.discharging, :time_available => @report.discharging_time_available, :time_used => @report.discharging_time_used, :diff => @report.discharging_diff, :amt => @report.discharging_amt, :facts_report => @report.discharging_fact_report_list  } %>
 </fieldset>
+<fieldset class='summary-alt'>
+    <li>
+    <span class="stitle">Balance Despatch</span>
+    <%= @report.loading_amt + @report.discharging_amt %>
+    </li>
+</fieldset>
+<%= link_to "View PDF", "/foo/report.pdf" %>

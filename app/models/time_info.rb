@@ -32,4 +32,8 @@ class TimeInfo < ActiveRecord::Base
    def less_than(info)
       self.to_mins < info.to_mins
    end
+
+   def to_s
+     self.days.to_s + " " + pad(self.hours).to_s + ":" + pad(self.mins).to_s
+   end
 end

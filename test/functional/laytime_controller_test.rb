@@ -12,7 +12,7 @@ class LaytimeControllerTest < ActionController::TestCase
     post(:portdetails,{:cp_detail => {:partner => "Banpu",
                         :cpName => "coal mining corp",
                         :number => "1234",
-                        :vessel => "My vessel",
+                        :vessel => "Medi Dublin",
                         :from => "Jorong",
                         :to => "Cochin",
                         :currency => "USD",
@@ -22,7 +22,7 @@ class LaytimeControllerTest < ActionController::TestCase
     assert_equal "Banpu", session[:cp_detail].partner
     assert_equal "coal mining corp", session[:cp_detail].cpName
     assert_equal 1234, session[:cp_detail].number
-    assert_equal "My vessel", session[:cp_detail].vessel
+    assert_equal "Medi Dublin", session[:cp_detail].vessel
     assert_equal "Jorong", session[:cp_detail].from
     assert_equal "Cochin", session[:cp_detail].to
     assert_equal "USD", session[:cp_detail].currency
@@ -50,7 +50,7 @@ class LaytimeControllerTest < ActionController::TestCase
     cp_detail = CpDetail.new(:partner => "Banpu",
                         :cpName => "coal mining corp",
                         :number => "1234",
-                        :vessel => "My vessel",
+                        :vessel => "Medi Dublin",
                         :from => "Jorong",
                         :to => "Cochin",
                         :currency => "USD",
@@ -102,7 +102,7 @@ class LaytimeControllerTest < ActionController::TestCase
     cp_detail = CpDetail.new(:partner => "Banpu",
                         :cpName => "coal mining corp",
                         :number => "1234",
-                        :vessel => "My vessel",
+                        :vessel => "Medi Dublin",
                         :from => "Jorong",
                         :to => "Cochin",
                         :currency => "USD",

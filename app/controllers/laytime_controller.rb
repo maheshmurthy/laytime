@@ -1,5 +1,6 @@
 class LaytimeController < ApplicationController
   include TimeUtil
+  include PdfUtil
   def index
     clear_session
   end
@@ -14,7 +15,6 @@ class LaytimeController < ApplicationController
   end
 
   def generate_pdf
-    @cpdetails = CpDetail.find(:all)
     respond_to do |format|
       format.pdf {render :layout => false}
     end
@@ -54,14 +54,6 @@ class LaytimeController < ApplicationController
     loading_fact_report_list = build_fact_report_list(loading_facts)
     discharging_fact_report_list = build_fact_report_list(discharging_facts)
 
-#    loading_facts.each do |fact|
-#      loading_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, loading_time_used)
-#    end
-
-#    discharging_facts.each do |fact|
-#      discharging_time_used = add_time_used(fact.from.to_datetime, fact.to.to_datetime, fact.val, discharging_time_used)
-#    end
-
     # This is asking for trouble
     report_list = loading_fact_report_list[loading_fact_report_list.length - 1]
     loading_time_used = report_list[report_list.length - 1].running_total
@@ -88,7 +80,7 @@ class LaytimeController < ApplicationController
     report.loading_fact_report_list = loading_fact_report_list
     report.discharging_fact_report_list = discharging_fact_report_list
 
-
+    create_pdf("report.pdf", report)
     return report
   end
 
@@ -189,6 +181,7 @@ class LaytimeController < ApplicationController
                               session[:port_details][1],
                               session[:cp_detail])
     #TODO Uncomment this.
+    session[:report] = @report
     #clear_session
   end
 
@@ -433,14 +426,6 @@ class LaytimeController < ApplicationController
     time_info.days= 0
     time_info.hours = 0
     time_info.mins = 0
-  end
-
-  def add_time_used(from, to, pct, time_used)
-    total_mins =((to - from) * 24 * 60).to_i
-    total_count_in_mins = (total_mins * (pct/100)).to_i
-    total_count_in_mins += time_used.to_mins
-    time_used = to_time_info(total_count_in_mins)
-    return time_used
   end
 
   def build_fact(from, to, pct, remarks)
