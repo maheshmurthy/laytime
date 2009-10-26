@@ -1,0 +1,12 @@
+module PortsToCalculate
+  NON_REVERSIBLE = 0
+  AVERAGED = 1
+  REVERSIBLE_ALL = 2
+  REVERSIBLE_LOADING_PORT = 3
+  REVERSIBLE_DISCHARGING_PORT = 4
+end
+
+module OnceOnDemurrage
+  ALWAYS - 0
+  NOT_ALWAYS = 1
+end

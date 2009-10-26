@@ -22,6 +22,10 @@ html, body {
     margin-bottom: 20px;
 }
 
+span.fieldwithErrors input {
+  border: 1px solid red;
+}
+
 .summary-heading {
   font-style: italic;
   font-size: 20px;

@@ -1,4 +1,4 @@
-<%= error_messages_for :cpdetail, :header_message => 'Please correct the following errors and try again' %>
+<%= error_messages_for :cpdetail, :header_message => 'Please try again!', :message => 'There were some problems in the form:' %>
 <% form_for @cpdetail, :url => { :action => "portdetails" } do |f| %>
   <fieldset id="mainset">
   <ol>
@@ -27,9 +27,9 @@
   </li>
   <li>
   <%= f.label :from, 'From / To', :class => 'stdlabel'%>
-    <%= f.text_field :from, :class => 'stdtextbox', :maxlength => 14 %>
+    <%= f.text_field :from, :class => 'stdtextbox', :maxlength => 13 %>
     /
-    <%= f.text_field :to, :class => 'stdtextbox', :maxlength => 14 %>
+    <%= f.text_field :to, :class => 'stdtextbox', :maxlength => 13 %>
   </li>
   <li>
     <%= f.label :details, 'Details', :class => 'stdlabel'  %>
@@ -38,16 +38,16 @@
   <li>
     <%= f.label :ports_to_calculate, 'Ports to be calculated', :class => 'stdlabel'  %>
     <li class="ports-to-calc">
-    <%= f.radio_button :ports_to_calculate, 'R' %>Reversible
-    <%= f.check_box :ports_to_calculate %>All Ports reversible
-    <%= f.check_box :ports_to_calculate %>Loading Ports reversible
-    <%= f.check_box :ports_to_calculate %>Discharge Ports reversible
+    <%= f.radio_button :ports_to_calculate, 'R', :disabled => true %>Reversible
+    <%= f.check_box :ports_to_calculate, :disabled => true %>All Ports reversible
+    <%= f.check_box :ports_to_calculate, :disabled => true %>Loading Ports reversible
+    <%= f.check_box :ports_to_calculate, :disabled => true %>Discharge Ports reversible
     </li>
     <li class="ports-to-calc">
-    <%= f.radio_button :ports_to_calculate, 'NR', :checked => true %>Non reversible
+    <%= f.radio_button :ports_to_calculate, 'NON_REVERSIBLE', :checked => true %>Non reversible
     </li>
     <li class="ports-to-calc">
-    <%= f.radio_button :ports_to_calculate, 'A' %>Averaged
+    <%= f.radio_button :ports_to_calculate, 'A', :disabled => true %>Averaged
     </li>
   </li>
   <li>
