@@ -215,16 +215,12 @@ class LaytimeController < ApplicationController
       end
   end
 
-
   private 
 
   def is_cpdetails_valid
-    unless(session[:cp_detail] && session[:cp_detail].errors && session[:cp_detail].errors.empty?)
-      # Take it from params if there is nothing in session 
-      # or there are errors in session
+    if params[:cp_visited] || session[:cp_detail] == nil
       session[:cp_detail] = CpDetail.new(params[:cp_detail])
     end
-
     if session[:cp_detail].invalid?
       # redirect to cp detail page instead of back
       return false
