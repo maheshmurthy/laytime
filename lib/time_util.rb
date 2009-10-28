@@ -25,4 +25,16 @@ module TimeUtil
   def pretty_time_with_zone(time)
     time.strftime("%d-%m-%Y %H:%M") if time
   end
+
+  def to_hr_min(value)                                                                  
+    hr = value/60                                                                       
+    min = value % 60                                                                    
+    "%02d:%02d" % [hr,min]                                                              
+  end                                                                                   
+
+  def reset_time_info(time_info)
+    time_info.days= 0
+    time_info.hours = 0
+    time_info.mins = 0
+  end
 end

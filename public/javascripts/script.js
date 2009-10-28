@@ -6,13 +6,13 @@ function addrow(operation) {
      row.setAttribute('class','row');
 
      var input = document.createElement('input')
-     input.setAttribute('class','loc');
+     input.setAttribute('class','time-info-text');
      input.setAttribute('type','textbox');
      input.setAttribute('name',operation+'[][from]');
      row.appendChild(input);
 
      input = document.createElement('input')
-     input.setAttribute('class','loc');
+     input.setAttribute('class','time-info-text');
      input.setAttribute('type','textbox');
      input.setAttribute('name',operation+'[][to]');
      row.appendChild(input);
