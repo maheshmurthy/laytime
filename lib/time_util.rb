@@ -12,13 +12,17 @@ module TimeUtil
     "%02d" % value
   end
 
-  def pretty_time_info(time_info)                                                    
+  def pretty_time_info(time_info)
     time_info.days.to_s + " days " + pad(time_info.hours) + ":" + pad(time_info.mins)
-  end                                                                                
+  end
 
-  def to_hr_min(value)                                                                  
-    hr = value/60                                                                       
-    min = value % 60                                                                    
-    "%02d:%02d" % [hr,min]                                                              
-  end                                                                                   
+  def to_hr_min(value)
+    hr = value/60
+    min = value % 60
+    "%02d:%02d" % [hr,min]
+  end
+
+  def pretty_time_with_zone(time)
+    time.strftime("%d-%m-%Y %H:%M") if time
+  end
 end
