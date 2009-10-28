@@ -94,15 +94,18 @@ span.fieldwithErrors input {
 }
 
 .time-info-text {
-  width: 175px;
+  width: 170px;
+  margin-right: 5px;
 }
 
 .ttc {
   width: 130px;
+  margin-right: 5px;
 }
 
 .pct {
   width: 50px;
+  margin-right: 5px;
 }
 
 .rem {

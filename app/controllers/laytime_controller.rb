@@ -1,6 +1,8 @@
 class LaytimeController < ApplicationController
   include TimeUtil
   include PdfUtil
+  include LaytimeUtil
+
   def index
     clear_session
   end
@@ -82,17 +84,6 @@ class LaytimeController < ApplicationController
 
     create_pdf("report.pdf", report)
     return report
-  end
-
-  def demurrage_despatch(available, used, despatch, demurrage)
-    diff_days = (available.diff(used)).to_days
-    if(available.greater_than(used))
-      # despatch calculation
-      return ((despatch * diff_days * 10**2).round.to_f)/(10**2)
-    else
-      # demurrage calculation
-      return ((demurrage * diff_days * 10**2).round.to_f)/(10**2)
-    end
   end
 
   def cpdetails
@@ -185,14 +176,6 @@ class LaytimeController < ApplicationController
     #clear_session
   end
 
-  def calculate_available_time(unit, quantity, allowance_type, allowance)
-    #For now this is super simple. Figure out if unit and allowance type can be 
-    #different? IF so, calculation becomes much more complicated.
-    total = quantity/allowance
-    mins = (total * 24 * 60).to_i
-    info = to_time_info(mins)
-  end
-
   def addRow
     session[:facts] << Fact.new
   end
@@ -232,63 +215,6 @@ class LaytimeController < ApplicationController
       end
   end
 
-  def build_fact_report_list(facts)
-    fact_report_list = Array.new
-    running_total = 0
-    facts.each do |fact|
-      fact_reports = build_fact_report(fact.from.to_datetime, fact.to.to_datetime, fact.val, fact.remarks, running_total)
-      running_total = fact_reports[fact_reports.length - 1].running_total.to_mins
-      fact_report_list << fact_reports
-    end
-    return fact_report_list
-  end
-
-  def build_fact_report(from, to, pct, remarks, running_total)
-    pct_val = (pct/100).to_i
-    fact_report_list = Array.new
-    fact_report = FactReport.new
-    total_mins =((to - from) * 24 * 60).to_i
-    if(total_mins < 1440) 
-      fact_report.fact = build_fact(from, to, pct, remarks)
-      fact_report.time_used = total_mins
-      running_total = (total_mins * pct_val) + running_total
-      fact_report.running_total = to_time_info(running_total)
-      # Fill in other things
-      fact_report_list << fact_report
-      return fact_report_list
-    end
-    # Spans over multiple days
-    end_of_day = DateTime.new(from.year, from.month, from.day, 24, 0, 0)
-    mins_to_end_of_day = ((end_of_day - from) * 24 * 60).to_i
-    running_total += (mins_to_end_of_day * pct_val)
-    fact_report.fact = build_fact(from, end_of_day, pct, remarks)
-    fact_report.time_used = mins_to_end_of_day
-    fact_report.running_total = to_time_info(running_total)
-    # Fill in other things
-    fact_report_list << fact_report
-    total_mins -= mins_to_end_of_day
-
-    while total_mins > 1440 do
-      running_total += (1440*pct_val)
-      fact_report = FactReport.new
-      fact_report.fact = build_fact(end_of_day, end_of_day + 1, pct, remarks)
-      fact_report.time_used = 1440
-      fact_report.running_total = to_time_info(running_total)
-      end_of_day += 1
-      # Fill in other things
-      fact_report_list << fact_report
-      total_mins -= 1440
-    end
-
-    fact_report = FactReport.new
-    fact_report.fact = build_fact(end_of_day, to, pct, remarks)
-    fact_report.time_used = ((to - end_of_day) * 24 * 60).to_i
-    running_total += (fact_report.time_used * pct_val)
-    fact_report.running_total = to_time_info(running_total)
-    # Fill in other things
-    fact_report_list << fact_report
-    return fact_report_list
-  end
 
   private 
 
@@ -384,6 +310,7 @@ class LaytimeController < ApplicationController
   end
 
   def read_from_params(facts)
+    # Read from params only if there is no error in the fact object already
     read_from_params = false
     if(facts)
       facts.each do |fact|
@@ -392,6 +319,9 @@ class LaytimeController < ApplicationController
     else
       read_from_params = true
     end
+    logger.info "********"
+    logger.info read_from_params
+    logger.info "********"
     return read_from_params
   end
 
@@ -420,12 +350,6 @@ class LaytimeController < ApplicationController
       end
     end
     return is_invalid
-  end
-
-  def reset_time_info(time_info)
-    time_info.days= 0
-    time_info.hours = 0
-    time_info.mins = 0
   end
 
   def build_fact(from, to, pct, remarks)

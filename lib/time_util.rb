@@ -21,4 +21,10 @@ module TimeUtil
     min = value % 60                                                                    
     "%02d:%02d" % [hr,min]                                                              
   end                                                                                   
+
+  def reset_time_info(time_info)
+    time_info.days= 0
+    time_info.hours = 0
+    time_info.mins = 0
+  end
 end
