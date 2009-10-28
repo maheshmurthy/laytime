@@ -20,6 +20,7 @@
 
 <h1>PortDetails</h1>
 <% form_for @portdetails, :url => { :action => "result" } do |f| %>
+  <%= hidden_field_tag :port_visited, true %>
   <fieldset id="port-tab">
   <ol class="tab">
     <li><a href="#loading">Loading at <%= session[:cp_detail].from %></a></li>

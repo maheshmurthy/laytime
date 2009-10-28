@@ -219,6 +219,8 @@ class LaytimeController < ApplicationController
 
   def is_cpdetails_valid
     if params[:cp_visited] || session[:cp_detail] == nil
+      # session[:cp_detail] will be null when someone deeplinks into port details page without
+      # previously filling cp details
       session[:cp_detail] = CpDetail.new(params[:cp_detail])
     end
     if session[:cp_detail].invalid?
@@ -230,31 +232,33 @@ class LaytimeController < ApplicationController
   end
 
   def is_portdetails_valid
-    unless(session[:port_details] && session[:port_details][0].errors && session[:port_details][1].errors && session[:port_details][0].errors.empty? && session[:port_details][1].errors.empty?)
-      portdetails = Array.new
-      port_detail = PortDetail.new(params['portdetail'][0])
-      port_detail.location = session[:cp_detail].from
-      port_detail.calculation_type = params['calculation_type0']
-      port_detail.calculation_time_saved = params['calculation_time_saved0']
-      portdetails << port_detail
-
-      port_detail = PortDetail.new(params['portdetail'][1])
-      port_detail.location = session[:cp_detail].to
-      port_detail.calculation_type = params['calculation_type1']
-      port_detail.calculation_time_saved = params['calculation_time_saved1']
-      portdetails << port_detail
-      session[:port_details] = portdetails
+    debugger
+    if !params[:port_visited]
+      return false
     end
+    #unless(session[:port_details] && session[:port_details][0].errors && session[:port_details][1].errors && session[:port_details][0].errors.empty? && session[:port_details][1].errors.empty?)
+    portdetails = Array.new
+    port_detail = PortDetail.new(params['portdetail'][0])
+    port_detail.location = session[:cp_detail].from
+    port_detail.calculation_type = params['calculation_type0']
+    port_detail.calculation_time_saved = params['calculation_time_saved0']
+    portdetails << port_detail
+
+    port_detail = PortDetail.new(params['portdetail'][1])
+    port_detail.location = session[:cp_detail].to
+    port_detail.calculation_type = params['calculation_type1']
+    port_detail.calculation_time_saved = params['calculation_time_saved1']
+    portdetails << port_detail
+    session[:port_details] = portdetails
     port_validity0_invalid = session[:port_details][0].invalid?
     port_validity1_invalid = session[:port_details][1].invalid?
-
 
     # The reason I did it this way is because I want to call
     # invalid method on both objects. If I do an or directly,
     # if the first one satisfies, it wouldn't even go to the
     # second object's invalid method
     
-    # Do Statement of Facts validation as well here because both of them
+    # Do Statement of Facts validation as well here because both of they
     # are in the same page.
 
     loading_facts_invalid = is_facts_invalid('loading')
@@ -331,16 +335,12 @@ class LaytimeController < ApplicationController
     
     is_invalid = false
     if(operation == 'loading')
-      if(read_from_params(session[:loading_facts]))
-        session[:loading_facts] = fact_list
-      end
+      session[:loading_facts] = fact_list
       session[:loading_facts].each do |fact|
         is_invalid ||= fact.invalid?
       end
     else
-      if(read_from_params(session[:discharging_facts]))
-        session[:discharging_facts] = fact_list
-      end
+      session[:discharging_facts] = fact_list
       session[:discharging_facts].each do |fact|
         is_invalid ||= fact.invalid?
       end
