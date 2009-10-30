@@ -35,33 +35,7 @@
     <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
     </li>
 
-    <li>
-    <%= label_tag 'Additional time','Additional time',{:class => 'stdlabel'}  %>
-    <%= text_field_tag 'add_allowance[][days]', additional_time_allowance.days, :class => 'stdtextbox', :size => 5 %>
-    days
-    <%= text_field_tag 'add_allowance[][hours]', additional_time_allowance.hours, :class => 'stdtextbox', :size => 2  %>
-    hrs
-    <%= text_field_tag 'add_allowance[][mins]', additional_time_allowance.mins, :class => 'stdtextbox', :size => 2  %>
-    mins
-    </li>
-    <li>
-    <%= label_tag '', 'Pre-advise given', {:class => 'stdlabel'} %>
-    <%= text_field_tag 'pre_advise_given_first', additional_time_allowance.mins, :class => 'stdtextbox' %>
-    </li>
-    <li>
-    <%= label_tag '', 'Pre-advise given', {:class => 'stdlabel'} %>
-    <%= text_field_tag 'pre_advise_given_second', additional_time_allowance.mins, :class => 'stdtextbox' %>
-    </li>
-    <li>
-    <%= label_tag '', 'Begin Laytime Counting', {:class => 'stdlabel'} %>
-    <%= text_field_tag 'pre_advise[][days]', pre_advise.days, :class => 'stdtextbox', :size => 5 %>
-    days
-    <%= text_field_tag 'pre_advise[][hours]', pre_advise.hours, :class => 'stdtextbox', :size => 2 %>
-    hrs
-    <%= text_field_tag 'pre_advise[][mins]', pre_advise.mins, :class => 'stdtextbox', :size => 2 %>
-    mins
-    </li>
-    <li>
+   <li>
     <%= f.label :demurrage, 'Demurrage', :class => 'stdlabel'  %>
     <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage %>
     </li>
