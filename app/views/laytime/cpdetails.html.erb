@@ -47,13 +47,13 @@
     <%= f.radio_button :ports_to_calculate, 'NON_REVERSIBLE', :checked => true %>Non reversible
     </li>
     <li class="ports-to-calc">
-    <%= f.radio_button :ports_to_calculate, 'A', :disabled => true %>Averaged
+    <%= f.radio_button :ports_to_calculate, 'AVERAGED', :disabled => true %>Averaged
     </li>
   </li>
   <li>
     <%= f.label :once_on_demurrage, 'Once on demurrage', :class => 'stdlabel'  %>
-    <%= f.radio_button :once_on_demurrage, 'A', :checked => true %>Always on demurrage
-    <%= f.radio_button :once_on_demurrage, 'NA' %>Not always on demurrage
+    <%= f.radio_button :once_on_demurrage, 'ALWAYS', :checked => true %>Always on demurrage
+    <%= f.radio_button :once_on_demurrage, 'NOT_ALWAYS' %>Not always on demurrage
   </li>
   <li>
     <%= f.label :remarks, 'Remarks', :class => 'stdlabel'  %>
