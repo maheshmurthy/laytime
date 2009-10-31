@@ -196,8 +196,8 @@ class LaytimeController < ApplicationController
           fact.save
         end
 
-        save_time_info(@portdetail.id, session[:after_pre_advise][0])
-        save_time_info(@portdetail.id, session[:additional_time][0])
+#        save_time_info(@portdetail.id, session[:after_pre_advise][0])
+#        save_time_info(@portdetail.id, session[:additional_time][0])
 
         @portdetail = session[:port_details][1]
         @portdetail.cp_detail_id = @cpdetail.id
@@ -207,8 +207,8 @@ class LaytimeController < ApplicationController
           fact.save
         end
 
-        save_time_info(@portdetail.id, session[:after_pre_advise][1])
-        save_time_info(@portdetail.id, session[:additional_time][1])
+#        save_time_info(@portdetail.id, session[:after_pre_advise][1])
+#        save_time_info(@portdetail.id, session[:additional_time][1])
       else
         logger.info "Failed to save!"
       end
@@ -262,8 +262,8 @@ class LaytimeController < ApplicationController
     loading_facts_invalid = is_facts_invalid('loading')
     discharging_facts_invalid = is_facts_invalid('discharging')
 
-    add_allowance_invalid = is_time_info_invalid('add_allowance')
-    pre_advise_invalid = is_time_info_invalid('pre_advise')
+#    add_allowance_invalid = is_time_info_invalid('add_allowance')
+#    pre_advise_invalid = is_time_info_invalid('pre_advise')
 
     if port_validity0_invalid || port_validity1_invalid || loading_facts_invalid || discharging_facts_invalid
       return false
