@@ -116,7 +116,7 @@ class LaytimeController < ApplicationController
       @loading_facts = session[:loading_facts]
     else
       @loading_facts = Array.new
-      @loading_facts <<  Fact.new
+    #  @loading_facts <<  Fact.new
       @loading_facts << Fact.new
       # Need this for addRow method
       session[:loading_facts] = @loading_facts
@@ -126,7 +126,7 @@ class LaytimeController < ApplicationController
       @discharging_facts = session[:discharging_facts]
     else
       @discharging_facts = Array.new
-      @discharging_facts <<  Fact.new
+    #  @discharging_facts <<  Fact.new
       @discharging_facts << Fact.new
       # Need this for addRow method
       session[:discharging_facts] = @discharging_facts
@@ -172,7 +172,6 @@ class LaytimeController < ApplicationController
                               session[:port_details][1],
                               session[:cp_detail])
     #TODO Uncomment this.
-    session[:report] = @report
     #clear_session
   end
 
@@ -232,7 +231,6 @@ class LaytimeController < ApplicationController
   end
 
   def is_portdetails_valid
-    debugger
     if !params[:port_visited]
       return false
     end
@@ -267,7 +265,7 @@ class LaytimeController < ApplicationController
     add_allowance_invalid = is_time_info_invalid('add_allowance')
     pre_advise_invalid = is_time_info_invalid('pre_advise')
 
-    if port_validity0_invalid || port_validity1_invalid || loading_facts_invalid || discharging_facts_invalid || add_allowance_invalid || pre_advise_invalid
+    if port_validity0_invalid || port_validity1_invalid || loading_facts_invalid || discharging_facts_invalid
       return false
     end
     return true
@@ -319,9 +317,6 @@ class LaytimeController < ApplicationController
     else
       read_from_params = true
     end
-    logger.info "********"
-    logger.info read_from_params
-    logger.info "********"
     return read_from_params
   end
 

@@ -6,7 +6,7 @@ module LaytimeUtil
       return ((despatch * diff_days * 10**2).round.to_f)/(10**2)
     else
       # demurrage calculation
-      return ((demurrage * diff_days * 10**2).round.to_f)/(10**2)
+      return ((-demurrage * diff_days * 10**2).round.to_f)/(10**2)
     end
   end
 
@@ -14,7 +14,7 @@ module LaytimeUtil
     #For now this is super simple. Figure out if unit and allowance type can be 
     #different? IF so, calculation becomes much more complicated.
     total = quantity/allowance
-    mins = (total * 24 * 60).to_i
+    mins = (total * 60 * 24).to_i
     info = to_time_info(mins)
   end
 

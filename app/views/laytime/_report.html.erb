@@ -52,6 +52,12 @@
     <%= diff.days %> days <%= pad(diff.hours) %>:<%= pad(diff.mins) %> mins
   </li>
   <li>
+    <% if amt >= 0 %>
     <span class="stitle">Despatch Due</span>
     <%= amt %> 
+    <% else %>
+      <span class="stitle">Demurrage Due</span>
+      <%= amt.abs %> 
+    <% end %>
+
   </li>
