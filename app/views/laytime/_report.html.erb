@@ -48,10 +48,22 @@
     <%= time_used.days %> days <%= pad(time_used.hours) %>:<%= pad(time_used.mins) %> mins
   </li>
   <li>
-    <span class="stitle">Time Saved</span>
+  <span class="stitle">Time 
+    <% if time_used.greater_than(time_available) %>
+    Lost
+    <% else %>
+    Saved
+    <% end %>
+  </span>
     <%= diff.days %> days <%= pad(diff.hours) %>:<%= pad(diff.mins) %> mins
   </li>
   <li>
+    <% if amt >= 0 %>
     <span class="stitle">Despatch Due</span>
     <%= amt %> 
+    <% else %>
+      <span class="stitle">Demurrage Due</span>
+      <%= amt.abs %> 
+    <% end %>
+
   </li>
