@@ -14,7 +14,7 @@ module LaytimeUtil
     #For now this is super simple. Figure out if unit and allowance type can be 
     #different? IF so, calculation becomes much more complicated.
     total = quantity/allowance
-    mins = (total * 60 * 24).to_i
+    mins = (total * 60 * 24).round
     info = to_time_info(mins)
   end
 
