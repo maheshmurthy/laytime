@@ -65,7 +65,8 @@ class LaytimeControllerTest < ActionController::TestCase
                    :loading => loading_facts,
                    :discharging => discharging_facts,
                    :pre_advise => pre_advise,
-                   :add_allowance => add_allowance
+                   :add_allowance => add_allowance,
+                   :port_visited => "true"
                    }, {:cp_detail => cp_detail})
 
     assert_response :success
