@@ -5,7 +5,7 @@ class PortDetail < ActiveRecord::Base
    has_many :facts
 
    def time_start_string
-     time_start.to_s(:db) if time_start
+     time_start.to_s(:custom) if time_start
    end
 
    def time_start_string=(time_start_str)
@@ -13,7 +13,7 @@ class PortDetail < ActiveRecord::Base
    end
 
    def time_end_string
-     time_end.to_s(:db) if time_end
+     time_end.to_s(:custom) if time_end
    end
 
    def time_end_string=(time_end_str)

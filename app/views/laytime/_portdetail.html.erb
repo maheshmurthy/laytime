@@ -95,9 +95,9 @@
     <% facts.each do  |fact| %>
     <div class="row">
      <% if portdetail_counter == 0 %>
-      <%= text_field_tag 'from', fact.from, :name => 'loading[][from]', :class =>'time-info-text' %><%= text_field_tag 'to', fact.to, :name => 'loading[][to]', :class =>'time-info-text' %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
+      <%= text_field_tag 'from', fact.from_string, :name => 'loading[][from]', :class =>'time-info-text' %><%= text_field_tag 'to', fact.to_string, :name => 'loading[][to]', :class =>'time-info-text' %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
       <% else %>
-      <%= text_field_tag 'from', fact.from, :name => 'discharging[][from]', :class =>'time-info-text' %><%= text_field_tag 'to', fact.to, :name => 'discharging[][to]', :class =>'time-info-text' %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
+      <%= text_field_tag 'from', fact.from_string, :name => 'discharging[][from]', :class =>'time-info-text' %><%= text_field_tag 'to', fact.to_string, :name => 'discharging[][to]', :class =>'time-info-text' %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
       <% end %>
       </div>
     <% end %>
