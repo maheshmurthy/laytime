@@ -9,7 +9,7 @@ class PortDetail < ActiveRecord::Base
    end
 
    def time_start_string=(time_start_str)
-     self.time_start = Time.parse(time_start.str)
+     self.time_start = Time.parse(time_start_str) if time_start_str
    end
 
    def time_end_string
@@ -17,6 +17,6 @@ class PortDetail < ActiveRecord::Base
    end
 
    def time_end_string=(time_end_str)
-     self.time_end = Time.parse(time_end.str)
+     self.time_end = Time.parse(time_end_str) if time_end_str
    end
 end
