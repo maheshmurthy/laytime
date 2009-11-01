@@ -1,7 +1,7 @@
 <%  fact_report.each do |f_report| %>
   <tr>
-    <td><%= f_report.fact.from %></td>
-    <td><%= f_report.fact.to %></td>
+    <td><%= f_report.fact.from_string %></td>
+    <td><%= f_report.fact.to_string %></td>
     <td><%= f_report.fact.val %></td>
     <td><%= f_report.fact.remarks %></td>
     <td><%= to_hr_min(f_report.time_used) %></td>
