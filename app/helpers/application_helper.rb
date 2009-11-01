@@ -8,4 +8,13 @@ module ApplicationHelper
       DateTime.now.strftime('%d/%m/%Y')
     end
   end
+
+  def facts_has_errors(fact_list)
+    fact_list.each do |fact|
+      unless fact.errors.empty?
+        return true
+      end
+    end
+    return false
+  end
 end
