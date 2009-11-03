@@ -1,7 +1,7 @@
 module PdfUtil
   include TimeUtil
   def create_pdf(name, report)
-    Prawn::Document.generate(name) do |pdf|
+    Prawn::Document.generate("public/" + name) do |pdf|
       pdf.text "Laytime Calculation Report", :align => :center, :size => 16, :style => :bold
 
       pdf.move_down 20
@@ -50,14 +50,14 @@ module PdfUtil
       pdf.text "<b>Time Allowed</b> " + pretty_time_info(time_available)
       pdf.text "<b>Time Used</b> " + pad(time_used.hours) +  ":" + pad(time_used.mins)
       pdf.text "<b>Time saved</b> " + pretty_time_info(diff)
-      pdf.text "<b>Despatch Due</b>" + amt.to_s
+      pdf.text "<b>Despatch Due</b> " + amt.to_s
   end
 
   def write_fact_report(pdf, fact_report_list)
     fact_report_list.each do |f_list|
       f_list.each do |f|
         pdf.move_down 5
-        pdf.text f.fact.from.to_s + " " + f.fact.to.to_s + " " + f.fact.val.to_s + " " + f.fact.remarks + " " + to_hr_min(f.time_used) + " " + f.running_total.to_s
+        pdf.text f.fact.from_string + " " + f.fact.to_string + " " + f.fact.val.to_s + " " + f.fact.remarks + " " + to_hr_min(f.time_used) + " " + f.running_total.to_s
         #
       end
     end
