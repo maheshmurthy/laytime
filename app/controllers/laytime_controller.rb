@@ -24,10 +24,10 @@ class LaytimeController < ApplicationController
 
   def load
     clear_session
-    session[:cp_detail] = CpDetail.find(81)
-    session[:port_details] = PortDetail.find(:all, :conditions => {:cp_detail_id => 81})
-    session[:loading_facts] = Fact.find(:all, :conditions => {:port_detail_id => 31})
-    session[:discharging_facts] = Fact.find(:all, :conditions => {:port_detail_id => 32})
+    session[:cp_detail] = CpDetail.find(params[:id])
+    session[:port_details] = PortDetail.find(:all, :conditions => {:cp_detail_id => session[:cp_detail].id})
+    session[:loading_facts] = Fact.find(:all, :conditions => {:port_detail_id => session[:port_details][0].id})
+    session[:discharging_facts] = Fact.find(:all, :conditions => {:port_detail_id =>  session[:port_details][1].id})
 
     info = Array.new
     info << TimeInfo.find(:all, :conditions => {:port_detail_id => 31, :time_info_type => 'add_allowance'})
@@ -237,6 +237,7 @@ class LaytimeController < ApplicationController
     #unless(session[:port_details] && session[:port_details][0].errors && session[:port_details][1].errors && session[:port_details][0].errors.empty? && session[:port_details][1].errors.empty?)
     portdetails = Array.new
     port_detail = PortDetail.new(params['portdetail'][0])
+
     port_detail.location = session[:cp_detail].from
     port_detail.calculation_type = params['calculation_type0']
     port_detail.calculation_time_saved = params['calculation_time_saved0']
@@ -264,6 +265,7 @@ class LaytimeController < ApplicationController
 
 #    add_allowance_invalid = is_time_info_invalid('add_allowance')
 #    pre_advise_invalid = is_time_info_invalid('pre_advise')
+
 
     if port_validity0_invalid || port_validity1_invalid || loading_facts_invalid || discharging_facts_invalid
       return false
