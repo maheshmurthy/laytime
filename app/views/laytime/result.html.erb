@@ -25,13 +25,8 @@
 </fieldset>
 <fieldset class='summary-alt'>
     <li>
-    <% if @report.loading_amt + @report.discharging_amt >= 0 %>
-    <span class="stitle">Balance Despatch</span>
-    <%= @report.loading_amt + @report.discharging_amt %>
-    <% else %>
-    <span class="stitle">Balance Demurrage</span>
-    <%= (@report.loading_amt + @report.discharging_amt).abs %>
-    <% end %>
+    <span class="stitle"><%= @report.balance_string %></span>
+    <%= @report.balance %>
     </li>
 </fieldset>
-<%= link_to "View PDF", "/foo/report.pdf" %>
+<%= link_to "View PDF", "/" + @report.cp_detail.id.to_s + ".pdf" %>

@@ -82,7 +82,7 @@ class LaytimeController < ApplicationController
     report.loading_fact_report_list = loading_fact_report_list
     report.discharging_fact_report_list = discharging_fact_report_list
 
-    create_pdf("report.pdf", report)
+    create_pdf(cp_detail.id.to_s+".pdf", report)
     return report
   end
 
@@ -173,6 +173,9 @@ class LaytimeController < ApplicationController
                               session[:cp_detail])
     #TODO Uncomment this.
     #clear_session
+    respond_to do |format|
+      format.html
+    end
   end
 
   def addRow
