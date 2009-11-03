@@ -1,16 +1,17 @@
 module PdfUtil
   include TimeUtil
   def create_pdf(name, report)
-    Prawn::Document.generate("public/" + name) do |pdf|
+    Prawn::Document.generate(name) do |pdf|
       pdf.text "Laytime Calculation Report", :align => :center, :size => 16, :style => :bold
 
       pdf.move_down 20
-      pdf.text "_____________________________________"
+      pdf.horizontal_line 25,100
       pdf.text "<b>Vessel: </b>" + report.cp_detail.vessel
       pdf.move_down 10
       pdf.text "<b>Partner</b>: " + report.cp_detail.partner
       pdf.text "<b>From / To: </b>" + report.cp_detail.from + " / " + report.cp_detail.to
       pdf.text "<b>C/P</b>: " + report.cp_detail.cpName
+      pdf.stroke_horizontal_line 0, 600
 
       pdf.move_down 15
       pdf.text "<b>Loading at " + report.cp_detail.from + "</b>"
@@ -19,7 +20,6 @@ module PdfUtil
 
       pdf.move_down 15
       port_details = report.loading
-      pdf.text " <b>From To % Remarks TimeUsed TotalTime </b>"
       write_fact_report(pdf, report.loading_fact_report_list)
       pdf.move_down 20
       write_summary(pdf, 
@@ -28,14 +28,15 @@ module PdfUtil
                     report.loading_diff,
                     report.loading_amt)
 
-      pdf.move_down 20
+      pdf.start_new_page
+
       pdf.text "<b>Discharging at " + report.cp_detail.to + "</b>"
       pdf.move_down 10
       write_port_details(pdf, report.discharging)
       pdf.move_down 15
 
+
       port_details = report.discharging
-      pdf.text "<b> From To % Remarks TimeUsed TotalTime </b>"
       write_fact_report(pdf, report.discharging_fact_report_list)
       pdf.move_down 20
       write_summary(pdf, 
@@ -43,24 +44,47 @@ module PdfUtil
                     report.discharging_time_used,
                     report.discharging_diff,
                     report.discharging_amt)
+      pdf.move_down 30
+      pdf.text report.balance_string + " " + report.balance.to_s
     end
   end
 
   def write_summary(pdf, time_available, time_used, diff, amt)
       pdf.text "<b>Time Allowed</b> " + pretty_time_info(time_available)
       pdf.text "<b>Time Used</b> " + pad(time_used.hours) +  ":" + pad(time_used.mins)
-      pdf.text "<b>Time saved</b> " + pretty_time_info(diff)
-      pdf.text "<b>Despatch Due</b> " + amt.to_s
+      if time_available.greater_than(time_used)
+        pdf.text "<b>Time saved</b> " + pretty_time_info(diff)
+      else
+        pdf.text "<b>Time Lost</b> " + pretty_time_info(diff)
+      end
+      if amt > 0
+        pdf.text "<b>Despatch Due</b> " + amt.to_s
+      else
+        pdf.text "<b>Demurrage Due</b> " + amt.abs.to_s
+      end
   end
 
   def write_fact_report(pdf, fact_report_list)
+    table = Array.new
     fact_report_list.each do |f_list|
       f_list.each do |f|
-        pdf.move_down 5
-        pdf.text f.fact.from_string + " " + f.fact.to_string + " " + f.fact.val.to_s + " " + f.fact.remarks + " " + to_hr_min(f.time_used) + " " + f.running_total.to_s
-        #
+        row = Array.new
+        row << f.fact.from_string
+        row << f.fact.to_string
+        row << f.fact.val.to_s
+        row << f.fact.remarks
+        row << to_hr_min(f.time_used)
+        row << f.running_total.to_s
+        table << row
+#        pdf.text f.fact.from_string + " " + f.fact.to_string + " " + f.fact.val.to_s + " " + f.fact.remarks + " " + to_hr_min(f.time_used) + " " + f.running_total.to_s
       end
     end
+    pdf.table table, :font_size          => 10,
+                     :vertical_padding   => 2,
+                     :horizontal_padding => 5,
+                     :position           => :center,
+                     :row_colors         => :pdf_writer,
+                     :headers            => ["From","To","%", "Remarks","Time Used","Total Time"]
   end
 
   def write_port_details(pdf, port_details)
