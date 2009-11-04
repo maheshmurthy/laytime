@@ -120,3 +120,52 @@ span.fieldwithErrors input {
 .submit {
     float: right;
 }
+
+#fact-table-loading, #fact-table-discharging
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	border-collapse: collapse;
+    border-width: 2px;
+    border-style: solid;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#fact-table-loading {
+    border-color: #808080;
+}
+
+
+#fact-table-loading thead tr {
+    background-color: #808080;
+}
+
+#fact-table-discharging {
+    border-color: #5F2A2F;
+}
+
+#fact-table-discharging thead tr {
+    background-color: #5F2A2F;
+}
+
+#fact-table-loading thead tr, #fact-table-discharging thead tr {
+    color: white;
+	font-size: 14px;
+	font-weight: normal;
+    border-bottom: solid
+    border-width: 5px;
+}
+
+#fact-table-loading th, #fact-table-discharging th
+{
+	font-size: 14px;
+	font-weight: normal;
+	padding: 10px 8px;
+}
+#fact-table-loading td, #fact-table-discharging td
+{
+	padding: 8px;
+}
+

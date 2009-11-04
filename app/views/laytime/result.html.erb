@@ -15,13 +15,13 @@
 
 <fieldset class='summary-alt'>
   <div class="summary-heading" style="background-color: #808080; color: white;font-weight: bold">Loading at <%= @report.cp_detail.from %></div>
-  <%= render :partial => 'report', :locals => {:port_details => @report.loading, :time_available => @report.loading_time_available, :time_used => @report.loading_time_used, :diff => @report.loading_diff, :amt => @report.loading_amt, :facts_report => @report.loading_fact_report_list } %>
+  <%= render :partial => 'report', :locals => {:port_details => @report.loading, :time_available => @report.loading_time_available, :time_used => @report.loading_time_used, :diff => @report.loading_diff, :amt => @report.loading_amt, :facts_report => @report.loading_fact_report_list, :port => "loading" } %>
 </fieldset>
 
 <fieldset class='summary'>
 
   <div class="summary-heading" style="background-color: #5F2A2F; color: white;font-weight: bold">Discharging at <%= @report.cp_detail.to %></div>
-  <%= render :partial => 'report', :locals => {:port_details => @report.discharging, :time_available => @report.discharging_time_available, :time_used => @report.discharging_time_used, :diff => @report.discharging_diff, :amt => @report.discharging_amt, :facts_report => @report.discharging_fact_report_list  } %>
+  <%= render :partial => 'report', :locals => {:port_details => @report.discharging, :time_available => @report.discharging_time_available, :time_used => @report.discharging_time_used, :diff => @report.discharging_diff, :amt => @report.discharging_amt, :facts_report => @report.discharging_fact_report_list, :port => "discharging"  } %>
 </fieldset>
 <fieldset class='summary-alt'>
     <li>

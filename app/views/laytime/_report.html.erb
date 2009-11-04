@@ -27,14 +27,24 @@
   </li>
   <li class="seperator">
     <div class="heading">Statement of Facts</div>
-    <table>
+      <% if port == "loading" %>
+        <table id="fact-table-loading">
+      <% else %>
+        <table id="fact-table-discharging">
+      <% end %>
+      <thead>
+      <tr>
       <th>From</th>
       <th>To</th>
       <th>%</th>
       <th>Remarks</th>
       <th>Time Used</th>
       <th>Total Time</th>
+      </tr>
+      </thead>
+      <tbody>
     <%= render :partial => 'fact_report', :collection => facts_report %>
+      </tbody>
     </table>
   </li>
 

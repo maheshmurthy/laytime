@@ -5,13 +5,13 @@ module PdfUtil
       pdf.text "Laytime Calculation Report", :align => :center, :size => 16, :style => :bold
 
       pdf.move_down 20
-      pdf.horizontal_line 25,100
       pdf.text "<b>Vessel: </b>" + report.cp_detail.vessel
       pdf.move_down 10
       pdf.text "<b>Partner</b>: " + report.cp_detail.partner
       pdf.text "<b>From / To: </b>" + report.cp_detail.from + " / " + report.cp_detail.to
       pdf.text "<b>C/P</b>: " + report.cp_detail.cpName
-      pdf.stroke_horizontal_line 0, 600
+      pdf.move_down 5
+      pdf.stroke_horizontal_line 0, 500
 
       pdf.move_down 15
       pdf.text "<b>Loading at " + report.cp_detail.from + "</b>"
