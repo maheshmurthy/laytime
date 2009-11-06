@@ -164,8 +164,13 @@ span.fieldwithErrors input {
 	font-weight: normal;
 	padding: 10px 8px;
 }
+
 #fact-table-loading td, #fact-table-discharging td
 {
 	padding: 8px;
 }
 
+#user-nav {
+  float: rigth;
+  font-size: 12px;
+}
