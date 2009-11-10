@@ -22,6 +22,10 @@ class LaytimeController < ApplicationController
     end
   end
 
+  def load_saved
+    @cpdetails = CpDetail.find(:all)
+  end
+
   def load
     clear_session
     session[:cp_detail] = CpDetail.find(params[:id])
