@@ -58,7 +58,6 @@ class UsersController < ApplicationController
   # PUT /users/1.xml
   def update
     @user = current_user
-
     respond_to do |format|
       if @user.update_attributes(params[:user])
         flash[:notice] = 'User was successfully updated.'
