@@ -5,6 +5,9 @@ class LaytimeController < ApplicationController
 
   def index
     clear_session
+    if current_user
+      @cp_details = load_saved
+    end
   end
 
   def clear_session 
@@ -23,7 +26,7 @@ class LaytimeController < ApplicationController
   end
 
   def load_saved
-    @cpdetails = CpDetail.find(:all)
+    CpDetail.find(:all, :conditions => ['user_id = ?', current_user.id])
   end
 
   def load
@@ -229,6 +232,7 @@ class LaytimeController < ApplicationController
       # session[:cp_detail] will be null when someone deeplinks into port details page without
       # previously filling cp details
       session[:cp_detail] = CpDetail.new(params[:cp_detail])
+      session[:cp_detail].user_id = current_user.id
     end
     if session[:cp_detail].invalid?
       # redirect to cp detail page instead of back

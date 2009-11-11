@@ -1,14 +1,10 @@
 <%= link_to 'New Calculation', :controller => 'laytime', :action => 'cpdetails' %>
 <br/>
 <br/>
-<br/>
-<%= link_to 'Load Saved Calculations', :controller => 'laytime', :action => 'load_saved' %>
-<%= link_to 'Medi Dublin', :controller => 'laytime', :action => 'load', :id => 81 %>
-<br/>
-<%= link_to 'Noble Shipping BVI', :controller => 'laytime', :action => 'load', :id => 82 %>
-<br/>
-<%= link_to 'ST shipping', :controller => 'laytime', :action => 'load', :id => 83 %>
-<br/>
-<%= link_to 'Rio Tinto', :controller => 'laytime', :action => 'load', :id => 84 %>
-<br/>
-<br/>
+<%
+if @cp_details
+ @cp_details.each do |cp_detail| %>
+  <br/>
+  <%= link_to cp_detail.partner, :controller => 'laytime', :action => 'load', :id => cp_detail.id %>
+<%  end
+end %>

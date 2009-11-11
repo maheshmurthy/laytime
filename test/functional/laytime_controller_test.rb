@@ -17,7 +17,8 @@ class LaytimeControllerTest < ActionController::TestCase
                         :to => "Cochin",
                         :currency => "USD",
                         :ports_to_calculate => "A",
-                        :once_on_demurrage => "A"}})
+                        :once_on_demurrage => "A",
+                        :user_id => 2}})
     assert_response :success
     assert_equal "Banpu", session[:cp_detail].partner
     assert_equal "coal mining corp", session[:cp_detail].cpName
