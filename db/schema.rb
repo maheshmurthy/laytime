@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091104141147) do
+ActiveRecord::Schema.define(:version => 20091110143835) do
 
   create_table "cp_details", :force => true do |t|
     t.string   "partner"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20091104141147) do
     t.datetime "updated_at"
     t.string   "ports_to_calculate"
     t.string   "once_on_demurrage"
+    t.integer  "user_id"
   end
 
   create_table "facts", :force => true do |t|
