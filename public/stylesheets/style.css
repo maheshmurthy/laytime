@@ -16,8 +16,8 @@ html, body {
 #port-tab, #mainset, .summary, .summary-alt {
     margin: auto;
     padding: 0; 
-    border-style: none; 
-    background-color: #F2EFE9;
+    background-color: #EBEFF1;
+    border-style: none;
     width: 800px;
     margin-bottom: 20px;
 }
@@ -34,11 +34,13 @@ span.fieldwithErrors input {
 }
 
 .summary-alt {
-    background-color: #F2F2F2;
+    background-color: #E3ECF1;
+    border-color: #E3ECF1;
 }
 
 #port-tab {
-  background-color: #F2EFE9;
+  background-color: #EBEFF1;
+  border-color: #EBEFF1;
 }
 
 #mainset ol {  
@@ -134,24 +136,23 @@ span.fieldwithErrors input {
 }
 
 #fact-table-loading {
-    border-color: #808080;
+    border-color: #68B2C0;
 }
 
 
 #fact-table-loading thead tr {
-    background-color: #808080;
+    background-color: #68B2C0;
 }
 
 #fact-table-discharging {
-    border-color: #5F2A2F;
+    border-color: #85B0BC;
 }
 
 #fact-table-discharging thead tr {
-    background-color: #5F2A2F;
+    background-color: #85B0BC;
 }
 
 #fact-table-loading thead tr, #fact-table-discharging thead tr {
-    color: white;
 	font-size: 14px;
 	font-weight: normal;
     border-bottom: solid
