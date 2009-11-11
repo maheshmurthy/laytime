@@ -26,17 +26,17 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should get edit" do
-    get :edit, :id => users(:one).to_param
-    assert_response :success
-  end
+#  test "should get edit" do
+#    get :edit, :id => users(:one).to_param
+#    assert_response :success
+#  end
 
-  test "should update user" do
-    put :update, :id => users(:one).to_param, :user => { :username => 'mahesh',
-                                                         :email => 'mahesh@mmurthy.com'}
+#  test "should update user" do
+#    put :update, :id => users(:one).to_param, :user => { :username => 'mahesh',
+#                                                         :email => 'mahesh@mmurthy.com'}
 
-    assert_redirected_to user_path(assigns(:user))
-  end
+#    assert_redirected_to user_path(assigns(:user))
+#  end
 
   test "should destroy user" do
     assert_difference('User.count', -1) do
