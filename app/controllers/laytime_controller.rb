@@ -36,6 +36,7 @@ class LaytimeController < ApplicationController
     session[:loading_facts] = Fact.find(:all, :conditions => {:port_detail_id => session[:port_details][0].id})
     session[:discharging_facts] = Fact.find(:all, :conditions => {:port_detail_id =>  session[:port_details][1].id})
 
+    # TODO Remove this hard coding
     info = Array.new
     info << TimeInfo.find(:all, :conditions => {:port_detail_id => 31, :time_info_type => 'add_allowance'})
     info << TimeInfo.find(:all, :conditions => {:port_detail_id => 32, :time_info_type => 'add_allowance'})
