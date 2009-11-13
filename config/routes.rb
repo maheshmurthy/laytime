@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.logout "logout", :controller => "user_sessions", :action => "destroy"
 
   map.new "new", :controller => "laytime", :action => "cpdetails"
+  map.forgot_password "forgot_password", :controller => "password_resets", :action => "create"
 
   # Sample of regular route:
   #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
