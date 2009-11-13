@@ -1,10 +1,26 @@
-<%= link_to 'New Calculation', :controller => 'laytime', :action => 'cpdetails' %>
+<!-- User is not logged in. Display introduction -->
+<% unless current_user %>
+<h3>Laytime Calculation has never been easier!</h3>
+<br />
+<strong>Features Include:</strong>
+<br />
+<li>Simple and intuitive interface</li>
+<li>Pretty charts to visualize all your data</li>
+<li>No intallation required!</li>
+<li>Login from any computer and start calculating!</li>
+<li>Send reports as email attachments</li>
 <br/>
 <br/>
-<%
-if @cp_details
- @cp_details.each do |cp_detail| %>
+<%= link_to 'Signup',  new_user_path %> now for  your free 7 day trial now! (no credit card required)
+<!-- User is logged in. Either display saved forms or show nice message -->
+<% else
+ if @cp_details.empty? %>
+    You have not created any calculations yet. Go ahead and create your first one <%= link_to 'now', new_path %>!
+  <% else %>
+  <h3>Your saved forms </h3>
+  <%  @cp_details.each do |cp_detail| %>
   <br/>
   <%= link_to cp_detail.partner, :controller => 'laytime', :action => 'load', :id => cp_detail.id %>
-<%  end
+  <% end
+  end
 end %>
