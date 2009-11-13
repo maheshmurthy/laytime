@@ -34,10 +34,10 @@ html, body {
 }
 
 #features {
-  color: white;
+  color: orange;
   font-size: 16px;
   padding-left: 140px;
-  background-image: url("../images/feature.jpg");
+  font-weight: bold;
 }
 
 #user-nav {
