@@ -34,9 +34,10 @@ html, body {
 }
 
 #features {
-  color: #414036;
+  color: white;
   font-size: 16px;
-  padding-left: 40px;
+  padding-left: 140px;
+  background-image: url("../images/feature.jpg");
 }
 
 #user-nav {
