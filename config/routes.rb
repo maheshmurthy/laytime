@@ -5,10 +5,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :user_session
   map.root :controller => 'laytime', :action => 'index'
 
+  map.new "new", :controller => "laytime", :action => "cpdetails"
   map.login "login", :controller => "user_sessions", :action => "new"
   map.logout "logout", :controller => "user_sessions", :action => "destroy"
-
-  map.new "new", :controller => "laytime", :action => "cpdetails"
   map.forgot_password "forgot_password", :controller => "password_resets", :action => "create"
 
   # Sample of regular route:
