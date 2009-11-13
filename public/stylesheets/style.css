@@ -7,10 +7,43 @@ html, body {
 #page-container {
     width: 1000px;
     margin: auto;
+    background-color: white;
+    clear: both;
+    min-height: 100%;
+    position: relative;
 }
 
-#title {
-  color: #333333;
+#user-nav a:link, #user-nav a:visited {
+  text-decoration: none;
+  font-size: 22px;
+  margin-left: 10px;
+  color: #003399;
+}
+
+#header {
+  width: 1000px;
+  margin: auto;
+}
+
+#logo {
+  float: left;
+  background-image: url("../images/panga-small.jpg");
+  height: 150px;
+  width: 275px;
+  background-repeat: no-repeat;
+}
+
+#features {
+  color: orange;
+  font-size: 16px;
+  padding-left: 140px;
+  font-weight: bold;
+}
+
+#user-nav {
+  margin-top: 30px;
+  float: right;
+  font-size: 16px;
 }
 
 #port-tab, #mainset, .summary, .summary-alt {
@@ -171,7 +204,4 @@ span.fieldwithErrors input {
 	padding: 8px;
 }
 
-#user-nav {
-  float: rigth;
-  font-size: 16px;
-}
+
