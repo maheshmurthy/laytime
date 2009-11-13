@@ -5,29 +5,27 @@
   <%= javascript_include_tag :all %>
   <%= javascript_include_tag "livepipe/livepipe" %>
   <%= javascript_include_tag "livepipe/tabs" %>
-  <h1>
-    <center>
-      <div id="title">
-        Laytime Calculation
-      </div>
-<div id="user-nav">
-  <%= link_to "Home", root_url %> | 
-   About | Feedback |
-  <% if current_user %>
-    Howdy <%= current_user.username %>!
-    <%= link_to "Logout", logout_path %> 
-  <% else %>
-    <%= link_to "Register", new_user_path %> |
-    <%= link_to "Login", login_path %> 
-  <% end %>
-</div>
-
-    </center>
-  </h1>
 </head>
 <body>
-    <div id="page-container">
-       <%= yield %>
+  <div id="header">
+    <div id="logo"></div>
+    <div id="user-nav">
+      <%= link_to "Home", root_url %>
+      <%= link_to "About", root_url %> 
+      <%= link_to "Feedback", root_url %>
+      <% if current_user %>
+        Howdy <%= current_user.username %>!
+        <%= link_to "Logout", logout_path  %> 
+      <% else %>
+        <%= link_to "Signup", new_user_path %>
+        <%= link_to "Login", login_path %> 
+      <% end %>
     </div>
+  </div>
+
+  <div id="page-container">
+       <%= yield %>
+  </div>
+  <div id="footer"></div>
 </body>
 </html>
