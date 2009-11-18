@@ -1,1 +1,2 @@
-Time::DATE_FORMATS[:custom] = "%d-%m-%Y %H:%M"
+Time::DATE_FORMATS[:custom_date] = "%d-%m-%y"
+Time::DATE_FORMATS[:custom_time] = "%H:%M"

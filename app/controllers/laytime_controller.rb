@@ -253,12 +253,14 @@ class LaytimeController < ApplicationController
     port_detail.location = session[:cp_detail].from
     port_detail.calculation_type = params['calculation_type0']
     port_detail.calculation_time_saved = params['calculation_time_saved0']
+    port_detail.fix_dates
     portdetails << port_detail
 
     port_detail = PortDetail.new(params['portdetail'][1])
     port_detail.location = session[:cp_detail].to
     port_detail.calculation_type = params['calculation_type1']
     port_detail.calculation_time_saved = params['calculation_time_saved1']
+    port_detail.fix_dates
     portdetails << port_detail
     session[:port_details] = portdetails
     port_validity0_invalid = session[:port_details][0].invalid?

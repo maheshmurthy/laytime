@@ -28,6 +28,7 @@
  if @cp_details.empty? %>
     You have not created any calculations yet. Go ahead and create your first one <%= link_to 'now', new_path %>!
   <% else %>
+    Create <%= link_to 'new', new_path %> calculation 
   <h3>Your saved forms </h3>
   <%  @cp_details.each do |cp_detail| %>
   <br/>

@@ -48,12 +48,26 @@
     <%= f.text_field 'commission_pct', :name => 'portdetail[][commission_pct]', :class => 'stdtextbox', :value => portdetail.commission_pct %>
     </li>
     <li>
-    <%= f.label :time_start, 'Start time', :class => 'stdlabel'  %>
-    <%= f.text_field 'time_start', :name => 'portdetail[][time_start]', :class => 'stdtextbox', :value => portdetail.time_start_string %>
+    <%= f.label :time_start, 'Laytime Commenced', :class => 'stdlabel' %>
+    <%= portdetail.time_start %>
+    <% if portdetail.time_start %>
+      <%= f.text_field 'time_start', :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => portdetail.time_start_date_string, :maxlength => 10 %>
+      <%= f.text_field 'time_start', :name => 'portdetail[][time_start_time]', :class => 'stdtextbox', :value => portdetail.time_start_time_string, :maxlength => 10 %>
+    <% else %>
+      <%= f.text_field 'time_start', :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => 'dd-mm-yy', :maxlength => 10 %>
+      <%= f.text_field 'time_start', :name => 'portdetail[][time_start_time]', :class => 'stdtextbox', :value => 'hh:mm', :maxlength => 10 %>
+    <% end %>
     </li>
     <li>
-    <%= f.label :time_end, 'End time', :class => 'stdlabel'  %>
-    <%= f.text_field 'time_end', :name => 'portdetail[][time_end]', :class => 'stdtextbox', :value => portdetail.time_end_string %>
+    <%= f.label :time_end, 'Laytime Completed', :class => 'stdlabel'  %>
+
+    <% if portdetail.time_end %>
+      <%= f.text_field 'time_end', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10 %>
+      <%= f.text_field 'time_end', :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10 %>
+    <% else %>
+      <%= f.text_field 'time_end', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => 'dd-mm-yy', :maxlength => 10 %>
+      <%= f.text_field 'time_end', :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => 'hh:mm', :maxlength => 10 %>
+    <% end %>
     </li>
     <li>
     <%= f.label :calculation_type, 'Calculate this port', :class => 'stdlabel'  %>
@@ -90,16 +104,6 @@
     Remarks
     </span>
     </div>
-    </li>
-    <li>
-      <div class="row">
-        <span style="margin-left:15px;">
-         dd-mm-yyyy hh:mm
-        </span>
-        <span style="margin-left:45px;">
-         dd-mm-yyyy hh:mm
-        </span>
-      </div>
     </li>
     <div class="sof">
     <% facts.each do  |fact| %>
