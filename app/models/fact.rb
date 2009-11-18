@@ -4,7 +4,11 @@ class Fact < ActiveRecord::Base
   attr_accessor :from_date, :from_time, :to_date, :to_time
 
    def from_date_string
-     from.to_s(:custom_date) if from_date
+     if from_date
+       from.to_s(:custom_date)
+     else
+       "dd-mm-yy"
+     end
    end
 
    def from_date_string=(from_date_str)
@@ -12,7 +16,11 @@ class Fact < ActiveRecord::Base
    end
 
    def from_time_string
-     from_time.to_s(:custom_time) if from_time
+     if from_time
+       from_time.to_s(:custom_time)
+     else
+       "hh:mm"
+     end
    end
 
    def from_time_string=(from_time_str)
@@ -20,7 +28,11 @@ class Fact < ActiveRecord::Base
    end
 
    def to_date_string
-     to_date.to_s(:custom_date) if to_date
+     if to_date
+       to_date.to_s(:custom_date)
+     else
+       "dd-mm-yy"
+     end
    end
 
    def to_date_string=(to_date_str)
@@ -28,7 +40,11 @@ class Fact < ActiveRecord::Base
    end
 
    def to_time_string
-     to_time.to_s(:custom_time) if to_time
+     if to_time
+       to_time.to_s(:custom_time)
+     else
+       "hh:mm"
+     end
    end
 
    def to_time_string=(to_time_str)
