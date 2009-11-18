@@ -341,6 +341,7 @@ class LaytimeController < ApplicationController
     fact_list = Array.new
     params[operation].each do |fact|
       fact_obj = Fact.new(fact)
+      fact_obj.fix_fact_dates
       fact_list << fact_obj
     end
     
