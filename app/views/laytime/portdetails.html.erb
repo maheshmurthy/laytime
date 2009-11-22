@@ -4,11 +4,21 @@
   }
 
 </style>
+<!-- Take from livepipe to make tabs for loading and discharging port details -->
 <script type="text/javascript">
   document.observe('dom:loaded',function(){
     new Control.Tabs('port-tab');
   });
 </script>
+
+<%= javascript_tag "
+  $$('input').invoke('observe', 'focus', function(event) {
+    var value = $F(Event.element(event));
+    if(value == 'hh:mm' || value == 'dd-mm-yy') {
+      Event.element(event).clear();
+    }
+  });
+" %>
 
 
 <h1>PortDetails</h1>

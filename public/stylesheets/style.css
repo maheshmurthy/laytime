@@ -128,8 +128,13 @@ span.fieldwithErrors input {
   width: 765;
 }
 
-.time-info-text {
-  width: 100px;
+.time-info-text-date {
+  width: 80px;
+  margin-right: 5px;
+}
+
+.time-info-text-time {
+  width: 50px;
   margin-right: 5px;
 }
 

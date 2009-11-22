@@ -6,28 +6,28 @@ function addrow(operation) {
      row.setAttribute('class','row');
 
      var input = document.createElement('input')
-     input.setAttribute('class','time-info-text');
+     input.setAttribute('class','time-info-text-date');
      input.setAttribute('type','textbox');
      input.setAttribute('name',operation+'[][from_date]');
      input.value = "dd-mm-yy";
      row.appendChild(input);
 
      input = document.createElement('input')
-     input.setAttribute('class','time-info-text');
+     input.setAttribute('class','time-info-text-time');
      input.setAttribute('type','textbox');
      input.setAttribute('name',operation+'[][from_time]');
      input.value = "hh:mm";
      row.appendChild(input);
 
      input = document.createElement('input')
-     input.setAttribute('class','time-info-text');
+     input.setAttribute('class','time-info-text-date');
      input.setAttribute('type','textbox');
      input.setAttribute('name',operation+'[][to_date]');
      input.value = "dd-mm-yy";
      row.appendChild(input);
 
      input = document.createElement('input')
-     input.setAttribute('class','time-info-text');
+     input.setAttribute('class','time-info-text-time');
      input.setAttribute('type','textbox');
      input.setAttribute('name',operation+'[][to_time]');
      input.value = "hh:mm";

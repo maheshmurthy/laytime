@@ -19,6 +19,7 @@ Rails::Initializer.run do |config|
   config.gem "authlogic"
   config.gem "prawn"
   config.gem "prawn-format", :lib => "prawn/format"
+  config.gem "mysql"
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
