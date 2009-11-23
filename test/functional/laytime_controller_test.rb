@@ -2,6 +2,15 @@ require 'test_helper'
 
 class LaytimeControllerTest < ActionController::TestCase
 
+  setup do
+    user = User.create(:username => 'mahesh', :email => 'mah@mah.com', :password => 'asdf')
+    UserSession.create(user)
+    #UserSession.create(users(:one))
+    #assert_nil controller.session["user_credentials"]
+   # assert UserSession.create(ben)
+   # assert_equal controller.session["user_credentials"], ben.persistence_token
+  end
+
   test "cp detail not filled" do
     post :portdetails
     assert_equal "can't be blank", session[:cp_detail].errors["vessel"]
@@ -33,11 +42,11 @@ class LaytimeControllerTest < ActionController::TestCase
 
   test "port_detail validation" do
 
-    loading_port_detail = {"location" => "Jorong",  "demurrage"=>"50000", "commission_pct"=>"0", "despatch"=>"25000", "quantity"=>"55000", "description"=>"Coal", "cargo"=>"mts", "allowanceType"=>"mts/day", "allowance" => 10000, "operation"=>"loading", "time_end"=>"2009-06-09 04:30:00 UTC", "time_start"=>"2009-06-04 21:12:00 UTC"}
+    loading_port_detail = {"location" => "Jorong",  "demurrage"=>"50000", "commission_pct"=>"0", "despatch"=>"25000", "quantity"=>"55000", "description"=>"Coal", "cargo"=>"mts", "allowanceType"=>"mts/day", "allowance" => 10000, "operation"=>"loading", "time_end_date"=>"2009-06-09", "time_end_time" =>  "4:30", "time_start_date"=>"2009-06-04", :time_start_time => "21:12"}
 
-    discharging_port_detail = {"location" => "Cochin",  "demurrage"=>"50000", "commission_pct"=>"0", "despatch"=>"25000", "quantity"=>"55000", "description"=>"Coal", "cargo"=>"mts", "allowanceType"=>"mts/day", "allowance" => 10000, "operation"=>"discharging", "time_end"=>"2009-06-17 04:00:00 UTC", "time_start"=>"2009-06-14 01:30:00 UTC"}
+    discharging_port_detail = {"location" => "Cochin",  "demurrage"=>"50000", "commission_pct"=>"0", "despatch"=>"25000", "quantity"=>"55000", "description"=>"Coal", "cargo"=>"mts", "allowanceType"=>"mts/day", "allowance" => 10000, "operation"=>"discharging", "time_end_date"=>"2009-06-17", "time_end_time" =>  "4:00", "time_start_date"=>"2009-06-14", "time_start_time" => "1:30"}
 
-    loading_facts = [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from"=>"2009-06-04 21:12:00 UTC", "to"=>"2009-06-08 10:45:00 UTC"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from"=>"2009-06-08 10:45:00 UTC", "to"=>"2009-06-08 12:25:00 UTC"}]
+    loading_facts = [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"2009-06-04", "from_time" => "21:12", "to_date"=>"2009-06-08", "to_time" => "10:45"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"2009-06-08", "from_time" => "10:45", "to_date"=>"2009-06-08", "to_time" => "12:25"}]
 
     discharging_facts = [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from"=>"2009-06-14 01:30:00 UTC", "to"=>"2009-06-15 17:30:00 UTC"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from"=>"2009-06-15 17:30:00 UTC", "to"=>"2009-06-15 18:30:00 UTC"}]
 
