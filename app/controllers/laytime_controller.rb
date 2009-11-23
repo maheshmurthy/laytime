@@ -162,7 +162,7 @@ class LaytimeController < ApplicationController
       redirect_to :action => 'portdetails'
       return
     end
-    save_to_db
+    #save_to_db
 
     # Do whatever calculations you need to do and then send only those to generate report
     # which are required for display
@@ -359,6 +359,6 @@ class LaytimeController < ApplicationController
   end
 
   def build_fact(from, to, pct, remarks)
-    return Fact.new(:from => from, :to => to, :val => pct, :remarks => remarks)
+    Fact.new(:from => from, :to => to, :val => pct, :remarks => remarks)
   end
 end

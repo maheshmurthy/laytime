@@ -55,8 +55,13 @@
     </li>
     <li>
     <%= f.label :time_end, 'Laytime Completed', :class => 'stdlabel'  %>
+<<<<<<< HEAD:app/views/laytime/_portdetail.html.erb
     <%= f.text_field 'time_end_date', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10 %>
     <%= f.text_field 'time_end_time', :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_time_string, :maxlength => 10 %>
+=======
+    <%= f.text_field 'time_end', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10 %>
+    <%= f.text_field 'time_end', :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_time_string, :maxlength => 10 %>
+>>>>>>> Fixed lot of bugs, not saving to database anymore:app/views/laytime/_portdetail.html.erb
     </li>
     <li>
     <%= f.label :calculation_type, 'Calculate this port', :class => 'stdlabel'  %>

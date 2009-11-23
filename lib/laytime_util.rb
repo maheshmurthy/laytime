@@ -22,6 +22,7 @@ module LaytimeUtil
     fact_report_list = Array.new
     running_total = 0
     facts.each do |fact|
+      fact.merge_fact_date
       fact_reports = build_fact_report(fact.from.to_datetime, fact.to.to_datetime, fact.val, fact.remarks, running_total)
       running_total = fact_reports[fact_reports.length - 1].running_total.to_mins
       fact_report_list << fact_reports
