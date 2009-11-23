@@ -53,7 +53,6 @@ class Fact < ActiveRecord::Base
    end
 
    def merge_fact_date
-     debugger
      self.from = DateTime.strptime(self.from_date, "%d-%m-%y")
      time = Time.parse(from_time)
      self.from.advance(:hours => time.hour, :minutes => time.min)
