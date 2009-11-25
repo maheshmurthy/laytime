@@ -7,47 +7,51 @@ function addrow(operation) {
 
      var input = document.createElement('input')
      input.setAttribute('class','time-info-text-date');
-     input.setAttribute('type','textbox');
+     input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][from_date]');
-     input.value = "dd-mm-yy";
+     input.setAttribute('id','from_date');
+     input.setAttribute('value',"dd-mm-yy");
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','time-info-text-time');
-     input.setAttribute('type','textbox');
+     input.setAttribute('type','text');
+     input.setAttribute('id','from_time');
      input.setAttribute('name',operation+'[][from_time]');
-     input.value = "hh:mm";
+     input.setAttribute('value',"hh:mm");
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','time-info-text-date');
-     input.setAttribute('type','textbox');
+     input.setAttribute('type','text');
+     input.setAttribute('id','to_date');
      input.setAttribute('name',operation+'[][to_date]');
-     input.value = "dd-mm-yy";
+     input.setAttribute('value',"dd-mm-yy");
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','time-info-text-time');
-     input.setAttribute('type','textbox');
+     input.setAttribute('type','text');
+     input.setAttribute('id','to_time');
      input.setAttribute('name',operation+'[][to_time]');
-     input.value = "hh:mm";
+     input.setAttribute('value',"hh:mm");
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','ttc');
-     input.setAttribute('type','textbox');
+     input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][timeToCount]');
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','pct');
-     input.setAttribute('type','textbox');
+     input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][val]');
      row.appendChild(input);
 
      input = document.createElement('input')
      input.setAttribute('class','rem');
-     input.setAttribute('type','textbox');
+     input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][remarks]');
      row.appendChild(input);
      set.appendChild(row);

@@ -11,15 +11,6 @@
   });
 </script>
 
-<%= javascript_tag "
-  $$('input').invoke('observe', 'focus', function(event) {
-    var value = $F(Event.element(event));
-    if(value == 'hh:mm' || value == 'dd-mm-yy') {
-      Event.element(event).clear();
-    }
-  });
-" %>
-
 
 <h1>PortDetails</h1>
 <% form_for @portdetails, :url => { :action => "result" } do |f| %>

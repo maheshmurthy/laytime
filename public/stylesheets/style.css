@@ -55,6 +55,12 @@ html, body {
     margin-bottom: 20px;
 }
 
+#port-tab ol li{
+  display: inline;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
 span.fieldwithErrors input {
   border: 1px solid red;
 }
@@ -71,10 +77,6 @@ span.fieldwithErrors input {
     border-color: #E3ECF1;
 }
 
-#port-tab {
-  background-color: #EBEFF1;
-  border-color: #EBEFF1;
-}
 
 #mainset ol {  
     padding: 1em 1em 0 1em;  

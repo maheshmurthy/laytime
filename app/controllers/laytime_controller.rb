@@ -17,6 +17,7 @@ class LaytimeController < ApplicationController
       session[:discharging_facts] = nil
       session[:additional_time] = nil
       session[:after_pre_advise] = nil
+      session[:report] = nil
   end
 
   def generate_pdf
@@ -90,7 +91,8 @@ class LaytimeController < ApplicationController
     report.loading_fact_report_list = loading_fact_report_list
     report.discharging_fact_report_list = discharging_fact_report_list
 
-    create_pdf(cp_detail.id.to_s+".pdf", report)
+    session[:report] = report
+    #create_pdf(cp_detail.id.to_s+".pdf", report)
     return report
   end
 
