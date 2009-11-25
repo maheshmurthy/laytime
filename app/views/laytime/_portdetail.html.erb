@@ -50,13 +50,13 @@
     </li>
     <li>
     <%= f.label :time_start, 'Laytime Commenced', :class => 'stdlabel' %>
-    <%= f.text_field 'time_start_date', :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => portdetail.time_start_date_string, :maxlength => 10 %>
-    <%= f.text_field 'time_start_time', :name => 'portdetail[][time_start_time]', :class => 'stdtextbox', :value => portdetail.time_start_time_string, :maxlength => 10 %>
+    <%= f.text_field 'time_start_date', :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => portdetail.time_start_date_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
+    <%= f.text_field 'time_start_time', :name => 'portdetail[][time_start_time]', :class => 'stdtextbox', :value => portdetail.time_start_time_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
     </li>
     <li>
     <%= f.label :time_end, 'Laytime Completed', :class => 'stdlabel'  %>
-    <%= f.text_field 'time_end_date', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10 %>
-    <%= f.text_field 'time_end_time', :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_time_string, :maxlength => 10 %>
+    <%= f.text_field 'time_end_date', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
+    <%= f.text_field 'time_end_time', :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_time_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
     </li>
     <li>
     <%= f.label :calculation_type, 'Calculate this port', :class => 'stdlabel'  %>
@@ -90,11 +90,9 @@
     <% facts.each do  |fact| %>
     <div class="row">
     <% if portdetail_counter == 0 %>
-    <%= hidden_field_tag 'id', fact.id, :name => 'loading[][id]' %><%= text_field_tag 'from_date', fact.from_date_string, :name => 'loading[][from_date]', :class =>'time-info-text-date' %><%= text_field_tag 'from_time', fact.from_time_string, :name => 'loading[][from_time]', :class =>'time-info-text-time' %><%= text_field_tag 'to_date', fact.to_date_string, :name => 'loading[][to_date]', :class =>'time-info-text-date' %><%= text_field_tag 'to_time', fact.to_time_string, :name => 'loading[][to_time]', :class =>'time-info-text-time' %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
-      <% else %>
-    <%= hidden_field_tag 'id', fact.id, :name => 'discharging[][id]' %><%= text_field_tag 'from_date', fact.from_date_string, :name => 'discharging[][from_date]', :class =>'time-info-text-date' %><%= text_field_tag 'from_time', fact.from_time_string, :name => 'discharging[][from_time]', :class =>'time-info-text-time' %><%= text_field_tag 'to_date', fact.to_date_string, :name => 'discharging[][to_date]', :class =>'time-info-text-date' %><%= text_field_tag 'to_time', fact.to_time_string, :name => 'discharging[][to_time]', :class =>'time-info-text-time' %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
-      <% end %>
-      </div>
+    <%= hidden_field_tag 'id', fact.id, :name => 'loading[][id]' %><%= text_field_tag 'from_date', fact.from_date_string, :name => 'loading[][from_date]', :class =>'time-info-text-date', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'from_time', fact.from_time_string, :name => 'loading[][from_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_date', fact.to_date_string, :name => 'loading[][to_date]', :class =>'time-info-text-date', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_time', fact.to_time_string, :name => 'loading[][to_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
+    <% else %>
+    <%= hidden_field_tag 'id', fact.id, :name => 'discharging[][id]' %><%= text_field_tag 'from_date', fact.from_date_string, :name => 'discharging[][from_date]', :class =>'time-info-text-date', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'from_time', fact.from_time_string, :name => 'discharging[][from_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_date', fact.to_date_string, :name => 'discharging[][to_date]', :class =>'time-info-text-date', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_time', fact.to_time_string, :name => 'discharging[][to_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
     <% end %>
     </div>
     <li>

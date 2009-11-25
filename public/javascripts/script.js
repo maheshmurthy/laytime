@@ -11,6 +11,7 @@ function addrow(operation) {
      input.setAttribute('name',operation+'[][from_date]');
      input.setAttribute('id','from_date');
      input.setAttribute('value',"dd-mm-yy");
+     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -19,6 +20,7 @@ function addrow(operation) {
      input.setAttribute('id','from_time');
      input.setAttribute('name',operation+'[][from_time]');
      input.setAttribute('value',"hh:mm");
+     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -27,6 +29,7 @@ function addrow(operation) {
      input.setAttribute('id','to_date');
      input.setAttribute('name',operation+'[][to_date]');
      input.setAttribute('value',"dd-mm-yy");
+     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -35,6 +38,7 @@ function addrow(operation) {
      input.setAttribute('id','to_time');
      input.setAttribute('name',operation+'[][to_time]');
      input.setAttribute('value',"hh:mm");
+     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
      input = document.createElement('input')

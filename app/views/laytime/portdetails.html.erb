@@ -9,6 +9,21 @@
   document.observe('dom:loaded',function(){
     new Control.Tabs('port-tab');
   });
+/*
+  $$('input').invoke('observe', 'focus', function(event) {
+    var value = $F(Event.element(event));
+    if(value == 'hh:mm' || value == 'dd-mm-yy') {
+      Event.element(event).clear();
+    }
+  });
+
+  $('port_detail_time_start').onfocus = function() {
+    if($('port_detail_time_start') == 'dd-mm-yy') {
+      $('port_detail_time_start').clear();
+    }
+  }
+*/
+
 </script>
 
 
