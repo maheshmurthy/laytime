@@ -91,7 +91,7 @@ class LaytimeController < ApplicationController
     report.loading_fact_report_list = loading_fact_report_list
     report.discharging_fact_report_list = discharging_fact_report_list
 
-    session[:report] = report
+    #session[:report] = report
     #create_pdf(cp_detail.id.to_s+".pdf", report)
     return report
   end

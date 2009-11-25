@@ -95,6 +95,7 @@
     <%= hidden_field_tag 'id', fact.id, :name => 'discharging[][id]' %><%= text_field_tag 'from_date', fact.from_date_string, :name => 'discharging[][from_date]', :class =>'time-info-text-date', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'from_time', fact.from_time_string, :name => 'discharging[][from_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_date', fact.to_date_string, :name => 'discharging[][to_date]', :class =>'time-info-text-date', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_time', fact.to_time_string, :name => 'discharging[][to_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
     <% end %>
     </div>
+    <% end %>
     <li>
       <% if portdetail_counter == 0 %>
       <a href="#" onclick="addrow('loading');">Add Fact</a>
