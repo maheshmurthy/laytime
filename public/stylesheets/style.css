@@ -133,6 +133,7 @@ span.fieldwithErrors input {
 .time-info-text-date {
   width: 80px;
   margin-right: 5px;
+  margin-left: 10px;
 }
 
 .time-info-text-time {

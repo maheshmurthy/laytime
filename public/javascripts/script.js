@@ -9,13 +9,13 @@ function addrow(operation) {
 
      var to_date = lastRow.getElementsByClassName('time-info-text-date')[1].value;
      var to_time = lastRow.getElementsByClassName('time-info-text-time')[1].value;
-     var to = Date.parseExact(to_date, "dd-mm-yy");
+     var to = Date.parseExact(to_date, "dd-MM-yy");
      if(to == null) {
        alert('Please enter the date in format dd-mm-yy for to');
        return false;
      }
-     var hr = parseInt(to_time.split(':')[0]);
-     var min = parseInt(to_time.split(':')[1]);
+     var hr = parseInt(to_time.split(':')[0], 10);
+     var min = parseInt(to_time.split(':')[1], 10);
      if(!hr || !min) {
        alert('Please enter the to time in format hh:mm');
        return false;
@@ -24,14 +24,14 @@ function addrow(operation) {
 
      var from_date = lastRow.getElementsByClassName('time-info-text-date')[0].value;
      var from_time = lastRow.getElementsByClassName('time-info-text-time')[0].value;
-     var from = Date.parseExact(from_date, "dd-mm-yy");
+     var from = Date.parseExact(from_date, "dd-MM-yy");
      if(from == null) {
        alert('Please enter the date in format dd-mm-yy for from');
        return false;
      }
 
-     var hr = parseInt(from_time.split(':')[0]);
-     var min = parseInt(from_time.split(':')[1]);
+     var hr = parseInt(from_time.split(':')[0], 10);
+     var min = parseInt(from_time.split(':')[1], 10);
 
      if(!hr || !min) {
        alert('Please enter the from time in format hh:mm');
@@ -40,22 +40,22 @@ function addrow(operation) {
 
      from.set({hour: hr, minute: min});
 
-     if(from.compareTo(to) == 1) {
+     if(from > to) {
        alert('From can not be greater that to. Please correct and try again');
        return false;
      }
 
      var commence_date = document.getElementById('port_detail_time_start_date_' + operation).value;
      var commence_time = document.getElementById('port_detail_time_start_time_' + operation).value;
-     var commence = Date.parseExact(commence_date, "dd-mm-yy");
+     var commence = Date.parseExact(commence_date, "dd-MM-yy");
 
      if(commence == null) {
        alert('Please enter the Laytime Commence date in format dd-mm-yy');
        return false;
      }
 
-     var hr = parseInt(commence_time.split(':')[0]);
-     var min = parseInt(commence_time.split(':')[1]);
+     var hr = parseInt(commence_time.split(':')[0], 10);
+     var min = parseInt(commence_time.split(':')[1], 10);
 
      if(!hr || !min) {
        alert('Please enter the laytime commence time in format hh:mm');
@@ -65,15 +65,15 @@ function addrow(operation) {
 
      var complete_date = document.getElementById('port_detail_time_end_date_' + operation).value;
      var complete_time = document.getElementById('port_detail_time_end_time_' + operation).value;
-     var complete = Date.parseExact(complete_date, "dd-mm-yy");
+     var complete = Date.parseExact(complete_date, "dd-MM-yy");
 
      if(complete == null) {
        alert('Please enter the Laytime complete date in format dd-mm-yy');
        return false;
      }
 
-     var hr = parseInt(complete_time.split(':')[0]);
-     var min = parseInt(complete_time.split(':')[1]);
+     var hr = parseInt(complete_time.split(':')[0], 10);
+     var min = parseInt(complete_time.split(':')[1], 10);
 
      if(!hr || !min) {
        alert('Please enter the laytime complete time in format hh:mm');
@@ -83,23 +83,25 @@ function addrow(operation) {
 
      /* from and to datetime should be greater than equal commence date and 
         less than equal complete date */
+
+     /* TODO Add validation to check for continuity */
      
-     if(from.compareTo(commence) < 0) {
+     if(from < commence) {
        alert('From can not be less than laytime commence date');
        return false;
      }
 
-     if(from.compareTo(complete) >= 0) {
+     if(from >= complete) {
        alert('From can not be greater than laytime complete date');
        return false;
      }
 
-     if(to.compareTo(commence) <= 0) {
+     if(to <= commence) {
        alert('To can not be less than laytime commence date');
        return false;
      }
 
-     if(to.compareTo(complete) > 0) {
+     if(to > complete) {
        alert('To can not be greater than laytime complete date');
        return false;
      }
@@ -112,7 +114,12 @@ function addrow(operation) {
      var row = document.createElement('div')
      row.setAttribute('class','row');
 
-     var input = document.createElement('input')
+     var label = document.createElement('label');
+     label.setAttribute('id', 'from_' + operation + '_' + length);
+     label.innerHTML = getDay(to);
+     row.appendChild(label);
+
+     var input = document.createElement('input');
      input.setAttribute('class','time-info-text-date');
      input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][from_date]');
@@ -130,12 +137,18 @@ function addrow(operation) {
      input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
+     var label = document.createElement('label');
+     label.setAttribute('id', 'to_' + operation + '_' + length);
+     label.innerHTML = "---";
+     row.appendChild(label);
+
      input = document.createElement('input')
      input.setAttribute('class','time-info-text-date');
      input.setAttribute('type','text');
      input.setAttribute('id','to_date_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][to_date]');
      input.setAttribute('value',"dd-mm-yy");
+     input.setAttribute('onblur',"displayDayLabel(this.value, 'to', '" + operation + "', " + length + ");");
      input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
@@ -169,6 +182,23 @@ function addrow(operation) {
      row.scrollTop = row.scrollHeight;
 }
 
+function displayDayLabel(value, type, operation, index) {
+  var element = document.getElementById(type + '_' + operation + '_' + index);
+  var d = Date.parseExact(value, "dd-MM-yy");
+  // Month starts from 0 in datejs which sucks. Increment by a month and then
+  // take the day.
+  element.innerHTML = getDay(d);
+}
+
+function getDay(d) {
+  if(d) {
+    d.add ({months: 1});
+    return d.getDayName().substring(0,3);
+  } else {
+    return "---";
+  }
+
+}
 function isValidFacts() {
   var set = document.getElementById('set');
   var list = set.childNodes;
