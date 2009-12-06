@@ -282,12 +282,30 @@ function updateRunningInfo(operation, index) {
   // update demurrage/despatch information now.
   var att = $(operation).childNodes;
   for(var i=0; i< att.length; i++) {
-    var li = att[i].childNodes;
-    var foo = li.childElements;
-    for(var j=0; j<li.length; j++) {
-      if(li[j].id == "portdetail_demurrage") {
-        alert(li[j].value);
+    var nodes = att[i].childNodes;
+    for(var j=0; j<nodes.length; j++) {
+      if(nodes[j].id == "port_detail_demurrage") {
+        alert(nodes[j].value);
         return true;
+      }
+    }
+  }
+}
+
+function validateAndFillDespatch(operation) {
+  var att = $(operation).childNodes;
+  var demurrage = "";
+  for(var i=0; i< att.length; i++) {
+    var li = att[i].childNodes;
+    for(var j=0; j<li.length; j++) {
+      if(li[j].id == "port_detail_demurrage") {
+        if(li[j].value == "") {
+          alert("Please fill demurrage value");
+        } else {
+          demurrage = li[j].value;
+        }
+      } else if(li[j].id == "port_detail_despatch") {
+        li[j].value = demurrage/2;
       }
     }
   }
