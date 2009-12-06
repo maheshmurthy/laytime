@@ -39,24 +39,24 @@
    <li>
     <%= f.label :demurrage, 'Demurrage', :class => 'stdlabel'  %>
     <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage %>
-    </li>
-    <li>
+   </li>
+   <li>
     <%= f.label :despatch, 'Despatch', :class => 'stdlabel'  %>
     <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'stdtextbox', :value => portdetail.despatch %>
-    </li>
-    <li>
+   </li>
+   <li>
     <%= f.label :commission_pct, 'Commission on demurrage(%)', :class => 'stdlabel'  %>
     <%= f.text_field 'commission_pct', :name => 'portdetail[][commission_pct]', :class => 'stdtextbox', :value => portdetail.commission_pct %>
-    </li>
-    <li>
+   </li>
+   <li>
     <%= f.label :time_start, 'Laytime Commenced', :class => 'stdlabel' %>
-    <%= f.text_field 'time_start_date_' + type, :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => portdetail.time_start_date_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
-    <%= f.text_field 'time_start_time_' + type, :name => 'portdetail[][time_start_time]', :class => 'stdtextbox', :value => portdetail.time_start_time_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
+    <%= f.text_field 'time_start_date_' + type, :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => portdetail.time_start_date_string, :maxlength => 10, :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}" %>
+    <%= f.text_field 'time_start_time_' + type, :name => 'portdetail[][time_start_time]', :class => 'stdtextbox', :value => portdetail.time_start_time_string, :maxlength => 10, :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}" %>
     </li>
     <li>
     <%= f.label :time_end, 'Laytime Completed', :class => 'stdlabel'  %>
-    <%= f.text_field 'time_end_date_' + type, :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
-    <%= f.text_field 'time_end_time_' + type, :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_time_string, :maxlength => 10, :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %>
+    <%= f.text_field 'time_end_date_' + type, :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10, :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}" %>
+    <%= f.text_field 'time_end_time_' + type, :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_time_string, :maxlength => 10, :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}" %>
     </li>
     <li>
     <%= f.label :calculation_type, 'Calculate this port', :class => 'stdlabel'  %>
@@ -76,16 +76,30 @@
     <h2>Statement of Facts</h2>
     </li>
     <li>
-    <div class="row">
-    <span style="time-info-text-date"></span>
-    <span style="time-info-text-time">From</span>
-    <span style="time-info-text-date"></span>
-    <span style="time-info-text-time">Until</span>
-    <span style="ttc">Time To Count</span>
-    <span style="pct">Pct (%)</span>
-    <span style="rem">Remarks</span>
-    </div>
+      <div id="running-info">
+        <div id="running-time">
+          <div id=<%= type + "_allowed" %>>Total Time Allowed: </div>
+          <div id=<%= type + "_used" %>>Time Used: </div>
+          <div id=<%= type + "_available" %>>Time Remaining: </div>
+        </div>
+        <div id="running-dem-des">
+          <div id=<%= type + "_demurrage" %>>Demurrage: </div>
+          <div id=<%= type + "_despatch" %>>Despatch: </div>
+        </div>
+      </div>
     </li>
+    <li>
+      <table id="softable">
+        <tr>
+        <th style="width: 170px;">From</th>
+        <th style="width: 170px;">Until</th>
+        <th style="width: 110px;">Time To Count</th>
+        <th style="width: 50px;">Pct (%)</th>
+        <th style="width: 170px;">Remarks</th>
+        </tr>
+        <table>
+    </li>
+    <li>
     <div class="sof">
     <% facts.each do  |fact| %>
     <div class="row">
@@ -95,19 +109,20 @@
       width is all same. -->
     <% if portdetail_counter == 0 %>
       <%= hidden_field_tag 'id', fact.id, :name => 'loading[][id]' %>
-      <%= label_tag 'day', '---', :id => 'from_' + type + '_0' %><%= text_field_tag 'from_date_'+type+'_0', fact.from_date_string, :name => 'loading[][from_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'from', 'loading', 0);", :onfocus => "this.value = $F('port_detail_time_start_date_loading');" %><%= text_field_tag 'from_time_'+type+'_0', fact.from_time_string, :name => 'loading[][from_time]', :class =>'time-info-text-time', :onfocus => "this.value = $F('port_detail_time_start_time_loading');" %><%= label_tag 'day', '---', :id => 'to_' + type + '_0' %><%= text_field_tag 'to_date_'+type+'_0', fact.to_date_string, :name => 'loading[][to_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'to', 'loading', 0);", :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_time_'+type+'_0', fact.to_time_string, :name => 'loading[][to_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
+      <%= label_tag 'day', '---', :id => 'from_' + type + '_0' %><%= text_field_tag 'from_date_'+type+'_0', fact.from_date_string, :name => 'loading[][from_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'from', 'loading', 0);", :onfocus => "this.value = $F('port_detail_time_start_date_loading');" %><%= text_field_tag 'from_time_'+type+'_0', fact.from_time_string, :name => 'loading[][from_time]', :class =>'time-info-text-time', :onfocus => "this.value = $F('port_detail_time_start_time_loading');" %><%= label_tag 'day', '---', :id => 'to_' + type + '_0' %><%= text_field_tag 'to_date_'+type+'_0', fact.to_date_string, :name => 'loading[][to_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'to', 'loading', 0);", :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}" %><%= text_field_tag 'to_time_'+type+'_0', fact.to_time_string, :name => 'loading[][to_time]', :class =>'time-info-text-time', :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}" %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'loading[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'loading[][val]', :class =>'pct', :onblur => "updateRunningInfo('loading', 0);" %><%= text_field_tag 'remarks', fact.remarks, :name => 'loading[][remarks]', :class =>'rem' %>
     <% else %>
       <%= hidden_field_tag 'id', fact.id, :name => 'discharging[][id]' %>
-      <%= label_tag 'day', '---', :id => 'from_' + type + '_0' %><%= text_field_tag 'from_date_'+type+'_0', fact.from_date_string, :name => 'discharging[][from_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'from', 'discharging', 0);", :onfocus => "this.clear();this.value = $F('port_detail_time_start_date_discharging');" %><%= text_field_tag 'from_time_'+type+'_0', fact.from_time_string, :name => 'discharging[][from_time]', :class =>'time-info-text-time', :onfocus => "this.value = $F('port_detail_time_start_time_discharging');" %><%= label_tag 'day', '---', :id => 'to_' + type + '_0' %><%= text_field_tag 'to_date_'+type+'_0', fact.to_date_string, :name => 'discharging[][to_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'to', 'discharging', 0);", :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'to_time_'+type+'_0', fact.to_time_string, :name => 'discharging[][to_time]', :class =>'time-info-text-time', :onfocus => "if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}" %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct' %><%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
+      <%= label_tag 'day', '---', :id => 'from_' + type + '_0' %><%= text_field_tag 'from_date_'+type+'_0', fact.from_date_string, :name => 'discharging[][from_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'from', 'discharging', 0);", :onfocus => "this.value = '';this.value = $F('port_detail_time_start_date_discharging');" %><%= text_field_tag 'from_time_'+type+'_0', fact.from_time_string, :name => 'discharging[][from_time]', :class =>'time-info-text-time', :onfocus => "this.value = $F('port_detail_time_start_time_discharging');" %><%= label_tag 'day', '---', :id => 'to_' + type + '_0' %><%= text_field_tag 'to_date_'+type+'_0', fact.to_date_string, :name => 'discharging[][to_date]', :class =>'time-info-text-date', :onblur => "displayDayLabel(this.value, 'to', 'discharging', 0);", :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}"  %><%= text_field_tag 'to_time_'+type+'_0', fact.to_time_string, :name => 'discharging[][to_time]', :class =>'time-info-text-time', :onfocus => "if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}" %><%= text_field_tag 'timeToCount', fact.timeToCount, :name => 'discharging[][timeToCount]', :class =>'ttc' %><%= text_field_tag 'val', fact.val, :name => 'discharging[][val]', :class =>'pct', :onblur => "updateRunningInfo('loading', 0);" %><%= text_field_tag 'remarks', fact.remarks, :name => 'discharging[][remarks]', :class =>'rem' %>
     <% end %>
     </div>
     <% end %>
     </div>
+    </li>
     <li>
       <% if portdetail_counter == 0 %>
-      <a href="#" onclick="addrow('loading');">Add Fact</a>
+      <a href="#" onclick="addRow('loading');">Add Fact</a>
       <% else %>
-      <a href="#" onclick="addrow('discharging');">Add Fact</a>
+      <a href="#" onclick="addRow('discharging');">Add Fact</a>
       <% end %> 
     </li>
   </ol>

@@ -1,10 +1,10 @@
-function addrow(operation) {
-     var operationType = document.getElementById(operation);
-     var set = operationType.getElementsByClassName('sof')[0];
+function doValidation(operation) {
+     var operationType = $(operation);
+     var sofSet = operationType.getElementsByClassName('sof')[0];
 
-     var length = set.getElementsByClassName('row').length;
+     var length = sofSet.getElementsByClassName('row').length;
 
-     var rows = set.getElementsByClassName('row');
+     var rows = sofSet.getElementsByClassName('row');
      var lastRow = rows[rows.length - 1];
 
      var to_date = lastRow.getElementsByClassName('time-info-text-date')[1].value;
@@ -45,8 +45,8 @@ function addrow(operation) {
        return false;
      }
 
-     var commence_date = document.getElementById('port_detail_time_start_date_' + operation).value;
-     var commence_time = document.getElementById('port_detail_time_start_time_' + operation).value;
+     var commence_date = $('port_detail_time_start_date_' + operation).value;
+     var commence_time = $('port_detail_time_start_time_' + operation).value;
      var commence = Date.parseExact(commence_date, "dd-MM-yy");
 
      if(commence == null) {
@@ -63,8 +63,8 @@ function addrow(operation) {
      }
      commence.set({hour: hr, minute: min});
 
-     var complete_date = document.getElementById('port_detail_time_end_date_' + operation).value;
-     var complete_time = document.getElementById('port_detail_time_end_time_' + operation).value;
+     var complete_date = $('port_detail_time_end_date_' + operation).value;
+     var complete_time = $('port_detail_time_end_time_' + operation).value;
      var complete = Date.parseExact(complete_date, "dd-MM-yy");
 
      if(complete == null) {
@@ -106,6 +106,37 @@ function addrow(operation) {
        return false;
      }
 
+     var pct = lastRow.getElementsByClassName('pct')[0].value;
+
+     if(pct == "") {
+       alert("Please enter percentage"); 
+       return false;
+     }
+
+     return [from_date, from_time, from, to_date, to_time, to, commence, complete, sofSet, pct]
+}
+
+function addRow(operation) {
+    
+    var val = doValidation(operation);
+    if(!val) {
+      return false;
+    }
+    var from_date = val[0];
+    var from_time = val[1];
+    var from = val[2];
+    var to_date = val[3];
+    var to_time = val[4];
+    var to = val[5];
+    var commence = val [6];
+    var complete = val [7];
+    var sofSet = val[8];
+    var length = sofSet.getElementsByClassName('row').length;
+
+    if(complete.compareTo(to) == 0) {
+      alert("To is equal to Complete date");
+      return false;
+    } 
      /* 
       To of this sof is the from of next. 
       Get the to of the last sof and populate the from of new sof
@@ -125,7 +156,6 @@ function addrow(operation) {
      input.setAttribute('name',operation+'[][from_date]');
      input.setAttribute('id','from_date_'+operation+'_'+length);
      input.setAttribute('value',to_date);
-     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -134,7 +164,6 @@ function addrow(operation) {
      input.setAttribute('id','from_time_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][from_time]');
      input.setAttribute('value',to_time);
-     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
      row.appendChild(input);
 
      var label = document.createElement('label');
@@ -148,8 +177,8 @@ function addrow(operation) {
      input.setAttribute('id','to_date_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][to_date]');
      input.setAttribute('value',"dd-mm-yy");
-     input.setAttribute('onblur',"displayDayLabel(this.value, 'to', '" + operation + "', " + length + ");");
-     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
+     input.onblur = function() { displayDayLabel(this.value, 'to', operation, length); };
+     input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}};
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -158,7 +187,7 @@ function addrow(operation) {
      input.setAttribute('id','to_time_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][to_time]');
      input.setAttribute('value',"hh:mm");
-     input.setAttribute('onfocus',"if(this.getValue() == 'hh:mm' || this.getValue() == 'dd-mm-yy') {this.clear();}");
+     input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}};
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -171,6 +200,7 @@ function addrow(operation) {
      input.setAttribute('class','pct');
      input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][val]');
+     input.onblur = function() { updateRunningInfo(operation, length);};
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -178,12 +208,11 @@ function addrow(operation) {
      input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][remarks]');
      row.appendChild(input);
-     set.appendChild(row);
-     row.scrollTop = row.scrollHeight;
+     sofSet.appendChild(row);
 }
 
 function displayDayLabel(value, type, operation, index) {
-  var element = document.getElementById(type + '_' + operation + '_' + index);
+  var element = $(type + '_' + operation + '_' + index);
   var d = Date.parseExact(value, "dd-MM-yy");
   // Month starts from 0 in datejs which sucks. Increment by a month and then
   // take the day.
@@ -197,29 +226,85 @@ function getDay(d) {
   } else {
     return "---";
   }
-
 }
-function isValidFacts() {
-  var set = document.getElementById('set');
-  var list = set.childNodes;
-  var valid = true;
-  for(var i=0; i< list.length; i++) {
-    if(list[i].children != undefined) {
-      var collection = list[i].children
-      if(collection.length == 5 && collection[0].localName == "INPUT") {
-        for(var j=0; j<collection.length; j++) {
-          if(collection[j].value == "") {
-            valid = false;
-          }
-        }
+
+function updateRunningInfo(operation, index) {
+  var val = doValidation(operation);
+  if(!val) {
+    return false;
+  }
+
+  var from = val[2];
+  var to = val[5];
+  var commence = val[6];
+  var complete = val[7];
+  var sofSet = val[8];
+  var pct = val[9];
+
+  var totalMins = (complete-commence)/(1000*60);
+  var diffString = getDateDiffString(totalMins);
+  
+  /* Attach the running total used and available to the row.
+     That way you don't need to calculate the running info
+     from scratch every time a row is added. */
+  var rows = sofSet.getElementsByClassName('row');
+  var row = rows[index];
+
+  var running = $(operation + '_usedmins_' + index);
+  if(running) {
+    row.removeChild(running);
+  }
+
+  var used = 0;
+  if(index != 0) {
+    used = parseInt($(operation + '_usedmins_' + (index - 1)).getAttribute('value'));
+  }
+
+  used += Math.round(((to - from)*(pct/100))/(1000*60));
+
+  var info = document.createElement('span');
+  info.setAttribute('id', operation + '_usedmins_' + index);
+  info.setAttribute('hidden', true);
+  info.setAttribute('value', used);
+  row.appendChild(info);
+
+  var allowed = $(operation + '_allowed');
+  allowed.innerHTML = "Total Time Allowed: " + diffString ;
+
+  diffString = getDateDiffString(used)
+  var time_used = $(operation + '_used');
+  time_used.innerHTML = "Time Used: " + diffString;
+
+  diffString = getDateDiffString(totalMins - used)
+  var available = $(operation + '_available');
+  available.innerHTML = "Time Available: " + diffString;
+
+  // update demurrage/despatch information now.
+  var att = $(operation).childNodes;
+  for(var i=0; i< att.length; i++) {
+    var li = att[i].childNodes;
+    var foo = li.childElements;
+    for(var j=0; j<li.length; j++) {
+      if(li[j].id == "portdetail_demurrage") {
+        alert(li[j].value);
+        return true;
       }
     }
   }
-  if(!valid) {
-    alert("Please fill in all the fields and try");
-    return false;
-  } else {
-    alert("All Good");
-    return true;
+}
+
+function updateDemurrageDespatch(operation, index) {
+  $(operation + '_demurrage');
+  $(operation + '_despatch');
+}
+
+function getDateDiffString(totalMins) {
+  if(totalMins <= 0) {
+    return '0 days 0 hr 0 mins';
   }
+  var days = parseInt(totalMins/(60*24));
+  totalMins -= days*24*60;
+  var hours = parseInt(totalMins/60);
+  var mins = totalMins - (hours * 60);
+  return days + ' days ' + hours + ' hr ' + mins + ' mins ';
 }

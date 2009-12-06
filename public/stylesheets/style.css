@@ -212,4 +212,20 @@ span.fieldwithErrors input {
 	padding: 8px;
 }
 
+#running-info 
+{
+    width: 600px;
+    height: 50px;
+}
 
+#running-time 
+{
+  width: 400px;;
+  float: left;
+}
+
+#running-dem-des 
+{
+    width: 200px;
+    float: right;
+}
