@@ -36,7 +36,7 @@
   <h3>Your saved forms </h3>
   <%  @cp_details.each do |cp_detail| %>
   <br/>
-  <%= link_to cp_detail.partner, :controller => 'laytime', :action => 'load', :id => cp_detail.id %>
+  <%= link_to cp_detail.cpName + ' ' + cp_detail.created_at.to_date.to_s, :controller => 'laytime', :action => 'load', :id => cp_detail.id %>
   <% end
   end
 end %>

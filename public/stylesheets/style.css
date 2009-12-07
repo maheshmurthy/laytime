@@ -46,7 +46,7 @@ html, body {
   color: #4E4848;
 }
 
-.info-message a:link, a:visited {
+.info-message a:link, .info-message a:visited {
   color: #4E4848;
   font-size: 28px;
 }

@@ -52,6 +52,26 @@ class Fact < ActiveRecord::Base
     to.to_s(:custom_date_time)
    end
 
+   def from_date_day_string
+     if from
+       from.strftime("%a")
+     elsif from_date
+       from_date.strftime("%a")
+     else
+       "---"
+     end
+   end
+
+   def to_date_day_string
+     if to
+       to.strftime("%a")
+     elsif to_date
+       to_date.strftime("%a")
+     else
+       "---"
+     end
+   end
+
    def merge_fact_date
      self.from = DateTime.strptime(self.from_date, "%d-%m-%y")
      time = Time.parse(from_time)

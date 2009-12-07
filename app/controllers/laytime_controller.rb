@@ -31,6 +31,7 @@ class LaytimeController < ApplicationController
   end
 
   def load
+    # TODO Make sure the user is logged in and owns the id requested.
     clear_session
     session[:cp_detail] = CpDetail.find(params[:id])
     session[:port_details] = PortDetail.find(:all, :conditions => {:cp_detail_id => session[:cp_detail].id})
@@ -340,8 +341,6 @@ class LaytimeController < ApplicationController
     fact_list = Array.new
     params[operation].each do |fact|
       fact_obj = Fact.new(fact)
-      logger.info "**********************"
-      logger.info fact_obj.inspect
       fact_list << fact_obj
     end
     
