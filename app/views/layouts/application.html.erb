@@ -14,7 +14,7 @@
       <%= link_to "About", root_url %> 
       <%= link_to "Feedback", root_url %>
       <% if current_user %>
-        Howdy <%= current_user.username %>!
+        <span class="info-message" style="font-size: 16px;">Howdy <%= current_user.username %>!</span>
         <%= link_to "Logout", logout_path  %> 
       <% else %>
         <%= link_to "Signup", new_user_path %>

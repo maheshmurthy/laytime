@@ -13,22 +13,26 @@
 </style>
 <!-- User is not logged in. Display introduction -->
 <% unless current_user %>
-  <div class="info">laytime calculation has never been easier!</div>
-  <div id="features">
+  <div class="info">Laytime calculation has never been easier!</div>
+  <fieldset id="features">
     <strong>Perform calculations in Panga easily. Some of the features include:</strong>
     <li>Simple and intuitive interface</li>
     <li>Pretty charts to visualize all your data</li>
     <li>No intallation required!</li>
     <li>Login from any computer and start calculating!</li>
     <li>Send reports as email attachments</li>
-  </div>
+  </fieldset>
   <div class="info"><%= link_to 'Signup',  new_user_path %> for a free 7 day trial now! (no credit card required)</div>
 <!-- User is logged in. Either display saved forms or show nice message -->
 <% else
  if @cp_details.empty? %>
+    <div class="info-message">
     You have not created any calculations yet. Go ahead and create your first one <%= link_to 'now', new_path %>!
+    </div>
   <% else %>
+    <div class="info-message">
     Create <%= link_to 'new', new_path %> calculation 
+    </div>
   <h3>Your saved forms </h3>
   <%  @cp_details.each do |cp_detail| %>
   <br/>

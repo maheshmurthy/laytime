@@ -36,8 +36,19 @@ html, body {
 #features {
   color: orange;
   font-size: 16px;
-  padding-left: 140px;
+  padding-left: 160px;
   font-weight: bold;
+  border-style: none;
+}
+
+.info-message {
+  font-size: 20px;
+  color: #4E4848;
+}
+
+.info-message a:link, a:visited {
+  color: #4E4848;
+  font-size: 28px;
 }
 
 #user-nav {

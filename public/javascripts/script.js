@@ -16,11 +16,13 @@ function doValidation(operation) {
      }
      var hr = parseInt(to_time.split(':')[0], 10);
      var min = parseInt(to_time.split(':')[1], 10);
-     if(!hr || !min) {
-       alert('Please enter the to time in format hh:mm');
+     
+     try {
+      to.set({hour: hr, minute: min});
+     } catch(error) {
+       alert('Please make sure the hour and minute values are valid for to.');
        return false;
      }
-     to.set({hour: hr, minute: min});
 
      var from_date = lastRow.getElementsByClassName('time-info-text-date')[0].value;
      var from_time = lastRow.getElementsByClassName('time-info-text-time')[0].value;
@@ -33,12 +35,13 @@ function doValidation(operation) {
      var hr = parseInt(from_time.split(':')[0], 10);
      var min = parseInt(from_time.split(':')[1], 10);
 
-     if(!hr || !min) {
-       alert('Please enter the from time in format hh:mm');
+     try {
+      from.set({hour: hr, minute: min});
+     } catch(error) {
+       alert('Please make sure the hour and minute values are valid for from.');
        return false;
      }
 
-     from.set({hour: hr, minute: min});
 
      if(from > to) {
        alert('From can not be greater that to. Please correct and try again');
@@ -57,11 +60,12 @@ function doValidation(operation) {
      var hr = parseInt(commence_time.split(':')[0], 10);
      var min = parseInt(commence_time.split(':')[1], 10);
 
-     if(!hr || !min) {
-       alert('Please enter the laytime commence time in format hh:mm');
+     try {
+       commence.set({hour: hr, minute: min});
+     } catch(error) {
+       alert('Please make sure the hour and minute values are valid for commence date.');
        return false;
      }
-     commence.set({hour: hr, minute: min});
 
      var complete_date = $('port_detail_time_end_date_' + operation).value;
      var complete_time = $('port_detail_time_end_time_' + operation).value;
@@ -75,11 +79,12 @@ function doValidation(operation) {
      var hr = parseInt(complete_time.split(':')[0], 10);
      var min = parseInt(complete_time.split(':')[1], 10);
 
-     if(!hr || !min) {
-       alert('Please enter the laytime complete time in format hh:mm');
+     try {
+       complete.set({hour: hr, minute: min});
+     } catch(error) {
+       alert('Please make sure the hour and minute values are valid for complete date.');
        return false;
      }
-     complete.set({hour: hr, minute: min});
 
      /* from and to datetime should be greater than equal commence date and 
         less than equal complete date */
@@ -214,14 +219,11 @@ function addRow(operation) {
 function displayDayLabel(value, type, operation, index) {
   var element = $(type + '_' + operation + '_' + index);
   var d = Date.parseExact(value, "dd-MM-yy");
-  // Month starts from 0 in datejs which sucks. Increment by a month and then
-  // take the day.
   element.innerHTML = getDay(d);
 }
 
 function getDay(d) {
   if(d) {
-    d.add ({months: 1});
     return d.getDayName().substring(0,3);
   } else {
     return "---";
@@ -285,7 +287,6 @@ function updateRunningInfo(operation, index) {
     var nodes = att[i].childNodes;
     for(var j=0; j<nodes.length; j++) {
       if(nodes[j].id == "port_detail_demurrage") {
-        alert(nodes[j].value);
         return true;
       }
     }
