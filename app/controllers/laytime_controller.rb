@@ -33,10 +33,11 @@ class LaytimeController < ApplicationController
   def load
     # TODO Make sure the user is logged in and owns the id requested.
     clear_session
-    session[:cp_detail] = CpDetail.find(params[:id])
-    session[:port_details] = PortDetail.find(:all, :conditions => {:cp_detail_id => session[:cp_detail].id})
-    session[:loading_facts] = Fact.find(:all, :conditions => {:port_detail_id => session[:port_details][0].id})
-    session[:discharging_facts] = Fact.find(:all, :conditions => {:port_detail_id =>  session[:port_details][1].id})
+    cp_detail = CpDetail.find(params[:id])
+    session[:cp_detail] = cp_detail
+    session[:port_details] = cp_detail.port_details
+    session[:loading_facts] = cp_detail.port_details[0].facts
+    session[:discharging_facts] = cp_detail.port_details[1].facts
 
     # TODO Remove this hard coding
     info = Array.new
@@ -197,6 +198,10 @@ class LaytimeController < ApplicationController
     info.port_detail_id = port_id
     info.save
   end
+
+  def update_all
+  end
+
 
   def save_to_db
     @cpdetail = session[:cp_detail]
