@@ -18,7 +18,7 @@ function doValidation(operation) {
      var min = parseInt(to_time.split(':')[1], 10);
      
      try {
-      to.set({hour: hr, minute: min});
+       to.set({hour: hr, minute: min});
      } catch(error) {
        alert('Please make sure the hour and minute values are valid for to.');
        return false;
@@ -36,7 +36,7 @@ function doValidation(operation) {
      var min = parseInt(from_time.split(':')[1], 10);
 
      try {
-      from.set({hour: hr, minute: min});
+       from.set({hour: hr, minute: min});
      } catch(error) {
        alert('Please make sure the hour and minute values are valid for from.');
        return false;
@@ -243,7 +243,11 @@ function updateRunningInfo(operation, index) {
   var sofSet = val[8];
   var pct = val[9];
 
-  var totalMins = (complete-commence)/(1000*60);
+
+  var quantity = $F(operation+'_quantity');
+  var allowance = $F(operation+'_allowance');
+
+  var totalMins = Math.round((quantity/allowance)*24*60);
   var diffString = getDateDiffString(totalMins);
   
   /* Attach the running total used and available to the row.
@@ -319,11 +323,11 @@ function updateDemurrageDespatch(operation, index) {
 
 function getDateDiffString(totalMins) {
   if(totalMins <= 0) {
-    return '0 days 0 hr 0 mins';
+    return '0 days 0:0';
   }
   var days = parseInt(totalMins/(60*24));
   totalMins -= days*24*60;
   var hours = parseInt(totalMins/60);
   var mins = totalMins - (hours * 60);
-  return days + ' days ' + hours + ' hr ' + mins + ' mins ';
+  return days + ' days ' + hours + ':' + mins;
 }

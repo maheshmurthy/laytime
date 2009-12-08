@@ -7,6 +7,37 @@ class PortDetail < ActiveRecord::Base
    before_save :merge_dates
    attr_accessor :time_start_date, :time_start_time, :time_end_date, :time_end_time
 
+   include TimeUtil
+
+   def time_allowed
+     if quantity && allowance
+       pretty_time_mins(((quantity/Float(allowance)) * 24 * 60).round)
+     else
+       ""
+     end
+   end
+
+   def time_used
+     if time_start && time_end
+       logger.info time_start
+       logger.info time_end
+       logger.info time_end - time_start
+       pretty_time_mins((time_end - time_start) / 60)
+     else
+       ""
+     end
+   end
+
+   def time_remaining
+      if quantity && allowance && time_start && time_used
+        allowed = ((quantity/Float(allowance)) * 24 * 60).round
+        used = (time_end - time_start) / 60
+        pretty_time_mins((allowed-used).abs)
+      else
+        ""
+      end
+   end
+
    def time_start_date_string
      if time_start
        time_start.to_s(:custom_date)
@@ -53,7 +84,7 @@ class PortDetail < ActiveRecord::Base
      time = Time.parse(self.time_start_time)
      self.time_start = self.time_start.advance(:hours => time.hour, :minutes => time.min)
 
-     self.time_end = DateTime.parse(self.time_end_date, "%d-%m-%y")
+     self.time_end = DateTime.strptime(self.time_end_date, "%d-%m-%y")
      time = Time.parse(self.time_end_time)
      self.time_end = self.time_end.advance(:hours => time.hour, :minutes => time.min)
    end

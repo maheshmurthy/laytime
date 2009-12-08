@@ -37,4 +37,9 @@ module TimeUtil
     time_info.hours = 0
     time_info.mins = 0
   end
+
+  def pretty_time_mins(mins)
+    time_info = to_time_info(mins)
+    pretty_time_info(time_info)
+  end
 end

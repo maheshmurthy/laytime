@@ -22,7 +22,7 @@
     <%= f.hidden_field :operation, :name => 'portdetail[][operation]', :value => portdetail.operation %>
     <li>
     <%= f.label :cargo, 'Cargo Quantity', :class => 'stdlabel' %>
-    <%= f.text_field 'quantity', :name => 'portdetail[][quantity]', :class => 'stdtextbox', :value => portdetail.quantity, :maxlength => 10 %>
+    <%= f.text_field 'quantity', :name => 'portdetail[][quantity]', :class => 'stdtextbox', :value => portdetail.quantity, :id => operation + '_quantity', :maxlength => 10 %>
     <%= select 'portdetail', 'cargo', %w{mts}, {}, {:index => nil} %>
     </li>
     <li>
@@ -32,7 +32,7 @@
 
     <li>
     <%= f.label :allowance, 'Allowance', :class => 'stdlabel'  %>
-    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'stdtextbox', :value => portdetail.allowance, :maxlength => 10 %>
+    <%= f.text_field 'allowance', :name => 'portdetail[][allowance]', :class => 'stdtextbox', :value => portdetail.allowance, :id => operation + '_allowance', :maxlength => 10 %>
     <%= select 'portdetail', 'allowanceType', %w[mts/day], {},{:index => nil} %>
     </li>
 
@@ -78,9 +78,9 @@
     <li>
       <div id="running-info">
         <div id="running-time">
-          <div id=<%= operation + "_allowed" %>>Total Time Allowed: </div>
-          <div id=<%= operation + "_used" %>>Time Used: </div>
-          <div id=<%= operation + "_available" %>>Time Remaining: </div>
+          <div id=<%= operation + "_allowed" %>>Total Time Allowed: <%= portdetail.time_allowed %></div>
+          <div id=<%= operation + "_used" %>>Time Used: <%= portdetail.time_used %></div>
+          <div id=<%= operation + "_available" %>>Time Remaining: <%= portdetail.time_remaining %></div>
         </div>
         <div id="running-dem-des">
           <div id=<%= operation + "_demurrage" %>>Demurrage: </div>
