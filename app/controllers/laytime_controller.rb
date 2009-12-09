@@ -248,7 +248,9 @@ class LaytimeController < ApplicationController
     if params[:cp_visited] || session[:cp_detail] == nil
       # session[:cp_detail] will be null when someone deeplinks into port details page without
       # previously filling cp details
-      cp_detail = CpDetail.find_by_id(params[:cp_detail].delete(:id))
+      if params[:cp_detail]
+        cp_detail = CpDetail.find_by_id(params[:cp_detail].delete(:id))
+      end
       if cp_detail
         cp_detail.attributes = params[:cp_detail]
         session[:cp_detail] = cp_detail
