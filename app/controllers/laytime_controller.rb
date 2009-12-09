@@ -224,9 +224,12 @@ class LaytimeController < ApplicationController
 
 #        save_time_info(@portdetail.id, session[:after_pre_advise][1])
 #        save_time_info(@portdetail.id, session[:additional_time][1])
+        flash[:notice] = "Your calculation has been successfull saved!"
       else
-        logger.info "Failed to save!"
+        flash[:warning] = "Something went wrong. Please try again."
+        logger.error "Save failed"
       end
+      @cp_details = CpDetail.all
   end
 
   private 

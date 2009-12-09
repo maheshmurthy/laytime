@@ -1,0 +1,14 @@
+<% if flash[:warning] or flash[:notice] %>
+  <div id="notice" <% if flash[:warning] %>class="warning"<% end %>>
+    <%= flash[:warning] || flash[:notice] %>
+  </div>
+  <script type="text/javascript">
+    setTimeout("new Effect.Fade('notice');", 10000)
+  </script>
+<% end %>
+
+<%  @cp_details.each do |cp_detail| %>
+  <br/>
+<%= link_to cp_detail.cpName + ' ' + cp_detail.created_at.to_date.to_s, :controller => 'laytime', :action => 'load', :id => cp_detail.id %>
+<% end  %>
+
