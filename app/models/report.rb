@@ -22,6 +22,6 @@ class Report
   end
 
   def balance
-    (loading_amt + discharging_amt).abs
+    (loading_amt + discharging_amt)
   end
 end

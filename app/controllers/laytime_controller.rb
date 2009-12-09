@@ -199,10 +199,6 @@ class LaytimeController < ApplicationController
     info.save
   end
 
-  def update_all
-  end
-
-
   def save_to_db
     @cpdetail = session[:cp_detail]
       if @cpdetail.save
@@ -239,9 +235,16 @@ class LaytimeController < ApplicationController
     if params[:cp_visited] || session[:cp_detail] == nil
       # session[:cp_detail] will be null when someone deeplinks into port details page without
       # previously filling cp details
-      session[:cp_detail] = CpDetail.new(params[:cp_detail])
+      cp_detail = CpDetail.find_by_id(params[:cp_detail].delete(:id))
+      if cp_detail
+        cp_detail.attributes = params[:cp_detail]
+        session[:cp_detail] = cp_detail
+      else
+        session[:cp_detail] = CpDetail.new(params[:cp_detail])
+      end
       session[:cp_detail].user_id = current_user.id
     end
+
     if session[:cp_detail].invalid?
       # redirect to cp detail page instead of back
       return false
@@ -256,14 +259,25 @@ class LaytimeController < ApplicationController
     end
     #unless(session[:port_details] && session[:port_details][0].errors && session[:port_details][1].errors && session[:port_details][0].errors.empty? && session[:port_details][1].errors.empty?)
     portdetails = Array.new
-    port_detail = PortDetail.new(params['portdetail'][0])
+    port_detail = PortDetail.find_by_id(params['portdetail'][0].delete(:id))
+    if port_detail
+      port_detail.attributes = params['portdetail'][0]
+    else
+      port_detail = PortDetail.new(params['portdetail'][0])
+    end
 
     port_detail.location = session[:cp_detail].from
     port_detail.calculation_type = params['calculation_type0']
     port_detail.calculation_time_saved = params['calculation_time_saved0']
     portdetails << port_detail
+    
+    port_detail = PortDetail.find_by_id(params['portdetail'][1].delete(:id))
+    if port_detail
+      port_detail.attributes = params['portdetail'][1]
+    else
+      port_detail = PortDetail.new(params['portdetail'][1])
+    end
 
-    port_detail = PortDetail.new(params['portdetail'][1])
     port_detail.location = session[:cp_detail].to
     port_detail.calculation_type = params['calculation_type1']
     port_detail.calculation_time_saved = params['calculation_time_saved1']
@@ -345,7 +359,12 @@ class LaytimeController < ApplicationController
   def is_facts_invalid(operation)
     fact_list = Array.new
     params[operation].each do |fact|
-      fact_obj = Fact.new(fact)
+      fact_obj = Fact.find_by_id(fact.delete(:id))
+      if fact_obj
+        fact_obj.attributes = fact
+      else
+        fact_obj = Fact.new(fact)
+      end
       fact_list << fact_obj
     end
     

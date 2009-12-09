@@ -19,9 +19,6 @@ class PortDetail < ActiveRecord::Base
 
    def time_used
      if time_start && time_end
-       logger.info time_start
-       logger.info time_end
-       logger.info time_end - time_start
        pretty_time_mins((time_end - time_start) / 60)
      else
        ""
