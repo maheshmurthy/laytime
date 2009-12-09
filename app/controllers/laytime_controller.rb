@@ -32,8 +32,18 @@ class LaytimeController < ApplicationController
 
   def load
     # TODO Make sure the user is logged in and owns the id requested.
+    unless current_user
+      redirect_to login_path
+      return
+    end
+
     clear_session
     cp_detail = CpDetail.find(params[:id])
+
+    if cp_detail.user_id != current_user.id
+      redirect_to root_url
+      return
+    end
     session[:cp_detail] = cp_detail
     session[:port_details] = cp_detail.port_details
     session[:loading_facts] = cp_detail.port_details[0].facts
