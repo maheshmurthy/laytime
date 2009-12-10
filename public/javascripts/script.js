@@ -297,7 +297,7 @@ function updateRunningInfo(operation, index) {
   }
 }
 
-function validateAndFillDespatch(operation) {
+function validateAndUpdateFields(operation) {
   var att = $(operation).childNodes;
   var demurrage = "";
   for(var i=0; i< att.length; i++) {
@@ -306,11 +306,13 @@ function validateAndFillDespatch(operation) {
       if(li[j].id == "port_detail_demurrage") {
         if(li[j].value == "") {
           alert("Please fill demurrage value");
+          return false;
         } else {
           demurrage = li[j].value;
         }
       } else if(li[j].id == "port_detail_despatch") {
         li[j].value = demurrage/2;
+        document.getElementById('running_' + operation + '_despatch').innerHTML = "Despatch: " + 500;
       }
     }
   }

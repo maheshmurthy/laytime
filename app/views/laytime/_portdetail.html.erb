@@ -38,7 +38,7 @@
 
    <li>
     <%= f.label :demurrage, 'Demurrage', :class => 'stdlabel', :id => operation + '_demurrage'  %>
-    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage, :onblur => 'validateAndFillDespatch("' + operation + '");' %>
+    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage, :onblur => 'validateAndUpdateFields("' + operation + '");' %>
    </li>
    <li>
     <%= f.label :despatch, 'Despatch', :class => 'stdlabel', :id => operation + '_despatch'  %>
@@ -83,8 +83,8 @@
           <div id=<%= operation + "_available" %>>Time Remaining: <%= portdetail.time_remaining %></div>
         </div>
         <div id="running-dem-des">
-          <div id=<%= operation + "_demurrage" %>>Demurrage: </div>
-          <div id=<%= operation + "_despatch" %>>Despatch: </div>
+          <div id=<%= "running_" + operation + "_demurrage" %>>Demurrage: </div>
+          <div id=<%= "running_" + operation + "_despatch" %>>Despatch: </div>
         </div>
       </div>
     </li>
