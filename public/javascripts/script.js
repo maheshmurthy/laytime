@@ -7,28 +7,12 @@ function doValidation(operation) {
      var rows = sofSet.getElementsByClassName('row');
      var lastRow = rows[rows.length - 1];
 
-     var to_date = lastRow.getElementsByClassName('time-info-text-date')[1].value;
-     var to_time = lastRow.getElementsByClassName('time-info-text-time')[1].value;
-     var to = Date.parseExact(to_date, "dd-MM-yy");
-     if(to == null) {
-       alert('Please enter the date in format dd-mm-yy for to');
-       return false;
-     }
-     var hr = parseInt(to_time.split(':')[0], 10);
-     var min = parseInt(to_time.split(':')[1], 10);
-     
-     try {
-       to.set({hour: hr, minute: min});
-     } catch(error) {
-       alert('Please make sure the hour and minute values are valid for to.');
-       return false;
-     }
-
      var from_date = lastRow.getElementsByClassName('time-info-text-date')[0].value;
      var from_time = lastRow.getElementsByClassName('time-info-text-time')[0].value;
      var from = Date.parseExact(from_date, "dd-MM-yy");
+
      if(from == null) {
-       alert('Please enter the date in format dd-mm-yy for from');
+       alert('Please enter the date in format dd-mm-yy for From');
        return false;
      }
 
@@ -38,10 +22,27 @@ function doValidation(operation) {
      try {
        from.set({hour: hr, minute: min});
      } catch(error) {
-       alert('Please make sure the hour and minute values are valid for from.');
+       alert('Please make sure the hour and minute values are valid for From.');
        return false;
      }
 
+     var to_date = lastRow.getElementsByClassName('time-info-text-date')[1].value;
+     var to_time = lastRow.getElementsByClassName('time-info-text-time')[1].value;
+     var to = Date.parseExact(to_date, "dd-MM-yy");
+
+     if(to == null) {
+       alert('Please enter the date in format dd-mm-yy for Until');
+       return false;
+     }
+     var hr = parseInt(to_time.split(':')[0], 10);
+     var min = parseInt(to_time.split(':')[1], 10);
+     
+     try {
+       to.set({hour: hr, minute: min});
+     } catch(error) {
+       alert('Please make sure the hour and minute values are valid for Until.');
+       return false;
+     }
 
      if(from > to) {
        alert('From can not be greater that to. Please correct and try again');
@@ -247,6 +248,16 @@ function updateRunningInfo(operation, index) {
   var quantity = $F(operation+'_quantity');
   var allowance = $F(operation+'_allowance');
 
+  if(quantity == "") {
+    alert("Please fill the cargo quantity");
+    return false;
+  }
+
+  if(allowance == "") {
+    alert("Please fill the allowance");
+    return false;
+  }
+
   var totalMins = Math.round((quantity/allowance)*24*60);
   var diffString = getDateDiffString(totalMins);
   
@@ -281,21 +292,22 @@ function updateRunningInfo(operation, index) {
   var time_used = $(operation + '_used');
   time_used.innerHTML = "Time Used: " + diffString;
 
-  diffString = getDateDiffString(totalMins - used)
+  var availMins = totalMins - used
+  diffString = getDateDiffString(availMins)
   var available = $(operation + '_available');
-  available.innerHTML = "Time Available: " + diffString;
 
-  
   var demurrage = $F(operation + '_demurrage');
-  document.getElementById('running_' + operation + '_despatch').innerHTML = "Despatch: " + totalAmount(totalMins, demurrage);
-  var att = $(operation).childNodes;
-  for(var i=0; i< att.length; i++) {
-    var nodes = att[i].childNodes;
-    for(var j=0; j<nodes.length; j++) {
-      if(nodes[j].id == "port_detail_demurrage") {
-        return true;
-      }
-    }
+  var despatch = $F(operation + '_despatch');
+  var amount = calculateAmount(availMins, demurrage, despatch);
+
+  if(availMins < 0) {
+    available.innerHTML = "Time Over: " + diffString;
+    var amt = $('running_' + operation + '_demurrage');
+    amt.innerHTML = "Demurrage: " + amount;
+  } else {
+    available.innerHTML = "Time Available: " + diffString;
+    var amt = $('running_' + operation + '_despatch');
+    amt.innerHTML = "Despatch: " + amount;
   }
 }
 
@@ -304,35 +316,25 @@ function totalAmount(mins, amtPerDay) {
   return Math.round(days*amtPerDay*100)/100
 }
 
-function validateAndUpdateFields(operation) {
-  var att = $(operation).childNodes;
-  var demurrage = "";
-  for(var i=0; i< att.length; i++) {
-    var li = att[i].childNodes;
-    for(var j=0; j<li.length; j++) {
-      if(li[j].id == "port_detail_demurrage") {
-        if(li[j].value == "") {
-          alert("Please fill demurrage value");
-          return false;
-        } else {
-          demurrage = li[j].value;
-        }
-      } else if(li[j].id == "port_detail_despatch") {
-        li[j].value = demurrage/2;
-      }
-    }
+function calculateAmount(availMins, demurrage, despatch) {
+  var days = Math.abs(availMins)/(60*24);
+  if(availMins > 0) {
+    return Math.round(days*despatch*100)/100
+  } else {
+    return Math.round(days*demurrage*100)/100
   }
 }
 
-function updateDemurrageDespatch(operation, index) {
-  $(operation + '_demurrage');
-  $(operation + '_despatch');
+function validateAndUpdateFields(operation) {
+  if($F(operation + '_demurrage') == "") {
+    alert("Please enter the demurrage value");
+  } else {
+    $(operation + '_despatch').value = $F(operation + '_demurrage')/2;
+  }
 }
 
 function getDateDiffString(totalMins) {
-  if(totalMins <= 0) {
-    return '0 days 0:0';
-  }
+  totalMins = Math.abs(totalMins)
   var days = parseInt(totalMins/(60*24));
   totalMins -= days*24*60;
   var hours = parseInt(totalMins/60);

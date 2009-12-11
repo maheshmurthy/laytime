@@ -37,12 +37,12 @@
     </li>
 
    <li>
-    <%= f.label :demurrage, 'Demurrage', :class => 'stdlabel', :id => operation + '_demurrage'  %>
-    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage, :onblur => 'validateAndUpdateFields("' + operation + '");' %>
+    <%= f.label :demurrage, 'Demurrage', :class => 'stdlabel' %>
+    <%= f.text_field 'demurrage', :name => 'portdetail[][demurrage]', :class => 'stdtextbox', :value => portdetail.demurrage, :id => operation + '_demurrage', :onblur => 'validateAndUpdateFields("' + operation + '");' %>
    </li>
    <li>
-    <%= f.label :despatch, 'Despatch', :class => 'stdlabel', :id => operation + '_despatch'  %>
-    <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'stdtextbox', :value => portdetail.despatch %>
+    <%= f.label :despatch, 'Despatch', :class => 'stdlabel' %>
+    <%= f.text_field 'despatch', :name => 'portdetail[][despatch]', :class => 'stdtextbox', :value => portdetail.despatch, :id => operation + '_despatch' %>
    </li>
    <li>
     <%= f.label :commission_pct, 'Commission on demurrage(%)', :class => 'stdlabel'  %>
