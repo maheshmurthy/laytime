@@ -285,7 +285,9 @@ function updateRunningInfo(operation, index) {
   var available = $(operation + '_available');
   available.innerHTML = "Time Available: " + diffString;
 
-  // update demurrage/despatch information now.
+  
+  var demurrage = $F(operation + '_demurrage');
+  document.getElementById('running_' + operation + '_despatch').innerHTML = "Despatch: " + totalAmount(totalMins, demurrage);
   var att = $(operation).childNodes;
   for(var i=0; i< att.length; i++) {
     var nodes = att[i].childNodes;
@@ -295,6 +297,11 @@ function updateRunningInfo(operation, index) {
       }
     }
   }
+}
+
+function totalAmount(mins, amtPerDay) {
+  var days = mins/(60*24);
+  return Math.round(days*amtPerDay*100)/100
 }
 
 function validateAndUpdateFields(operation) {
@@ -312,7 +319,6 @@ function validateAndUpdateFields(operation) {
         }
       } else if(li[j].id == "port_detail_despatch") {
         li[j].value = demurrage/2;
-        document.getElementById('running_' + operation + '_despatch').innerHTML = "Despatch: " + 500;
       }
     }
   }
