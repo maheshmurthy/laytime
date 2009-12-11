@@ -1,3 +1,22 @@
+function buildDateTime(input_date, input_time, input_type) {
+    var parsedDate= Date.parseExact(input_date, "dd-MM-yy");
+
+    if(parsedDate == null) {
+      alert('Please enter the date in format dd-mm-yy for ' + input_type);
+      return null;
+    }
+
+    var hr = parseInt(input_time.split(':')[0], 10);
+    var min = parseInt(input_time.split(':')[1], 10);
+
+    try {
+      parsedDate.set({hour: hr, minute: min});
+    } catch(error) {
+      alert('Please make sure the hour and minute values are valid for ' + input_type);
+      return null;
+    }
+}
+
 function doValidation(operation) {
      var operationType = $(operation);
      var sofSet = operationType.getElementsByClassName('sof')[0];
@@ -7,84 +26,37 @@ function doValidation(operation) {
      var rows = sofSet.getElementsByClassName('row');
      var lastRow = rows[rows.length - 1];
 
-     var from_date = lastRow.getElementsByClassName('time-info-text-date')[0].value;
-     var from_time = lastRow.getElementsByClassName('time-info-text-time')[0].value;
-     var from = Date.parseExact(from_date, "dd-MM-yy");
-
+     var from = buildDateTime(lastRow.getElementsByClassName('time-info-text-date')[0].value, 
+          lastRow.getElementsByClassName('time-info-text-time')[0].value,
+          "From");
      if(from == null) {
-       alert('Please enter the date in format dd-mm-yy for From');
-       return false;
+        return false;
      }
 
-     var hr = parseInt(from_time.split(':')[0], 10);
-     var min = parseInt(from_time.split(':')[1], 10);
-
-     try {
-       from.set({hour: hr, minute: min});
-     } catch(error) {
-       alert('Please make sure the hour and minute values are valid for From.');
-       return false;
-     }
-
-     var to_date = lastRow.getElementsByClassName('time-info-text-date')[1].value;
-     var to_time = lastRow.getElementsByClassName('time-info-text-time')[1].value;
-     var to = Date.parseExact(to_date, "dd-MM-yy");
-
+     var to = buildDateTime(lastRow.getElementsByClassName('time-info-text-date')[1].value, 
+          lastRow.getElementsByClassName('time-info-text-time')[1].value,
+          "Until");
      if(to == null) {
-       alert('Please enter the date in format dd-mm-yy for Until');
-       return false;
-     }
-     var hr = parseInt(to_time.split(':')[0], 10);
-     var min = parseInt(to_time.split(':')[1], 10);
-     
-     try {
-       to.set({hour: hr, minute: min});
-     } catch(error) {
-       alert('Please make sure the hour and minute values are valid for Until.');
-       return false;
+        return false;
      }
 
      if(from > to) {
-       alert('From can not be greater that to. Please correct and try again');
+       alert('From can not be greater than Until. Please correct and try again');
        return false;
      }
 
-     var commence_date = $('port_detail_time_start_date_' + operation).value;
-     var commence_time = $('port_detail_time_start_time_' + operation).value;
-     var commence = Date.parseExact(commence_date, "dd-MM-yy");
-
+     var commence = buildDateTime($('port_detail_time_start_date_' + operation).value, 
+          $('port_detail_time_start_time_' + operation).value,
+          "Commence Date");
      if(commence == null) {
-       alert('Please enter the Laytime Commence date in format dd-mm-yy');
-       return false;
+        return false;
      }
-
-     var hr = parseInt(commence_time.split(':')[0], 10);
-     var min = parseInt(commence_time.split(':')[1], 10);
-
-     try {
-       commence.set({hour: hr, minute: min});
-     } catch(error) {
-       alert('Please make sure the hour and minute values are valid for commence date.');
-       return false;
-     }
-
-     var complete_date = $('port_detail_time_end_date_' + operation).value;
-     var complete_time = $('port_detail_time_end_time_' + operation).value;
-     var complete = Date.parseExact(complete_date, "dd-MM-yy");
-
+     
+     var complete = buildDateTime($('port_detail_time_end_date_' + operation).value, 
+          $('port_detail_time_end_time_' + operation).value,
+          "complete Date");
      if(complete == null) {
-       alert('Please enter the Laytime complete date in format dd-mm-yy');
-       return false;
-     }
-
-     var hr = parseInt(complete_time.split(':')[0], 10);
-     var min = parseInt(complete_time.split(':')[1], 10);
-
-     try {
-       complete.set({hour: hr, minute: min});
-     } catch(error) {
-       alert('Please make sure the hour and minute values are valid for complete date.');
-       return false;
+        return false;
      }
 
      /* from and to datetime should be greater than equal commence date and 
