@@ -281,20 +281,31 @@ function updateRunningInfo(operation, index) {
   var time_used = $(operation + '_used');
   time_used.innerHTML = "Time Used: " + diffString;
 
-  diffString = getDateDiffString(totalMins - used)
+  var availMins = totalMins - used
+  diffString = getDateDiffString(availMins)
   var available = $(operation + '_available');
-  available.innerHTML = "Time Available: " + diffString;
 
-  // update demurrage/despatch information now.
-  var att = $(operation).childNodes;
-  for(var i=0; i< att.length; i++) {
-    var nodes = att[i].childNodes;
-    for(var j=0; j<nodes.length; j++) {
-      if(nodes[j].id == "port_detail_demurrage") {
-        return true;
-      }
-    }
+  // Get the despatch amount
+  // Get the demurrage amount
+  
+  if(availMins < 0) {
+    available.innerHTML = "Time Over: " + diffString;
+  } else {
+    available.innerHTML = "Time Available: " + diffString;
   }
+
+  var amount = calculateAmount(availMins, demurrage, despatch);
+  if(availMins < 0) {
+     innerHTML = demurrage: ;
+  } else {
+     innerHTML = despatch: ; 
+  }
+}
+
+function calculateAmount(availMins, demurrage, despatch) {
+   if(availMins > 0) {
+   } else {
+   }
 }
 
 function validateAndUpdateFields(operation) {
@@ -324,9 +335,7 @@ function updateDemurrageDespatch(operation, index) {
 }
 
 function getDateDiffString(totalMins) {
-  if(totalMins <= 0) {
-    return '0 days 0:0';
-  }
+  totalMins = totalMins.abs
   var days = parseInt(totalMins/(60*24));
   totalMins -= days*24*60;
   var hours = parseInt(totalMins/60);
