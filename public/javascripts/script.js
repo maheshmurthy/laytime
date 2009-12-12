@@ -15,6 +15,7 @@ function buildDateTime(input_date, input_time, input_type) {
       alert('Please make sure the hour and minute values are valid for ' + input_type);
       return null;
     }
+    return parsedDate;
 }
 
 function doValidation(operation) {
@@ -91,7 +92,7 @@ function doValidation(operation) {
        return false;
      }
 
-     return [from_date, from_time, from, to_date, to_time, to, commence, complete, sofSet, pct]
+     return [from, to, commence, complete, sofSet, pct]
 }
 
 function addRow(operation) {
@@ -101,14 +102,14 @@ function addRow(operation) {
       return false;
     }
     var from_date = val[0];
-    var from_time = val[1];
-    var from = val[2];
-    var to_date = val[3];
-    var to_time = val[4];
-    var to = val[5];
-    var commence = val [6];
-    var complete = val [7];
-    var sofSet = val[8];
+    var from_time = val[0].getHours() + ':' + val[0].getMinutes();
+    // Figure out how to build just dd-mm-yy from date
+    var to = val[1];
+    var to_date = val[1];
+    var to_time = val[1].getHours() + ':' + val[1].getMinutes();
+    var commence = val [2];
+    var complete = val [3];
+    var sofSet = val[4];
     var length = sofSet.getElementsByClassName('row').length;
 
     if(complete.compareTo(to) == 0) {
@@ -209,12 +210,12 @@ function updateRunningInfo(operation, index) {
     return false;
   }
 
-  var from = val[2];
-  var to = val[5];
-  var commence = val[6];
-  var complete = val[7];
-  var sofSet = val[8];
-  var pct = val[9];
+  var from = val[0];
+  var to = val[1];
+  var commence = val[2];
+  var complete = val[3];
+  var sofSet = val[4];
+  var pct = val[5];
 
 
   var quantity = $F(operation+'_quantity');
