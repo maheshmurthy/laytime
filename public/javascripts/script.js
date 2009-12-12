@@ -95,6 +95,15 @@ function doValidation(operation) {
      return [from, to, commence, complete, sofSet, pct]
 }
 
+function pad(val) {
+  val += '';
+  if(val.length == 1) {
+    return "0" + val; 
+  } else {
+    return val;
+  }
+}
+
 function addRow(operation) {
     
     var val = doValidation(operation);
@@ -105,7 +114,7 @@ function addRow(operation) {
     var from_time = val[0].getHours() + ':' + val[0].getMinutes();
     // Figure out how to build just dd-mm-yy from date
     var to = val[1];
-    var to_date = val[1];
+    var to_date = pad(to.getDate()) + "-" + pad((to.getMonth() + 1)) + "-" + (to.getFullYear()+'').substring(2);
     var to_time = val[1].getHours() + ':' + val[1].getMinutes();
     var commence = val [2];
     var complete = val [3];
