@@ -44,7 +44,7 @@ class PortDetail < ActiveRecord::Base
      elsif time_start_date
        time_start_date
      else
-       "dd-mm-yy"
+       "dd.mm.yy"
      end
    end
 
@@ -64,7 +64,7 @@ class PortDetail < ActiveRecord::Base
      elsif time_end_date
        time_end_date
      else
-       "dd-mm-yy"
+       "dd.mm.yy"
      end
    end
 
@@ -79,12 +79,11 @@ class PortDetail < ActiveRecord::Base
    end
 
    def merge_dates
-     debugger
-     self.time_start = DateTime.strptime(self.time_start_date, "%d-%m-%y")
+     self.time_start = DateTime.strptime(self.time_start_date, "%d.%m.%y")
      time = Time.parse(self.time_start_time)
      self.time_start = self.time_start.advance(:hours => time.hour, :minutes => time.min)
 
-     self.time_end = DateTime.strptime(self.time_end_date, "%d-%m-%y")
+     self.time_end = DateTime.strptime(self.time_end_date, "%d.%m.%y")
      time = Time.parse(self.time_end_time)
      self.time_end = self.time_end.advance(:hours => time.hour, :minutes => time.min)
    end

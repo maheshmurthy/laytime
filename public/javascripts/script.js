@@ -1,8 +1,8 @@
 function buildDateTime(input_date, input_time, input_type) {
-    var parsedDate= Date.parseExact(input_date, "dd-MM-yy");
+    var parsedDate= Date.parseExact(input_date, "dd.MM.yy");
 
     if(parsedDate == null) {
-      alert('Please enter the date in format dd-mm-yy for ' + input_type);
+      alert('Please enter the date in format dd.mm.yy for ' + input_type);
       return null;
     }
 
@@ -112,9 +112,8 @@ function addRow(operation) {
     }
     var from_date = val[0];
     var from_time = val[0].getHours() + ':' + val[0].getMinutes();
-    // Figure out how to build just dd-mm-yy from date
     var to = val[1];
-    var to_date = pad(to.getDate()) + "-" + pad((to.getMonth() + 1)) + "-" + (to.getFullYear()+'').substring(2);
+    var to_date = pad(to.getDate()) + "." + pad((to.getMonth() + 1)) + "." + (to.getFullYear()+'').substring(2);
     var to_time = val[1].getHours() + ':' + val[1].getMinutes();
     var commence = val [2];
     var complete = val [3];
@@ -164,9 +163,9 @@ function addRow(operation) {
      input.setAttribute('type','text');
      input.setAttribute('id','to_date_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][to_date]');
-     input.setAttribute('value',"dd-mm-yy");
+     input.setAttribute('value',"dd.mm.yy");
      input.onblur = function() { displayDayLabel(this.value, 'to', operation, length); };
-     input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}};
+     input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd.mm.yy') {this.value = '';}};
      row.appendChild(input);
 
      input = document.createElement('input')
@@ -175,7 +174,7 @@ function addRow(operation) {
      input.setAttribute('id','to_time_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][to_time]');
      input.setAttribute('value',"hh:mm");
-     input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}};
+     input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd.mm.yy') {this.value = '';}};
      row.appendChild(input);
 
      input = document.createElement('select')
@@ -203,7 +202,7 @@ function addRow(operation) {
 
 function displayDayLabel(value, type, operation, index) {
   var element = $(type + '_' + operation + '_' + index);
-  var d = Date.parseExact(value, "dd-MM-yy");
+  var d = Date.parseExact(value, "dd.mm.yy");
   element.innerHTML = getDay(d);
 }
 
