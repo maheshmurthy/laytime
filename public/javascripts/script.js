@@ -18,6 +18,28 @@ function buildDateTime(input_date, input_time, input_type) {
     return parsedDate;
 }
 
+function checkForSOFContinuity(rows, operation) {
+  if(rows.length == 1) {
+    // There is nothing to check for
+    return true;
+  }
+
+  for(var i=0; i<rows.length-1; i++) {
+    var sof1 = rows[i];
+    var sof2 = rows[i+1];
+    var to_date = sof1.getElementsByClassName('time-info-text-date')[1].value;
+    var to_time = sof1.getElementsByClassName('time-info-text-time')[1].value;
+    var from_date = sof2.getElementsByClassName('time-info-text-date')[0].value;
+    var from_time = sof2.getElementsByClassName('time-info-text-time')[0].value;
+
+    if((to_date != from_date) || (to_time != from_time)) {
+      alert("The facts should be continuous. Please correct the from date of fact " + (i + 2) + " to match the until date of fact " + (i + 1) + " for " + operation);
+      return false;
+    }
+  }
+  return true;
+}
+
 function doValidation(operation) {
      var operationType = $(operation);
      var sofSet = operationType.getElementsByClassName('sof')[0];
@@ -25,6 +47,12 @@ function doValidation(operation) {
      var length = sofSet.getElementsByClassName('row').length;
 
      var rows = sofSet.getElementsByClassName('row');
+
+     var valid = checkForSOFContinuity(rows, operation);
+     if(!valid) {
+       return false;
+     }
+
      var lastRow = rows[rows.length - 1];
 
      var from = buildDateTime(lastRow.getElementsByClassName('time-info-text-date')[0].value, 
