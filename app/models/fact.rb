@@ -4,6 +4,8 @@ class Fact < ActiveRecord::Base
   attr_accessor :from_date, :from_time, :to_date, :to_time
   before_save :merge_fact_date
 
+  TIME_TO_COUNT = ['Full/Normal', 'Rain/Bad Weather', 'Not to count', 'Shifting', 'Half', 'Partial', 'Always partial','Always excluded', 'Waiting','Full even if S/H', 'Partial even if S/H']
+
    def from_date_string
      if from
        from.to_s(:custom_date)

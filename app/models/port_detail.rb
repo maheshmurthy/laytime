@@ -7,6 +7,9 @@ class PortDetail < ActiveRecord::Base
    before_save :merge_dates
    attr_accessor :time_start_date, :time_start_time, :time_end_date, :time_end_time
 
+   CALCULATION_TYPE = ['Normal', 'Customary Quick Despatch']
+   CALCULATION_TIME_SAVED= ['Working', 'All']
+
    include TimeUtil
 
    def time_allowed

@@ -3,6 +3,8 @@ class CpDetail < ActiveRecord::Base
    validates_presence_of :partner, :number, :vessel, :from, :to, :currency, :user_id
    has_many :port_details
 
+   DEMURRAGE = ['Always', 'Not Always']
+
    HUMANIZED_COLLUMNS = {:cpName => "Form name"}
    def self.human_attribute_name(attribute)
      HUMANIZED_COLLUMNS[attribute.to_sym] || super

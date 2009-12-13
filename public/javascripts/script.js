@@ -178,10 +178,12 @@ function addRow(operation) {
      input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd-mm-yy') {this.value = '';}};
      row.appendChild(input);
 
-     input = document.createElement('input')
-     input.setAttribute('class','ttc');
-     input.setAttribute('type','text');
+     input = document.createElement('select')
      input.setAttribute('name',operation+'[][timeToCount]');
+     var TIME_TO_COUNT = ['Full/Normal', 'Rain/Bad Weather', 'Not to count', 'Shifting', 'Half', 'Partial', 'Always partial','Always excluded', 'Waiting','Full even if S/H', 'Partial even if S/H']
+     for(var i=0; i<TIME_TO_COUNT.length; i++) {
+       input.options[i] = new Option(TIME_TO_COUNT[i], TIME_TO_COUNT[i]);
+     }
      row.appendChild(input);
 
      input = document.createElement('input')

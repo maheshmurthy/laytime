@@ -25,7 +25,7 @@ class LaytimeControllerTest < ActionController::TestCase
     assert_equal "Cochin", session[:cp_detail].to
     assert_equal "USD", session[:cp_detail].currency
     assert_equal "A", session[:cp_detail].ports_to_calculate
-    assert_equal "A", session[:cp_detail].once_on_demurrage
+    assert_equal "Always", session[:cp_detail].once_on_demurrage
   end
 
   test "port detail validation" do
