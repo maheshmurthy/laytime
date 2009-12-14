@@ -240,3 +240,7 @@ span.fieldwithErrors input {
     width: 200px;
     float: right;
 }
+
+.day {
+    width: 30px;
+}

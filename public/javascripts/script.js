@@ -159,14 +159,18 @@ function addRow(operation) {
 
      var row = document.createElement('div')
      row.setAttribute('class','row');
+     row.setAttribute('className','row');
 
      var label = document.createElement('label');
      label.setAttribute('id', 'from_' + operation + '_' + length);
+     label.setAttribute('class','day');
+     label.setAttribute('className','day');
      label.innerHTML = getDay(to);
      row.appendChild(label);
 
      var input = document.createElement('input');
      input.setAttribute('class','time-info-text-date');
+     input.setAttribute('className','time-info-text-date');
      input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][from_date]');
      input.setAttribute('id','from_date_'+operation+'_'+length);
@@ -175,6 +179,7 @@ function addRow(operation) {
 
      input = document.createElement('input')
      input.setAttribute('class','time-info-text-time');
+     input.setAttribute('className','time-info-text-time');
      input.setAttribute('type','text');
      input.setAttribute('id','from_time_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][from_time]');
@@ -183,11 +188,14 @@ function addRow(operation) {
 
      var label = document.createElement('label');
      label.setAttribute('id', 'to_' + operation + '_' + length);
+     label.setAttribute('class','day');
+     label.setAttribute('className','day');
      label.innerHTML = "---";
      row.appendChild(label);
 
      input = document.createElement('input')
      input.setAttribute('class','time-info-text-date');
+     input.setAttribute('className','time-info-text-date');
      input.setAttribute('type','text');
      input.setAttribute('id','to_date_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][to_date]');
@@ -198,6 +206,7 @@ function addRow(operation) {
 
      input = document.createElement('input')
      input.setAttribute('class','time-info-text-time');
+     input.setAttribute('className','time-info-text-time');
      input.setAttribute('type','text');
      input.setAttribute('id','to_time_'+operation+'_'+length);
      input.setAttribute('name',operation+'[][to_time]');
@@ -215,6 +224,7 @@ function addRow(operation) {
 
      input = document.createElement('input')
      input.setAttribute('class','pct');
+     input.setAttribute('className','pct');
      input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][val]');
      input.onblur = function() { updateRunningInfo(operation, length);};
@@ -222,6 +232,7 @@ function addRow(operation) {
 
      input = document.createElement('input')
      input.setAttribute('class','rem');
+     input.setAttribute('className','rem');
      input.setAttribute('type','text');
      input.setAttribute('name',operation+'[][remarks]');
      row.appendChild(input);
