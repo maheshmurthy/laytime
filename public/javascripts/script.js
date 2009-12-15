@@ -27,20 +27,19 @@ function buildDateTime(input_date, input_time, input_type) {
   return parsedDate;
 }
 
-function doValidation(operation) {
+function validateAndBuildInfo(operation) {
   var operationType = $(operation);
   var sofSet = operationType.getElementsByClassName('sof')[0];
   var length = sofSet.getElementsByClassName('row').length;
 
   var rows = sofSet.getElementsByClassName('row');
 
-  var totalUsedMins = 0;
-  var validity = doSofValidation(row, operation);
+  var validity = doSofValidation(rows[0], operation);
   if(rows.length == 1) {
-    return doSofValidation(row, operation);
+    return validity;
   }
 
-  var usedMins = validity[5];
+  var usedMins = validity.mins;
 
   for(var i=0; i<rows.length-1; i++) {
     var sof1 = rows[i];
@@ -56,7 +55,7 @@ function doValidation(operation) {
        return false;
     }
 
-    usedMins += validity[5];
+    usedMins += validity.mins;
 
     var to_date = sof1.getElementsByClassName('time-info-text-date')[1].value;
     var to_time = sof1.getElementsByClassName('time-info-text-time')[1].value;
@@ -68,7 +67,7 @@ function doValidation(operation) {
       return false;
     }
   }
-
+  validity.mins = usedMins;
   return validity;
 }
 
@@ -109,8 +108,6 @@ function doSofValidation(row, operation) {
    /* from and to datetime should be greater than equal commence date and 
     less than equal complete date */
 
-   /* TODO Add validation to check for continuity */
-   
    if(from < commence) {
      alert('From can not be less than laytime commence date');
      return false;
@@ -139,22 +136,30 @@ function doSofValidation(row, operation) {
    }
 
    var used = Math.round(((to - from)*(pct/100))/(1000*60));
-   return [from, to, commence, complete, pct, used]
+   var info = {
+     from: from,
+     to: to,
+     commence: commence,
+     complete: complete,
+     pct: pct,
+     mins: used
+   }
+   return info;
 }
 
 function addRow(operation) {
   
-  var val = doValidation(operation);
+  var val = validateAndBuildInfo(operation);
   if(!val) {
     return false;
   }
-  var from_date = val[0];
-  var from_time = val[0].getHours() + ':' + val[0].getMinutes();
-  var to = val[1];
+  var from_date = val.from;
+  var from_time = from_date.getHours() + ':' + from_date.getMinutes();
+  var to = val.to;
   var to_date = pad(to.getDate()) + "." + pad((to.getMonth() + 1)) + "." + (to.getFullYear()+'').substring(2);
-  var to_time = val[1].getHours() + ':' + val[1].getMinutes();
-  var commence = val [2];
-  var complete = val [3];
+  var to_time = to.getHours() + ':' + to.getMinutes();
+  var commence = val.commence;
+  var complete = val.complete;
   var operationType = $(operation);
   var sofSet = operationType.getElementsByClassName('sof')[0];
   var length = sofSet.getElementsByClassName('row').length;
@@ -162,7 +167,7 @@ function addRow(operation) {
   if(complete.compareTo(to) == 0) {
     alert("To is equal to Complete date");
     return false;
-  } 
+  }
    /* 
     To of this sof is the from of next. 
     Get the to of the last sof and populate the from of new sof
@@ -252,8 +257,20 @@ function addRow(operation) {
 
 function displayDayLabel(value, type, operation, index) {
   var element = $(type + '_' + operation + '_' + index);
-  var d = Date.parseExact(value, "dd.mm.yy");
+  var d = Date.parseExact(value, "dd.MM.yy");
   element.innerHTML = getDay(d);
+}
+
+function autoFill(val, index, operation) {
+  var start_date = $F(operation + '_time_start_date'); 
+  var start_time = $F(operation + '_time_start_time');
+  if(index == 0) {
+    if(val == "date") {
+      $('from_date_' + operation + '_' + index).value = start_date;
+    } else {
+      $('from_time_' + operation + '_' + index).value = start_time;
+    }
+  }
 }
 
 function getDay(d) {
@@ -265,24 +282,19 @@ function getDay(d) {
 }
 
 function updateRunningInfo(operation, index) {
-  var val = doValidation(operation);
+  var val = validateAndBuildInfo(operation);
   if(!val) {
     return false;
   }
 
-  var from = val[0];
-  var to = val[1];
-  var commence = val[2];
-  var complete = val[3];
-<<<<<<< Updated upstream:public/javascripts/script.js
-  var sofSet = val[4];
-  var pct = val[5];
-
-=======
+  var from = val.from;
+  var to = val.to;
+  var commence = val.commence;
+  var complete = val.complete;
   var operationType = $(operation);
   var sofSet = operationType.getElementsByClassName('sof')[0];
-  var pct = val[4];
->>>>>>> Stashed changes:public/javascripts/script.js
+  var pct = val.pct;
+  var usedMins = val.mins;
 
   var quantity = $F(operation+'_quantity');
   var allowance = $F(operation+'_allowance');
@@ -299,39 +311,14 @@ function updateRunningInfo(operation, index) {
 
   var totalMins = Math.round((quantity/allowance)*24*60);
   var diffString = getDateDiffString(totalMins);
-  
-  /* Attach the running total used and available to the row.
-     That way you don't need to calculate the running info
-     from scratch every time a row is added. */
-  var rows = sofSet.getElementsByClassName('row');
-  var row = rows[index];
-
-  var running = $(operation + '_usedmins_' + index);
-  if(running) {
-    row.removeChild(running);
-  }
-
-  var used = 0;
-  if(index != 0) {
-    used = parseInt($(operation + '_usedmins_' + (index - 1)).getAttribute('value'));
-  }
-
-  used += Math.round(((to - from)*(pct/100))/(1000*60));
-
-  var info = document.createElement('span');
-  info.setAttribute('id', operation + '_usedmins_' + index);
-  info.setAttribute('hidden', true);
-  info.setAttribute('value', used);
-  row.appendChild(info);
-
   var allowed = $(operation + '_allowed');
   allowed.innerHTML = "Total Time Allowed: " + diffString ;
 
-  diffString = getDateDiffString(used)
+  diffString = getDateDiffString(usedMins)
   var time_used = $(operation + '_used');
   time_used.innerHTML = "Time Used: " + diffString;
 
-  var availMins = totalMins - used
+  var availMins = totalMins - usedMins
   diffString = getDateDiffString(availMins)
   var available = $(operation + '_available');
 
@@ -347,58 +334,6 @@ function updateRunningInfo(operation, index) {
     available.innerHTML = "Time Available: " + diffString;
     var amt = $('running_' + operation + '_despatch');
     amt.innerHTML = "Despatch: " + amount;
-  }
-
-  var totalMins = Math.round((quantity/allowance)*24*60);
-  var diffString = getDateDiffString(totalMins);
-  
-  /* Attach the running total used and available to the row.
-   That way you don't need to calculate the running info
-   from scratch every time a row is added. */
-  var rows = sofSet.getElementsByClassName('row');
-  var row = rows[index];
-
-  var running = $(operation + '_usedmins_' + index);
-  if(running) {
-  row.removeChild(running);
-  }
-
-  var used = 0;
-  if(index != 0) {
-  used = parseInt($(operation + '_usedmins_' + (index - 1)).getAttribute('value'));
-  }
-
-  used += Math.round(((to - from)*(pct/100))/(1000*60));
-
-  var info = document.createElement('span');
-  info.setAttribute('id', operation + '_usedmins_' + index);
-  info.setAttribute('hidden', true);
-  info.setAttribute('value', used);
-  row.appendChild(info);
-
-  var allowed = $(operation + '_allowed');
-  allowed.innerHTML = "Total Time Allowed: " + diffString ;
-
-  diffString = getDateDiffString(used)
-  var time_used = $(operation + '_used');
-  time_used.innerHTML = "Time Used: " + diffString;
-
-  var availMins = totalMins - used
-  diffString = getDateDiffString(availMins)
-  var available = $(operation + '_available');
-
-  var demurrage = $F(operation + '_demurrage');
-  var despatch = $F(operation + '_despatch');
-  var amount = calculateAmount(availMins, demurrage, despatch);
-
-  if(availMins < 0) {
-  available.innerHTML = "Time Over: " + diffString;
-  var amt = $('running_' + operation + '_demurrage');
-  amt.innerHTML = "Demurrage: " + amount;
-  } else {
-  available.innerHTML = "Time Available: " + diffString;
-  var amt = $('running_' + operation + '_despatch');
-  amt.innerHTML = "Despatch: " + amount;
   }
 }
 
