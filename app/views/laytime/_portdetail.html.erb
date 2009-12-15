@@ -85,8 +85,12 @@
           <div id=<%= operation + "_available" %>>Time Remaining: <%= portdetail.time_remaining %></div>
         </div>
         <div id="running-dem-des">
-          <div id=<%= "running_" + operation + "_demurrage" %>>Demurrage: </div>
-          <div id=<%= "running_" + operation + "_despatch" %>>Despatch: </div>
+          <% amount = portdetail.amount_payable %>
+          <% if amount > 0 %>
+            <div id=<%= "running_" + operation + "_despatch" %>>Despatch: <%= amount %></div>
+          <% elsif amount <= 0 %>
+            <div id=<%= "running_" + operation + "_demurrage" %>>Demurrage: <%= amount.abs %></div>
+          <% end %>
         </div>
       </div>
     </li>
