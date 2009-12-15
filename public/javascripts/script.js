@@ -74,15 +74,15 @@ function doValidation(operation) {
        return false;
      }
 
-     var commence = buildDateTime($('port_detail_time_start_date_' + operation).value, 
-          $('port_detail_time_start_time_' + operation).value,
+     var commence = buildDateTime($F(operation + '_time_start_date'), 
+          $F(operation + '_time_start_time'),
           "Commence Date");
      if(commence == null) {
         return false;
      }
      
-     var complete = buildDateTime($('port_detail_time_end_date_' + operation).value, 
-          $('port_detail_time_end_time_' + operation).value,
+     var complete = buildDateTime($F(operation + '_time_end_date'), 
+          $F(operation + '_time_end_time'),
           "complete Date");
      if(complete == null) {
         return false;
