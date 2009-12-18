@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091111052007) do
+ActiveRecord::Schema.define(:version => 20091215195411) do
 
   create_table "cp_details", :force => true do |t|
     t.string   "partner"
@@ -64,6 +64,18 @@ ActiveRecord::Schema.define(:version => 20091111052007) do
     t.datetime "pre_advise_date"
     t.datetime "time_start"
     t.datetime "time_end"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "report_cards", :force => true do |t|
+    t.integer  "cp_detail_id"
+    t.integer  "loading_avail_id"
+    t.integer  "discharging_avail_id"
+    t.integer  "loading_used_id"
+    t.integer  "discharging_used_id"
+    t.float    "loading_amount"
+    t.float    "discharging_amount"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

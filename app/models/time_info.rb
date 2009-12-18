@@ -3,6 +3,8 @@ class TimeInfo < ActiveRecord::Base
    validates_presence_of :days, :hours, :mins, :time_info_type
    belongs_to :port_detail
 
+   TIME_INFO_TYPE = {'Report' => 'Report'}
+
    def add(info)
      self_mins = self.to_mins
      info_mins = info.to_mins

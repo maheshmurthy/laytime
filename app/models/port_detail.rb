@@ -4,6 +4,7 @@ class PortDetail < ActiveRecord::Base
    has_many :informative_entries
    has_many :time_infos
    has_many :facts
+   belongs_to :cp_detail
    before_save :merge_dates
    attr_accessor :time_start_date, :time_start_time, :time_end_date, :time_end_time
 

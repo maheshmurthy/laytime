@@ -103,7 +103,7 @@ class LaytimeController < ApplicationController
     report.loading_fact_report_list = loading_fact_report_list
     report.discharging_fact_report_list = discharging_fact_report_list
 
-    #session[:report] = report
+    session[:report] = report
     #create_pdf(cp_detail.id.to_s+".pdf", report)
     return report
   end
@@ -231,6 +231,14 @@ class LaytimeController < ApplicationController
           fact.port_detail_id = @portdetail.id
           fact.save
         end
+        report = session[:report]
+        save_report_card(report.loading_time_used, 
+                         report.loading_time_available, 
+                         report.discharging_time_used, 
+                         report.discharging_time_available, 
+                         report.loading_amt, 
+                         report.discharging_amt, 
+                         @cpdetail.id)
 
 #        save_time_info(@portdetail.id, session[:after_pre_advise][1])
 #        save_time_info(@portdetail.id, session[:additional_time][1])
@@ -243,6 +251,38 @@ class LaytimeController < ApplicationController
   end
 
   private 
+
+  def save_report_card(loading_time_used,
+                       loading_time_available,
+                       discharging_time_used,
+                       discharging_time_available,
+                       loading_amount,
+                       discharging_amount,
+                       cp_detail_id)
+    debugger
+    report_card = ReportCard.new
+    report_card.cp_detail_id = cp_detail_id
+
+    loading_time_used.time_info_type = TimeInfo::TIME_INFO_TYPE['Report']
+    loading_time_used.save
+    report_card.loading_used_id = loading_time_used.id
+
+    loading_time_available.time_info_type = TimeInfo::TIME_INFO_TYPE['Report']
+    loading_time_available.save
+    report_card.loading_avail_id = loading_time_available.id
+
+    discharging_time_used.time_info_type = TimeInfo::TIME_INFO_TYPE['Report']
+    discharging_time_used.save
+    report_card.discharging_used_id = discharging_time_used.id
+
+    discharging_time_available.time_info_type = TimeInfo::TIME_INFO_TYPE['Report']
+    discharging_time_available.save
+    report_card.discharging_avail_id = discharging_time_available.id
+
+    report_card.loading_amount = loading_amount
+    report_card.discharging_amount = discharging_amount
+    report_card.save
+  end
 
   def is_cpdetails_valid
     if params[:cp_visited] || session[:cp_detail] == nil
