@@ -40,6 +40,25 @@ module TimeUtil
 
   def pretty_time_mins(mins)
     time_info = to_time_info(mins)
-    pretty_time_info(time_info)
+    time_info.to_s
+  end
+
+  def pretty_time_info_for_id(id)
+    if(id)
+      info = TimeInfo.find_by_id(id)
+      info.to_s
+    else
+    ""
+    end
+  end
+
+  def pretty_time_diff_of_ids(id_avail, id_used)
+    if(id_avail && id_used) 
+      info_avail = TimeInfo.find_by_id(id_avail)
+      info_used = TimeInfo.find_by_id(id_used)
+      info_avail.diff(info_used).to_s
+    else
+      ""
+    end
   end
 end

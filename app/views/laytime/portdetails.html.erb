@@ -38,7 +38,7 @@
 
   </ol>
   </fieldset>
-  <%= render :partial => 'portdetail', :locals => {:f => f, :loading_facts => @loading_facts, :discharging_facts => @discharging_facts, :additional_time => @additional_time, :after_pre_advise => @after_pre_advise}, :collection => @portdetails %>
+  <%= render :partial => 'portdetail', :locals => {:f => f, :loading_facts => @loading_facts, :discharging_facts => @discharging_facts, :additional_time => @additional_time, :after_pre_advise => @after_pre_advise, :report_card => @report_card}, :collection => @portdetails %>
     <div id="submit">
       <%= f.submit "Calculate", :class => "submit" %>
   </div>

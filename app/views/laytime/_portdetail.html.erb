@@ -5,6 +5,10 @@
     operation = "loading"
     additional_time_allowance = additional_time[0]
     pre_advise = after_pre_advise[0]
+    time_allowed = pretty_time_info_for_id(report_card.loading_avail_id)
+    time_used = pretty_time_info_for_id(report_card.loading_used_id)
+    time_remaining = pretty_time_diff_of_ids(report_card.loading_avail_id, report_card.loading_used_id)
+    amount = report_card.loading_amount
   %>
   <ol id="loading">
     <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
@@ -14,6 +18,10 @@
     operation = "discharging"
     additional_time_allowance = additional_time[1]
     pre_advise = after_pre_advise[1]
+    time_allowed = pretty_time_info_for_id(report_card.discharging_avail_id)
+    time_used = pretty_time_info_for_id(report_card.discharging_used_id)
+    time_remaining = pretty_time_diff_of_ids(report_card.discharging_avail_id, report_card.discharging_used_id)
+    amount = report_card.discharging_amount
   %>
   <ol id="discharging">
     <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
@@ -80,17 +88,13 @@
     <li>
       <div id="running-info">
         <div id="running-time">
-          <div id=<%= operation + "_allowed" %>>Total Time Allowed: <%= portdetail.time_allowed %></div>
-          <div id=<%= operation + "_used" %>>Time Used: <%= portdetail.time_used %></div>
-          <div id=<%= operation + "_available" %>>Time Remaining: <%= portdetail.time_remaining %></div>
+          <div id=<%= operation + "_allowed" %>>Total Time Allowed: <%= time_allowed %></div>
+          <div id=<%= operation + "_used" %>>Time Used: <%= time_used %></div>
+          <div id=<%= operation + "_available" %>>Time Remaining: <%= time_remaining %></div>
         </div>
         <div id="running-dem-des">
-          <% amount = portdetail.amount_payable %>
-          <% if amount > 0 %>
-            <div id=<%= "running_" + operation + "_despatch" %>>Despatch: <%= amount %></div>
-          <% elsif amount <= 0 %>
-            <div id=<%= "running_" + operation + "_demurrage" %>>Demurrage: <%= amount.abs %></div>
-          <% end %>
+          <div id=<%= "running_" + operation + "_despatch" %>>Despatch: <%= amount if amount && amount > 0 %></div>
+          <div id=<%= "running_" + operation + "_demurrage" %>>Demurrage: <%= amount.abs if amount && amount <=0 %></div>
         </div>
       </div>
     </li>

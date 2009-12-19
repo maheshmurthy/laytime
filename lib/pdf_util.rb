@@ -50,12 +50,12 @@ module PdfUtil
   end
 
   def write_summary(pdf, time_available, time_used, diff, amt)
-      pdf.text "<b>Time Allowed</b> " + pretty_time_info(time_available)
+      pdf.text "<b>Time Allowed</b> " + time_available.to_s
       pdf.text "<b>Time Used</b> " + pad(time_used.hours) +  ":" + pad(time_used.mins)
       if time_available.greater_than(time_used)
-        pdf.text "<b>Time saved</b> " + pretty_time_info(diff)
+        pdf.text "<b>Time saved</b> " + diff.to_s
       else
-        pdf.text "<b>Time Lost</b> " + pretty_time_info(diff)
+        pdf.text "<b>Time Lost</b> " + diff.to_s
       end
       if amt > 0
         pdf.text "<b>Despatch Due</b> " + amt.to_s

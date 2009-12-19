@@ -18,6 +18,7 @@ class LaytimeController < ApplicationController
       session[:additional_time] = nil
       session[:after_pre_advise] = nil
       session[:report] = nil
+      session[:report_card] = nil
   end
 
   def generate_pdf
@@ -48,6 +49,7 @@ class LaytimeController < ApplicationController
     session[:port_details] = cp_detail.port_details
     session[:loading_facts] = cp_detail.port_details[0].facts
     session[:discharging_facts] = cp_detail.port_details[1].facts
+    session[:report_card] = cp_detail.report_card
 
     # TODO Remove this hard coding
     info = Array.new
@@ -103,7 +105,6 @@ class LaytimeController < ApplicationController
     report.loading_fact_report_list = loading_fact_report_list
     report.discharging_fact_report_list = discharging_fact_report_list
 
-    session[:report] = report
     #create_pdf(cp_detail.id.to_s+".pdf", report)
     return report
   end
@@ -169,6 +170,12 @@ class LaytimeController < ApplicationController
       @after_pre_advise << TimeInfo.new
       @after_pre_advise << TimeInfo.new
     end
+    
+    if session[:report_card]
+      @report_card = session[:report_card]
+    else
+      @report_card = ReportCard.new
+    end
   end
 
   def result
@@ -193,6 +200,7 @@ class LaytimeController < ApplicationController
                               session[:port_details][0],
                               session[:port_details][1],
                               session[:cp_detail])
+    session[:report] = @report
     #TODO Uncomment this.
     #clear_session
     respond_to do |format|
@@ -250,7 +258,7 @@ class LaytimeController < ApplicationController
       @cp_details = CpDetail.all
   end
 
-  private 
+  private
 
   def save_report_card(loading_time_used,
                        loading_time_available,
@@ -259,8 +267,15 @@ class LaytimeController < ApplicationController
                        loading_amount,
                        discharging_amount,
                        cp_detail_id)
-    debugger
-    report_card = ReportCard.new
+    if(session[:report_card])
+      report_card = session[:report_card]
+      loading_time_used = TimeInfo.find_by_id(report_card.loading_used_id)
+      discharging_time_used = TimeInfo.find_by_id(report_card.discharging_used_id)
+      loading_time_available = TimeInfo.find_by_id(report_card.loading_avail_id)
+      discharging_time_available = TimeInfo.find_by_id(report_card.discharging_avail_id)
+    else
+      report_card = ReportCard.new
+    end
     report_card.cp_detail_id = cp_detail_id
 
     loading_time_used.time_info_type = TimeInfo::TIME_INFO_TYPE['Report']

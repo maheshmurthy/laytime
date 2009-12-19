@@ -36,6 +36,6 @@ class TimeInfo < ActiveRecord::Base
    end
 
    def to_s
-     self.days.to_s + " " + pad(self.hours).to_s + ":" + pad(self.mins).to_s
+     self.days.to_s + " days " + pad(self.hours).to_s + ":" + pad(self.mins).to_s
    end
 end

@@ -74,8 +74,8 @@ ActiveRecord::Schema.define(:version => 20091215195411) do
     t.integer  "discharging_avail_id"
     t.integer  "loading_used_id"
     t.integer  "discharging_used_id"
-    t.float    "loading_amount"
-    t.float    "discharging_amount"
+    t.decimal  "loading_amount",       :precision => 10, :scale => 2
+    t.decimal  "discharging_amount",   :precision => 10, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end

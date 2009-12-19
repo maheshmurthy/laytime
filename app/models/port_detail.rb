@@ -14,40 +14,6 @@ class PortDetail < ActiveRecord::Base
    include TimeUtil
    include LaytimeUtil 
 
-   def time_allowed
-     if quantity && allowance
-       pretty_time_mins(((quantity/Float(allowance)) * 24 * 60).round)
-     else
-       ""
-     end
-   end
-
-   def amount_payable
-     if quantity && allowance && time_start && time_used
-       available = ((quantity/Float(allowance)) * 24 * 60).round
-       used = (time_end - time_start) / 60
-       demurrage_despatch(to_time_info(available), to_time_info(used), despatch, demurrage)
-     end
-   end
-
-   def time_used
-     if time_start && time_end
-       pretty_time_mins((time_end - time_start) / 60)
-     else
-       ""
-     end
-   end
-
-   def time_remaining
-      if quantity && allowance && time_start && time_used
-        allowed = ((quantity/Float(allowance)) * 24 * 60).round
-        used = (time_end - time_start) / 60
-        pretty_time_mins((allowed-used).abs)
-      else
-        ""
-      end
-   end
-
    def time_start_date_string
      if time_start
        time_start.to_s(:custom_date)
