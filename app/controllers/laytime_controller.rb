@@ -13,8 +13,7 @@ class LaytimeController < ApplicationController
   end
 
   def ensure_user_logged_in
-    debugger
-    if !current_user
+    unless current_user
       redirect_to root_url
       return
     end

@@ -55,7 +55,7 @@ class LaytimeControllerTest < ActionController::TestCase
                    :pre_advise => pre_advise,
                    :add_allowance => add_allowance,
                    :port_visited => "true"
-                   }, {:cp_detail => cp_detail})
+                   }, {:cp_detail => cp_detail, :user_credentials => session['user_credentials'], :user_credentials_id => session['user_credentials_id']})
 
     assert_response :success
   end
