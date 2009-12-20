@@ -29,7 +29,6 @@ class LaytimeControllerTest < ActionController::TestCase
   end
 
   test "port detail validation" do
-
     loading_port_detail = build_loading_port
 
     discharging_port_detail =  build_discharging_port
@@ -46,7 +45,6 @@ class LaytimeControllerTest < ActionController::TestCase
     port_details << loading_port_detail
     port_details << discharging_port_detail
     cp_detail = CpDetail.new(build_cp_details)
-
     post(:result, {:portdetail => port_details, 
                    :calculation_type0 => "normal", 
                    :calculation_type1 =>"normal",

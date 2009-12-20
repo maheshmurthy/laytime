@@ -3,10 +3,20 @@ class LaytimeController < ApplicationController
   include PdfUtil
   include LaytimeUtil
 
+  before_filter :ensure_user_logged_in, :except => [:index]
+
   def index
     clear_session
     if current_user
       @cp_details = load_saved
+    end
+  end
+
+  def ensure_user_logged_in
+    debugger
+    if !current_user
+      redirect_to root_url
+      return
     end
   end
 
@@ -218,6 +228,24 @@ class LaytimeController < ApplicationController
   end
 
   def save_to_db
+    # EDGE CONDITION support later
+    # if user deleted a fact, don't let them save.
+    if session[:port_details][0].id
+      # This is an update
+      loading_id = session[:port_details][0].id
+      discharging_id = session[:port_details][1].id
+      if Fact.find_all_by_port_detail_id(loading_id).length > session[:loading_facts].length
+        flash[:notice] = "Looks like you deleted one or more loading fact. You can not save the new form if fact is deleted."
+        redirect_to :action => 'result', :save_to_db_visited => 'true'
+        return
+      end
+      if Fact.find_all_by_port_detail_id(discharging_id).length > session[:discharging_facts].length
+        flash[:notice] = "Looks like you deleted one or more discharging fact. You can not save the new form if fact is deleted."
+        params[:save_to_db_visited] = true
+        redirect_to :action => 'result', :save_to_db_visited => 'true'
+        return
+      end
+    end
     @cpdetail = session[:cp_detail]
       if @cpdetail.save
         logger.info "Saved!"
@@ -324,6 +352,11 @@ class LaytimeController < ApplicationController
   end
 
   def is_portdetails_valid
+    if params[:save_to_db_visited]
+      # When redirected from save_to_db, don't worry about validation again.
+      return true
+    end
+
     if !params[:port_visited]
       return false
     end

@@ -142,7 +142,7 @@ span.fieldwithErrors input {
 }
 
 .time-info-text-date {
-  width: 80px;
+  width: 75px;
   margin-right: 5px;
   margin-left: 10px;
 }
@@ -243,4 +243,20 @@ span.fieldwithErrors input {
 
 .day {
     width: 30px;
+}
+
+.cancel {
+  margin-right: 5px;
+}
+
+#notice {
+  color: green;
+  text-align: center;
+  width: 500px;
+}
+
+.warning {
+  color: red;
+  text-align: center;
+  width: 500px;
 }

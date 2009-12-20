@@ -1,3 +1,8 @@
+<% if flash[:warning] or flash[:notice] %>
+  <div id="notice" <% if flash[:warning] %>class="warning"<% end %>>
+    <%= flash[:warning] || flash[:notice] %>
+  </div>
+<% end %>
 <fieldset class='summary'>
   <li>
   <span class="stitle">Partner </span><%= @report.cp_detail.partner %>

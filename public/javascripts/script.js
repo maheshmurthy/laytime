@@ -176,6 +176,8 @@ function addRow(operation) {
    var row = document.createElement('div')
    row.setAttribute('class','row');
    row.setAttribute('className','row');
+   var length = operationType.getElementsByClassName('sof')[0].length;
+   row.setAttribute('id', length);
 
    var label = document.createElement('label');
    label.setAttribute('id', 'from_' + operation + '_' + length);
@@ -366,4 +368,10 @@ function getDateDiffString(totalMins) {
   var hours = parseInt(totalMins/60);
   var mins = totalMins - (hours * 60);
   return days + ' days ' + hours + ':' + mins;
+}
+
+function deleteRow(num) {
+  if(window.confirm("Are you sure you want to delete this fact?")) { 
+    $(num).remove(); 
+  }
 }
