@@ -35,7 +35,7 @@
     </li>
 </fieldset>
 <div style="margin-top: 20px; margin-left: 100px;">
-<%= link_to "View PDF", "/" + @report.cp_detail.id.to_s + ".pdf" %>
+<%= link_to "View PDF", :action => "generate" %>
 If you are satisfied with the result, you can save. You can also hit the back button in your browser and make any changes and recalculate.
   <%= button_to "Save", :action => "save_to_db" %>
 </div>

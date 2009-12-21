@@ -30,7 +30,12 @@ class LaytimeController < ApplicationController
       session[:report_card] = nil
   end
 
-  def generate_pdf
+  def generate
+    unless session[:report]
+      redirect_to root_url
+      return
+    end
+    @report = session[:report]
     respond_to do |format|
       format.pdf {render :layout => false}
     end
