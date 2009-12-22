@@ -9,7 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091215195411) do
+ActiveRecord::Schema.define(:version => 20091221230328) do
+
+  create_table "accounts", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "cp_details", :force => true do |t|
     t.string   "partner"
@@ -109,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20091215195411) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "perishable_token"
+    t.integer  "account_id"
   end
 
 end

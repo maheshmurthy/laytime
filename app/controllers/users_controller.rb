@@ -41,15 +41,21 @@ class UsersController < ApplicationController
   # POST /users.xml
   def create
     @user = User.new(params[:user])
-
+    account = Account.new
     respond_to do |format|
-      if @user.save
-        flash[:notice] = 'Registration successful'
-        format.html { redirect_to root_url }
-        format.xml  { render :xml => @user, :status => :created, :location => @user }
+      if account.save
+        @user.account_id = account.id
+        if @user.save
+          flash[:notice] = 'Registration successful'
+          format.html { redirect_to root_url }
+          format.xml  { render :xml => @user, :status => :created, :location => @user }
+        else
+          format.html { render :action => "new" }
+          format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
+        end
       else
+        flash[:warning] = 'Registration failed'
         format.html { render :action => "new" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
