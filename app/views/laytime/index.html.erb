@@ -28,8 +28,8 @@
   <div class="info"><%= link_to 'Signup',  new_user_path %> for a free 7 day trial now! (no credit card required)</div>
 <!-- User is logged in. Either display saved forms or show nice message -->
 <% else %>
-  <div class="info-message">
-    <%= link_to 'Add User' %>
+  <div class="info-message" style="float: right">
+    <%= link_to "Manage Users", manage_users_path %>
   </div>
 <% if @cp_details.empty? %>
     <div class="info-message">

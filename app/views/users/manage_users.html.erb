@@ -1,0 +1,14 @@
+<h1>Current users</h1>
+<div id="notice" <% if flash[:warning] %>class="warning"<% end %>>
+  <%= flash[:warning] || flash[:notice] %>
+</div>
+<% @users.each do |user| %>
+</br>
+<%= user.username %>
+<% end %>
+</br>
+</br>
+</br>
+<div class="info-message">
+  <%= link_to "Add User", new_user_path %>
+</div>

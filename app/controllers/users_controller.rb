@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :require_user, :only => [:new_user, :add_new_user, :manage_users]
   # GET /users
   # GET /users.xml
   def index
@@ -12,11 +13,33 @@ class UsersController < ApplicationController
 
   # GET /users/1
   # GET /users/1.xml
-  def show
-    @user = User.find(params[:id])
+#  def show
+#    @user = User.find(params[:id])
 
+#    respond_to do |format|
+#      format.html # show.html.erb
+#      format.xml  { render :xml => @user }
+#    end
+#  end
+
+  def new_user
+    @user = User.new
+    @user.account_id = current_user.account_id
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
+      format.xml  { render :xml => @user }
+    end
+  end
+
+  def add_new_user
+    flash[:notice] = "An email notification has been sent to the new user"
+    redirect_to manage_users_path
+  end
+
+  def manage_users
+    @users = User.find_all_by_account_id(current_user.account_id)
+    respond_to do |format|
+      format.html
       format.xml  { render :xml => @user }
     end
   end

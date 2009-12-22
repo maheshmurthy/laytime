@@ -2,13 +2,17 @@ ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   
   map.resources :users
+  map.resources :password_resets
   map.resource :user_session
   map.root :controller => 'laytime', :action => 'index'
+  map.add_new_user "add_new_user", :controller => "users", :action => "add_new_user"
+  map.new_user "new_user", :controller => "users", :action => "new_user"
+  map.manage_users "manage_users", :controller => "users", :action => "manage_users"
 
   map.new "new", :controller => "laytime", :action => "cpdetails"
   map.login "login", :controller => "user_sessions", :action => "new"
   map.logout "logout", :controller => "user_sessions", :action => "destroy"
-  map.forgot_password "forgot_password", :controller => "password_resets", :action => "create"
+  map.signup "signup", :controller => "users", :action => "new"
 
   # Sample of regular route:
   #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'

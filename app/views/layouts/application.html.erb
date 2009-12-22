@@ -5,6 +5,9 @@
   <%= javascript_include_tag :all %>
   <%= javascript_include_tag "livepipe/livepipe" %>
   <%= javascript_include_tag "livepipe/tabs" %>
+  <script>
+  setTimeout("new Effect.Fade('notice');", 5000)
+  </script>
 </head>
 <body>
   <div id="header">
@@ -17,7 +20,7 @@
         <span class="info-message" style="font-size: 16px;">Howdy <%= current_user.username %>!</span>
         <%= link_to "Logout", logout_path  %> 
       <% else %>
-        <%= link_to "Signup", new_user_path %>
+        <%= link_to "Signup", signup_path %>
         <%= link_to "Login", login_path %> 
       <% end %>
     </div>
