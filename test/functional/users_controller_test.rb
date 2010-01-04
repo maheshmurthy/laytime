@@ -15,10 +15,10 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
-  test "should show user" do
-    get :show, :id => users(:one).to_param
-    assert_response :success
-  end
+#  test "should show user" do
+#    get :show, :id => users(:one).to_param
+#    assert_response :success
+#  end
 
 #  test "should get edit" do
 #    get :edit, :id => users(:one).to_param

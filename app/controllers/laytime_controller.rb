@@ -42,7 +42,9 @@ class LaytimeController < ApplicationController
   end
 
   def load_saved
-    CpDetail.find(:all, :conditions => ['user_id = ?', current_user.id])
+    # Load all the ones created by all users of this account.
+    users = User.find_all_by_account_id(current_user.account_id)
+    CpDetail.find(:all, :conditions => ['user_id in (?)', users ])
   end
 
   def load
