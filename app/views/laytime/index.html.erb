@@ -39,10 +39,22 @@
     <div class="info-message">
     Create <%= link_to 'new', new_path %> calculation 
     </div>
-  <h3>Your saved forms </h3>
-  <%  @cp_details.each do |cp_detail| %>
-  <br/>
-  <%= link_to cp_detail.cpName + ' ' + cp_detail.created_at.to_date.to_s, :controller => 'laytime', :action => 'load', :id => cp_detail.id %>
+  <h3>Saved Calculations </h3>
+  <table>
+    <tr>
+      <th> Name </th>
+      <th> Created by </th>
+    </tr>
+    <% @cp_details.each do |cp_detail| %>
+    <tr>
+      <td>
+    <%= link_to cp_detail.cpName + ' ' + cp_detail.created_at.to_date.to_s, :controller => 'laytime', :action => 'load', :id => cp_detail.id %>
+      </td>
+      <td>
+        <%= cp_detail.user.username %> 
+      </td>
+    </tr>
+  <% end %>
+  </table>
   <% end
-  end
 end %>
