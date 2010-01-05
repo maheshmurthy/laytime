@@ -90,7 +90,11 @@
         <div id="running-time">
           <div id=<%= operation + "_allowed" %>>Total Time Allowed: <%= time_allowed %></div>
           <div id=<%= operation + "_used" %>>Time Used: <%= time_used %></div>
+          <% if amount && amount > 0 %>
           <div id=<%= operation + "_available" %>>Time Remaining: <%= time_remaining %></div>
+          <% else %>
+          <div id=<%= operation + "_available" %>>Time Over: <%= time_remaining %></div>
+          <% end %>
         </div>
         <div id="running-dem-des">
           <div id=<%= "running_" + operation + "_despatch" %>>Despatch: <%= amount if amount && amount > 0 %></div>
