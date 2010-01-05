@@ -176,8 +176,16 @@ function addRow(operation) {
    var row = document.createElement('div')
    row.setAttribute('class','row');
    row.setAttribute('className','row');
-   var length = operationType.getElementsByClassName('sof')[0].length;
    row.setAttribute('id', length);
+
+   var img = document.createElement('img');
+   img.setAttribute('alt', 'Cancel');
+   img.setAttribute('class', 'cancel');
+   img.setAttribute('className', 'cancel');
+   img.setAttribute('id', length);
+   img.setAttribute('src', '/images/cancel.png');
+   img.onclick = function() { deleteRow(length)};
+   row.appendChild(img);
 
    var label = document.createElement('label');
    label.setAttribute('id', 'from_' + operation + '_' + length);
@@ -371,7 +379,8 @@ function getDateDiffString(totalMins) {
 }
 
 function deleteRow(num) {
-  if(window.confirm("Are you sure you want to delete this fact?")) { 
+  num += '';
+  if(window.confirm("Are you sure you want to delete this fact?" + num)) { 
     $(num).remove(); 
   }
 }
