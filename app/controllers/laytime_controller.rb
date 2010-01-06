@@ -4,6 +4,7 @@ class LaytimeController < ApplicationController
   include LaytimeUtil
 
   before_filter :ensure_user_logged_in, :except => [:index]
+  before_filter :check_free_trial_validity
 
   def index
     clear_session
@@ -494,5 +495,11 @@ class LaytimeController < ApplicationController
 
   def build_fact(from, to, pct, remarks)
     Fact.new(:from => from, :to => to, :val => pct, :remarks => remarks)
+  end
+
+  def check_free_trial_validity
+    if current_user && current_user.account.pricing_plan == "FREE" && current_user.account.created_at < Time.now - 7.days
+      redirect_to :controller => 'payment', :action => 'index'
+    end
   end
 end
