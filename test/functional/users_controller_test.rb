@@ -8,10 +8,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test "should create user" do
     assert_difference('User.count') do
-    post :create, :user => {:username => 'mahesh',                                
-                            :email => 'mahesh@mmurthy.com',
-                            :password => 'hello',
-                            :password_confirmation => 'hello'}
+      post :create, :user => Factory.attributes_for(:user)
     end
   end
 
@@ -33,8 +30,9 @@ class UsersControllerTest < ActionController::TestCase
 #  end
 
   test "should destroy user" do
+    user = Factory.create(:user)
     assert_difference('User.count', -1) do
-      delete :destroy, :id => users(:one).to_param
+      delete :destroy, :id => user.to_param
     end
 
     assert_redirected_to users_path

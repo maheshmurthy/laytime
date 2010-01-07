@@ -1,1 +1,4 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+tuna:
+  pricing_plan: FREE

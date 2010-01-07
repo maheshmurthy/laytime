@@ -2,8 +2,9 @@ require 'test_helper'
 
 class LaytimeControllerTest < ActionController::TestCase
 
+  fixtures :all
   setup do
-    user = User.create(:username => 'mahesh', :email => 'mah@mah.com', :password => 'asdf')
+    user = Factory.create(:user)
     UserSession.create(user)
   end
 
