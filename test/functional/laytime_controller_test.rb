@@ -8,6 +8,20 @@ class LaytimeControllerTest < ActionController::TestCase
     UserSession.create(user)
   end
 
+  test "any action if not logged in should redirect to login page" do
+    UserSession.find.destroy
+    post :portdetails
+    assert_redirected_to login_path
+  end
+
+  test "redirect to payment page if free trial has expired" do
+    account = UserSession.find.user.account
+    account.created_at = Time.now - 8.days
+    account.save!
+    post :portdetails
+    assert_redirected_to :controller => "payment", :action => "index"
+  end
+
   test "cp detail not filled" do
     post :portdetails
     assert_equal "can't be blank", session[:cp_detail].errors["vessel"]
