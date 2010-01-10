@@ -11,6 +11,9 @@ class PortDetail < ActiveRecord::Base
    CALCULATION_TYPE = ['Normal', 'Customary Quick Despatch']
    CALCULATION_TIME_SAVED= ['Working', 'All']
 
+   default_value_for :calculation_type, CALCULATION_TYPE[0]
+   default_value_for :calculation_time_saved, CALCULATION_TIME_SAVED[0]
+
    include TimeUtil
    include LaytimeUtil 
 
