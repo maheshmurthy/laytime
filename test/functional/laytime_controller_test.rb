@@ -14,6 +14,23 @@ class LaytimeControllerTest < ActionController::TestCase
     assert_redirected_to login_path
   end
 
+  test "load all forms belonging to an account" do
+    # Create another user. Associate two forms with user 1 and two forms with
+    # user 2. Check that only first two forms are loaded.
+    user2 = Factory.create(:user, :username => "yao1")
+    user = UserSession.find.user
+    cp_detail1 = Factory.create(:cp_detail, :user => user)
+    cp_detail2 = Factory.create(:cp_detail, :user => user)
+    cp_detail3 = Factory.create(:cp_detail, :user => user2)
+    cp_detail4 = Factory.create(:cp_detail, :user => user2)
+
+    get :index
+    cp_details = assigns(:cp_details)
+    assert_equal 2, cp_details.length
+    assert_equal cp_detail1, cp_details[0]
+    assert_equal cp_detail2, cp_details[1]
+  end
+
   test "redirect to payment page if free trial has expired" do
     account = UserSession.find.user.account
     account.created_at = Time.now - 8.days

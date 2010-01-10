@@ -42,11 +42,6 @@ class LaytimeController < ApplicationController
     end
   end
 
-  def load_saved
-    # Load all the ones created by all users of this account.
-    users = User.find_all_by_account_id(current_user.account_id)
-    CpDetail.find(:all, :conditions => ['user_id in (?)', users ])
-  end
 
   def load
     unless current_user
@@ -487,5 +482,11 @@ class LaytimeController < ApplicationController
     if current_user && current_user.account.pricing_plan == "FREE" && current_user.account.created_at < Time.now - 7.days
       redirect_to :controller => 'payment', :action => 'index'
     end
+  end
+
+  def load_saved
+    # Load all the ones created by all users of this account.
+    users = User.find_all_by_account_id(current_user.account_id)
+    CpDetail.find(:all, :conditions => ['user_id in (?)', users ])
   end
 end
