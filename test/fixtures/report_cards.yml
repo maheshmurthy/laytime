@@ -1,19 +1,2 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  cp_detail_id: 1
-  loading_avail_id: 1
-  discharging_avail_id: 1
-  loading_used_id: 1
-  discharging_used_id: 1
-  loading_amount: 1.5
-  discharging_amount: 1.5
-
-two:
-  cp_detail_id: 1
-  loading_avail_id: 1
-  discharging_avail_id: 1
-  loading_used_id: 1
-  discharging_used_id: 1
-  loading_amount: 1.5
-  discharging_amount: 1.5

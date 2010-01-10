@@ -1,13 +1,2 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-mushu:
-  username: mushu
-  email: mushu@mulan.com
-  crypted_password: MyString
-  account: tuna
-
-yao:
-  username: yao
-  email: yao@mulan.com
-  crypted_password: MyString
-  account: tuna
