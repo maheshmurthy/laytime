@@ -7,6 +7,6 @@ module PortsToCalculate
 end
 
 module OnceOnDemurrage
-  ALWAYS - 0
+  ALWAYS = 0
   NOT_ALWAYS = 1
 end
