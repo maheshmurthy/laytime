@@ -51,3 +51,7 @@ Factory.define :discharging_port_details, :parent => :port_detail do |f|
   f.time_start_date "14.06.09"
   f.time_start_time "1:30"
 end
+
+Factory.define :fact do |f|
+  f.from "17.06.09"
+end
