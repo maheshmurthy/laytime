@@ -22,7 +22,7 @@ class Fact < ActiveRecord::Base
      elsif from_time 
        from_time
      else
-       "hh:mm"
+       "hh.mm"
      end
    end
 
@@ -46,7 +46,7 @@ class Fact < ActiveRecord::Base
      elsif to_time
        to_time
      else
-       "hh:mm"
+       "hh.mm"
      end
    end
 

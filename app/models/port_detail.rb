@@ -30,7 +30,7 @@ class PortDetail < ActiveRecord::Base
      elsif time_start_time
        time_start_time
      else
-       "hh:mm"
+       "hh.mm"
      end
    end
 
@@ -50,7 +50,7 @@ class PortDetail < ActiveRecord::Base
      elsif time_end_time
        time_end_time
      else
-       "hh:mm"
+       "hh.mm"
      end
    end
 

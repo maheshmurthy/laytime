@@ -13,7 +13,7 @@ module TimeUtil
   end
 
   def pretty_time_info(time_info)
-    time_info.days.to_s + " days " + pad(time_info.hours) + ":" + pad(time_info.mins)
+    time_info.days.to_s + " days " + pad(time_info.hours) + "." + pad(time_info.mins)
   end
 
   def to_hr_min(value)
@@ -23,7 +23,7 @@ module TimeUtil
   end
 
   def pretty_time_with_zone(time)
-    time.strftime("%d-%m-%Y %H:%M") if time
+    time.strftime("%d-%m-%Y %H.%M") if time
   end
 
   def to_hr_min(value)                                                                  
