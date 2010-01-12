@@ -32,12 +32,6 @@ module TimeUtil
     "%02d:%02d" % [hr,min]                                                              
   end                                                                                   
 
-  def reset_time_info(time_info)
-    time_info.days= 0
-    time_info.hours = 0
-    time_info.mins = 0
-  end
-
   def pretty_time_mins(mins)
     time_info = to_time_info(mins)
     time_info.to_s

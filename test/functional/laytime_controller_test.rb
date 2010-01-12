@@ -8,6 +8,37 @@ class LaytimeControllerTest < ActionController::TestCase
     UserSession.create(user)
   end
 
+  test "any action if not logged in should redirect to login page" do
+    UserSession.find.destroy
+    post :portdetails
+    assert_redirected_to login_path
+  end
+
+  test "load all forms belonging to an account" do
+    # Create another user. Associate two forms with user 1 and two forms with
+    # user 2. Check that only first two forms are loaded.
+    user2 = Factory.create(:user, :username => "yao1")
+    user = UserSession.find.user
+    cp_detail1 = Factory.create(:cp_detail, :user => user)
+    cp_detail2 = Factory.create(:cp_detail, :user => user)
+    cp_detail3 = Factory.create(:cp_detail, :user => user2)
+    cp_detail4 = Factory.create(:cp_detail, :user => user2)
+
+    get :index
+    cp_details = assigns(:cp_details)
+    assert_equal 2, cp_details.length
+    assert_equal cp_detail1, cp_details[0]
+    assert_equal cp_detail2, cp_details[1]
+  end
+
+  test "redirect to payment page if free trial has expired" do
+    account = UserSession.find.user.account
+    account.created_at = Time.now - 8.days
+    account.save!
+    post :portdetails
+    assert_redirected_to :controller => "payment", :action => "index"
+  end
+
   test "cp detail not filled" do
     post :portdetails
     assert_equal "can't be blank", session[:cp_detail].errors["vessel"]
@@ -15,7 +46,7 @@ class LaytimeControllerTest < ActionController::TestCase
   end
 
   test "cp detail validation" do
-    cp_detail = build_cp_details
+    cp_detail = Factory.attributes_for(:cp_detail)
     post(:portdetails,{:cp_detail => cp_detail})
     assert_response :success
     assert_equal "Banpu", session[:cp_detail].partner
@@ -30,9 +61,9 @@ class LaytimeControllerTest < ActionController::TestCase
   end
 
   test "port detail validation" do
-    loading_port_detail = build_loading_port
+    loading_port_detail = Factory.attributes_for(:loading_port_details)
 
-    discharging_port_detail =  build_discharging_port
+    discharging_port_detail =  Factory.attributes_for(:discharging_port_details)
 
     loading_facts = build_loading_facts
 
@@ -45,8 +76,8 @@ class LaytimeControllerTest < ActionController::TestCase
     port_details = Array.new
     port_details << loading_port_detail
     port_details << discharging_port_detail
-    cp_detail = CpDetail.new(build_cp_details)
-    post(:result, {:portdetail => port_details, 
+    cp_detail = Factory.build(:cp_detail)
+    post(:result, {:portdetail => port_details,
                    :calculation_type0 => "normal", 
                    :calculation_type1 =>"normal",
                    :calculation_time_saved0 =>"working",
@@ -85,11 +116,11 @@ class LaytimeControllerTest < ActionController::TestCase
     loading_avail = TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
     discharging_avail = TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
 
-    loading_port_detail = PortDetail.new(build_loading_port)
+    loading_port_detail = Factory.build(:loading_port_details)
 
-    discharging_port_detail = PortDetail.new(build_discharging_port)
+    discharging_port_detail = Factory.build(:discharging_port_details)
 
-    cp_detail = CpDetail.new(build_cp_details)
+    cp_detail = Factory.build(:cp_detail)
 
  
     report = @controller.generate_report(loading_facts, discharging_facts, loading_avail, discharging_avail, loading_port_detail, discharging_port_detail, cp_detail)
@@ -184,26 +215,5 @@ class LaytimeControllerTest < ActionController::TestCase
 
   def build_discharging_facts
     [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"14.06.09", "from_time" => "1:30", "to_date"=>"15.06.09", "to_time" => "17:30"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"15.06.09", "from_time" => "17:30", "to_date"=>"15.06.09", "to_time" => "18:30"}]
-  end
-
-  def build_loading_port
-    {"location" => "Jorong",  "demurrage"=>"50000", "commission_pct"=>"0", "despatch"=>"25000", "quantity"=>"55000", "description"=>"Coal", "cargo"=>"mts", "allowanceType"=>"mts/day", "allowance" => 10000, "operation"=>"loading", "time_end_date"=>"09.06.09", "time_end_time" =>  "4:30", "time_start_date"=>"04.06.09", :time_start_time => "21:12" }
-  end
-
-  def build_discharging_port
-    {"location" => "Cochin",  "demurrage"=>"50000", "commission_pct"=>"0", "despatch"=>"25000", "quantity"=>"55000", "description"=>"Coal", "cargo"=>"mts", "allowanceType"=>"mts/day", "allowance" => 10000, "operation"=>"discharging", "time_end_date"=>"17.06.09", "time_end_time" =>  "4:00", "time_start_date"=>"14.06.09", "time_start_time" => "1:30"}
-  end
-
-  def build_cp_details
-    {:partner => "Banpu",
-     :cpName => "coal mining corp",
-     :number => "1234",
-     :vessel => "Medi Dublin",
-     :from => "Jorong",
-     :to => "Cochin",
-     :currency => "USD",
-     :ports_to_calculate => "A",
-     :once_on_demurrage => "Always",
-     :user_id => 2}
   end
 end

@@ -1,0 +1,3 @@
+[submodule "vendor/plugins/default_value_for"]
+	path = vendor/plugins/default_value_for
+	url = git://github.com/FooBarWidget/default_value_for

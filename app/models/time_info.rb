@@ -12,6 +12,12 @@ class TimeInfo < ActiveRecord::Base
      new_info = to_time_info(total_mins)
    end
 
+   def reset
+     self.days = 0
+     self.hours = 0
+     self.mins = 0
+   end
+
    def diff(info)
      self_mins = self.to_mins
      info_mins = info.to_mins

@@ -15,7 +15,7 @@ class LaytimeController < ApplicationController
 
   def ensure_user_logged_in
     unless current_user
-      redirect_to root_url
+      redirect_to login_path
       return
     end
   end
@@ -42,14 +42,8 @@ class LaytimeController < ApplicationController
     end
   end
 
-  def load_saved
-    # Load all the ones created by all users of this account.
-    users = User.find_all_by_account_id(current_user.account_id)
-    CpDetail.find(:all, :conditions => ['user_id in (?)', users ])
-  end
 
   def load
-    # TODO Make sure the user is logged in and owns the id requested.
     unless current_user
       redirect_to login_path
       return
@@ -67,19 +61,6 @@ class LaytimeController < ApplicationController
     session[:loading_facts] = cp_detail.port_details[0].facts
     session[:discharging_facts] = cp_detail.port_details[1].facts
     session[:report_card] = cp_detail.report_card
-
-    # TODO Remove this hard coding
-    info = Array.new
-    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 31, :time_info_type => 'add_allowance'})
-    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 32, :time_info_type => 'add_allowance'})
-    session[:additional_time] = info.flatten
-
-
-    info = Array.new
-    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 31, :time_info_type => 'pre_advise'})
-    info << TimeInfo.find(:all, :conditions => {:port_detail_id => 32, :time_info_type => 'pre_advise'})
-    session[:after_pre_advise] = info.flatten
-
     redirect_to :action => 'cpdetails'
   end
 
@@ -89,9 +70,9 @@ class LaytimeController < ApplicationController
     #Sum up both
     #TODO Override the new method to do this?
     loading_time_used = TimeInfo.new
-    reset_time_info(loading_time_used)
+    loading_time_used.reset
     discharging_time_used = TimeInfo.new
-    reset_time_info(discharging_time_used)
+    discharging_time_used.reset
 
     loading_fact_report_list = build_fact_report_list(loading_facts)
     discharging_fact_report_list = build_fact_report_list(discharging_facts)
@@ -501,5 +482,11 @@ class LaytimeController < ApplicationController
     if current_user && current_user.account.pricing_plan == "FREE" && current_user.account.created_at < Time.now - 7.days
       redirect_to :controller => 'payment', :action => 'index'
     end
+  end
+
+  def load_saved
+    # Load all the ones created by all users of this account.
+    users = User.find_all_by_account_id(current_user.account_id)
+    CpDetail.find(:all, :conditions => ['user_id in (?)', users ])
   end
 end
