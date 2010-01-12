@@ -72,11 +72,11 @@ class Fact < ActiveRecord::Base
 
    def merge_fact_date
      self.from = DateTime.strptime(self.from_date, "%d.%m.%y")
-     time = Time.parse(from_time)
-     self.from = self.from.advance(:hours => time.hour, :minutes => time.min)
+     time = from_time.split('.')
+     self.from = self.from.advance(:hours => time[0].to_i, :minutes => time[1].to_i)
 
      self.to = DateTime.strptime(self.to_date, "%d.%m.%y")
-     time = Time.parse(to_time)
-     self.to = self.to.advance(:hours => time.hour, :minutes => time.min)
+     time = to_time.split('.')
+     self.to = self.to.advance(:hours => time[0].to_i, :minutes => time[1].to_i)
    end
 end

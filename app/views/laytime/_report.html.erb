@@ -51,11 +51,11 @@
 
   <li>
     <span class="stitle">Time Allowed</span>
-    <%= time_available.days %> days <%= pad(time_available.hours) %>:<%= pad(time_available.mins) %> mins
+    <%= time_available.days %> days <%= pad(time_available.hours) %>.<%= pad(time_available.mins) %> mins
   </li>
   <li>
     <span class="stitle">Time Used</span>
-    <%= time_used.days %> days <%= pad(time_used.hours) %>:<%= pad(time_used.mins) %> mins
+    <%= time_used.days %> days <%= pad(time_used.hours) %>.<%= pad(time_used.mins) %> mins
   </li>
   <li>
   <span class="stitle">Time 
@@ -65,7 +65,7 @@
     Saved
     <% end %>
   </span>
-    <%= diff.days %> days <%= pad(diff.hours) %>:<%= pad(diff.mins) %> mins
+    <%= diff.days %> days <%= pad(diff.hours) %>.<%= pad(diff.mins) %> mins
   </li>
   <li>
     <% if amt >= 0 %>

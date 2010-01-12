@@ -19,7 +19,7 @@ module TimeUtil
   def to_hr_min(value)
     hr = value/60
     min = value % 60
-    "%02d:%02d" % [hr,min]
+    "%02d.%02d" % [hr,min]
   end
 
   def pretty_time_with_zone(time)
@@ -29,7 +29,7 @@ module TimeUtil
   def to_hr_min(value)                                                                  
     hr = value/60                                                                       
     min = value % 60                                                                    
-    "%02d:%02d" % [hr,min]                                                              
+    "%02d.%02d" % [hr,min]                                                              
   end                                                                                   
 
   def pretty_time_mins(mins)

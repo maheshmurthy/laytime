@@ -38,18 +38,18 @@ Factory.define :loading_port_details, :parent => :port_detail do |f|
   f.location  "Jorong"
   f.operation "loading"
   f.time_end_date "09.06.09"
-  f.time_end_time "4:30"
+  f.time_end_time "4.30"
   f.time_start_date "04.06.09"
-  f.time_start_time "21:12 "
+  f.time_start_time "21.12 "
 end
 
 Factory.define :discharging_port_details, :parent => :port_detail do |f|
   f.location  "Cochin"
   f.operation "discharging"
   f.time_end_date "17.06.09"
-  f.time_end_time "4:00"
+  f.time_end_time "4.00"
   f.time_start_date "14.06.09"
-  f.time_start_time "1:30"
+  f.time_start_time "1.30"
 end
 
 Factory.define :fact do |f|

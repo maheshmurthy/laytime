@@ -15,8 +15,8 @@ function buildDateTime(input_date, input_time, input_type) {
     return null;
   }
 
-  var hr = parseInt(input_time.split(':')[0], 10);
-  var min = parseInt(input_time.split(':')[1], 10);
+  var hr = parseInt(input_time.split('.')[0], 10);
+  var min = parseInt(input_time.split('.')[1], 10);
 
   try {
     parsedDate.set({hour: hr, minute: min});
@@ -154,10 +154,10 @@ function addRow(operation) {
     return false;
   }
   var from_date = val.from;
-  var from_time = from_date.getHours() + ':' + from_date.getMinutes();
+  var from_time = from_date.getHours() + '.' + from_date.getMinutes();
   var to = val.to;
   var to_date = pad(to.getDate()) + "." + pad((to.getMonth() + 1)) + "." + (to.getFullYear()+'').substring(2);
-  var to_time = to.getHours() + ':' + to.getMinutes();
+  var to_time = to.getHours() + '.' + to.getMinutes();
   var commence = val.commence;
   var complete = val.complete;
   var operationType = $(operation);
@@ -227,7 +227,7 @@ function addRow(operation) {
    input.setAttribute('name',operation+'[][to_date]');
    input.setAttribute('value',"dd.mm.yy");
    input.onblur = function() { displayDayLabel(this.value, 'to', operation, length); };
-   input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd.mm.yy') {this.value = '';}};
+   input.onfocus = function() {if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}};
    row.appendChild(input);
 
    input = document.createElement('input')
@@ -236,8 +236,8 @@ function addRow(operation) {
    input.setAttribute('type','text');
    input.setAttribute('id','to_time_'+operation+'_'+length);
    input.setAttribute('name',operation+'[][to_time]');
-   input.setAttribute('value',"hh:mm");
-   input.onfocus = function() {if(this.value == 'hh:mm' || this.value == 'dd.mm.yy') {this.value = '';}};
+   input.setAttribute('value',"hh.mm");
+   input.onfocus = function() {if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}};
    row.appendChild(input);
 
    input = document.createElement('select')
@@ -375,7 +375,7 @@ function getDateDiffString(totalMins) {
   totalMins -= days*24*60;
   var hours = parseInt(totalMins/60);
   var mins = totalMins - (hours * 60);
-  return days + ' days ' + hours + ':' + mins;
+  return days + ' days ' + hours + '.' + mins;
 }
 
 function deleteRow(num) {

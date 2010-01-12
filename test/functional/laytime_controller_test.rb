@@ -94,23 +94,23 @@ class LaytimeControllerTest < ActionController::TestCase
 
   test "validate values in the report" do
     loading_facts = Array.new
-    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"04.06.09", "from_time" => "21:12", "to_date"=>"08.06.09", "to_time" => "10:45")
+    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"04.06.09", "from_time" => "21.12", "to_date"=>"08.06.09", "to_time" => "10.45")
     loading_facts << fact
-    fact = Fact.new("timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"08.06.09", "from_time" => "10:45", "to_date"=>"08.06.09", "to_time" => "12:25")
+    fact = Fact.new("timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"08.06.09", "from_time" => "10.45", "to_date"=>"08.06.09", "to_time" => "12.25")
     loading_facts << fact
-    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"08.06.09", "from_time" => "12:25", "to_date"=>"09.06.09", "to_time" => "00:00")
+    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"08.06.09", "from_time" => "12.25", "to_date"=>"09.06.09", "to_time" => "00.00")
     loading_facts << fact
-    fact = Fact.new("timeToCount"=>"Not to Count", "remarks"=>"", "val"=>"0", "from_date"=>"09.06.09", "from_time" => "00:00", "to_date"=>"09.06.09", "to_time" => "00:30")
+    fact = Fact.new("timeToCount"=>"Not to Count", "remarks"=>"", "val"=>"0", "from_date"=>"09.06.09", "from_time" => "00.00", "to_date"=>"09.06.09", "to_time" => "00.30")
     loading_facts << fact
-    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"09.06.09", "from_time" => "00:30", "to_date"=>"09.06.09", "to_time" => "04:30")
+    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"09.06.09", "from_time" => "00.30", "to_date"=>"09.06.09", "to_time" => "04.30")
     loading_facts << fact
 
     discharging_facts = Array.new
-    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"14.06.09", "from_time" => "01:30", "to_date"=>"15.06.09", "to_time" => "17:30")
+    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"14.06.09", "from_time" => "01.30", "to_date"=>"15.06.09", "to_time" => "17.30")
     discharging_facts << fact
-    fact = Fact.new("timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"15.06.09", "from_time" => "17:30", "to_date"=>"15.06.09", "to_time" => "18:30")
+    fact = Fact.new("timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"15.06.09", "from_time" => "17.30", "to_date"=>"15.06.09", "to_time" => "18.30")
     discharging_facts << fact
-    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"15.06.09", "from_time" => "18:30", "to_date"=>"17.06.09", "to_time" => "04:00")
+    fact = Fact.new("timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"15.06.09", "from_time" => "18.30", "to_date"=>"17.06.09", "to_time" => "04.00")
     discharging_facts << fact
 
     loading_avail = TimeInfo.new("hours" => 12, "days" => 3, "mins" => 10, "type" => "add_allowance")
@@ -210,10 +210,10 @@ class LaytimeControllerTest < ActionController::TestCase
   end
 
   def build_loading_facts
-    [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"04.06.09", "from_time" => "21:12", "to_date"=>"08.06.09", "to_time" => "10:45"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"08.06.09", "from_time" => "10:45", "to_date"=>"08.06.09", "to_time" => "12:25"}]
+    [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"04.06.09", "from_time" => "21.12", "to_date"=>"08.06.09", "to_time" => "10.45"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"08.06.09", "from_time" => "10.45", "to_date"=>"08.06.09", "to_time" => "12.25"}]
   end
 
   def build_discharging_facts
-    [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"14.06.09", "from_time" => "1:30", "to_date"=>"15.06.09", "to_time" => "17:30"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"15.06.09", "from_time" => "17:30", "to_date"=>"15.06.09", "to_time" => "18:30"}]
+    [{"timeToCount"=>"Full", "remarks"=>"", "val"=>"100", "from_date"=>"14.06.09", "from_time" => "1.30", "to_date"=>"15.06.09", "to_time" => "17.30"}, {"timeToCount"=>"Rain", "remarks"=>"", "val"=>"0", "from_date"=>"15.06.09", "from_time" => "17.30", "to_date"=>"15.06.09", "to_time" => "18.30"}]
   end
 end
