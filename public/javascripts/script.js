@@ -8,11 +8,15 @@ function pad(val) {
 }
 
 function buildDateTime(input_date, input_time, input_type) {
+  var dateTime = {
+    error: null 
+    parsedDate: null
+  };
   var parsedDate= Date.parseExact(input_date, "dd.MM.yy");
 
   if(parsedDate == null) {
-    alert('Please enter the date in format dd.mm.yy for ' + input_type);
-    return null;
+    dateTime.error = 'Please enter the date in format dd.mm.yy for ' + input_type;
+    return dateTime;
   }
 
   var hr = parseInt(input_time.split('.')[0], 10);
@@ -21,10 +25,11 @@ function buildDateTime(input_date, input_time, input_type) {
   try {
     parsedDate.set({hour: hr, minute: min});
   } catch(error) {
-    alert('Please make sure the hour and minute values are valid for ' + input_type);
-    return null;
+    dateTime.error = 'Please make sure the hour and minute values are valid for ' + input_type;
+    return dateTime;
   }
-  return parsedDate;
+  dateTime.parsedDate = parsedDate;
+  return dateTime;
 }
 
 function validateAndBuildInfo(operation) {
@@ -39,6 +44,10 @@ function validateAndBuildInfo(operation) {
     return validity;
   }
 
+  if(validity.error != null) {
+    return validity;
+  }
+
   var usedMins = validity.mins;
 
   for(var i=0; i<rows.length-1; i++) {
@@ -46,13 +55,13 @@ function validateAndBuildInfo(operation) {
     var sof2 = rows[i+1];
 
     var validity = doSofValidation(rows[i], operation);
-    if(validity == false) {
-       return false;
+    if(validity.error != null) {
+       return validity;
     }
 
     validity = doSofValidation(rows[i + 1], operation);
-    if(validity == false) {
-       return false;
+    if(validity != null) {
+       return validity;
     }
 
     usedMins += validity.mins;
@@ -63,8 +72,8 @@ function validateAndBuildInfo(operation) {
     var from_time = sof2.getElementsByClassName('time-info-text-time')[0].value;
 
     if((to_date != from_date) || (to_time != from_time)) {
-      alert("The facts should be continuous. Please correct the from date of fact " + (i + 2) + " to match the until date of fact " + (i + 1) + " for " + operation);
-      return false;
+      validity.error = "The facts should be continuous. Please correct the from date of fact " + (i + 2) + " to match the until date of fact " + (i + 1) + " for " + operation;
+      return validity;
     }
   }
   validity.mins = usedMins;
@@ -72,84 +81,103 @@ function validateAndBuildInfo(operation) {
 }
 
 function doSofValidation(row, operation) {
-  var from = buildDateTime(row.getElementsByClassName('time-info-text-date')[0].value, 
+  var info = {
+    error: ''
+  }
+
+  var dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[0].value, 
        row.getElementsByClassName('time-info-text-time')[0].value,
        "From");
-   if(from == null) {
-    return false;
+   if(dateTime.parsedDate == null) {
+     info.error = dateTime.error;
+     return info;
+   } else {
+     from = dateTime.parsedDate;
    }
 
-   var to = buildDateTime(row.getElementsByClassName('time-info-text-date')[1].value, 
+   dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[1].value, 
       row.getElementsByClassName('time-info-text-time')[1].value,
       "Until");
-   if(to == null) {
-    return false;
+   if(dateTime.parsedDate == null) {
+     info.error = dateTime.error;
+     return info;
+   } else {
+     to = dateTime.parsedDate;
    }
 
    if(from > to) {
-     alert('From can not be greater than Until. Please correct and try again');
-     return false;
+     info.error = 'From can not be greater than Until. Please correct and try again';
+     return info;
    }
 
-   var commence = buildDateTime($F(operation + '_time_start_date'), 
+   dateTime = buildDateTime($F(operation + '_time_start_date'), 
       $F(operation + '_time_start_time'),
       "Commence Date");
-   if(commence == null) {
-    return false;
+
+   if(dateTime.parsedDate == null) {
+     info.error = dateTime.error;
+     return info;
+   } else {
+     commence = dateTime.parsedDate;
    }
    
    var complete = buildDateTime($F(operation + '_time_end_date'), 
       $F(operation + '_time_end_time'),
       "complete Date");
-   if(complete == null) {
-    return false;
+
+   if(dateTime.parsedDate == null) {
+     info.error = dateTime.error;
+     return info;
+   } else {
+     complete = dateTime.parsedDate;
    }
 
    /* from and to datetime should be greater than equal commence date and 
     less than equal complete date */
 
    if(from < commence) {
-     alert('From can not be less than laytime commence date');
-     return false;
+     info.error = 'From can not be less than laytime commence date';
+     return info;
    }
 
    if(from >= complete) {
-     alert('From can not be greater than laytime complete date');
-     return false;
+     info.error = 'From can not be greater than laytime complete date';
+     return info;
    }
 
    if(to <= commence) {
-     alert('To can not be less than laytime commence date');
-     return false;
+     info.error = 'To can not be less than laytime commence date';
+     return info;
    }
 
    if(to > complete) {
-     alert('To can not be greater than laytime complete date');
-     return false;
+     info.error = 'To can not be greater than laytime complete date';
+     return info;
    }
 
    var pct = row.getElementsByClassName('pct')[0].value;
 
    if(pct == "") {
-     alert("Please enter percentage"); 
-     return false;
+     info.error = "Please enter percentage"; 
+     return info;
    }
 
    var used = Math.round(((to - from)*(pct/100))/(1000*60));
-   var info = {
-     from: from,
-     to: to,
-     commence: commence,
-     complete: complete,
-     pct: pct,
-     mins: used
-   }
+
+   info.from = from;
+   info.to = to;
+   info.commence = commence;
+   info.complete = complete;
+   info.pct = pct;
+   info.mins = used;
+
    return info;
 }
 
-function addRow(operation) {
+function addRow(operation, action) {
   
   var val = validateAndBuildInfo(operation);
+  if(action == "link")
   if(!val) {
     return false;
   }
@@ -207,9 +235,11 @@ function addRow(operation) {
    input.setAttribute('class','time-info-text-time');
    input.setAttribute('className','time-info-text-time');
    input.setAttribute('type','text');
-   input.setAttribute('id','from_time_'+operation+'_'+length);
+   var id = 'from_time_' + operation + '_' + length;
+   input.setAttribute('id', id);
    input.setAttribute('name',operation+'[][from_time]');
    input.setAttribute('value',to_time);
+   input.onblur = function() { validateTimeFormat(id)};
    row.appendChild(input);
 
    var label = document.createElement('label');
@@ -234,13 +264,17 @@ function addRow(operation) {
    input.setAttribute('class','time-info-text-time');
    input.setAttribute('className','time-info-text-time');
    input.setAttribute('type','text');
-   input.setAttribute('id','to_time_'+operation+'_'+length);
+   var id = 'to_time_' + operation + '_' + length;
+   input.setAttribute('id', id);
    input.setAttribute('name',operation+'[][to_time]');
    input.setAttribute('value',"hh.mm");
    input.onfocus = function() {if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}};
+   input.onblur = function() { validateTimeFormat(id)};
    row.appendChild(input);
 
    input = document.createElement('select')
+   var id = 'ttc_' + operation + '_' + length;
+   input.setAttribute('id', id);
    input.setAttribute('name',operation+'[][timeToCount]');
    var TIME_TO_COUNT = ['Full/Normal', 'Rain/Bad Weather', 'Not to count', 'Shifting', 'Half', 'Partial', 'Always partial','Always excluded', 'Waiting','Full even if S/H', 'Partial even if S/H']
    for(var i=0; i<TIME_TO_COUNT.length; i++) {
@@ -249,11 +283,15 @@ function addRow(operation) {
    row.appendChild(input);
 
    input = document.createElement('input')
+   var id = 'pct_' + operation + '_' + length;
+   input.setAttribute('id', id);
    input.setAttribute('class','pct');
    input.setAttribute('className','pct');
    input.setAttribute('type','text');
    input.setAttribute('name',operation+'[][val]');
    input.onblur = function() { updateRunningInfo(operation, length);};
+   id = 'ttc_' + operation + '_' + length;
+   input.onfocus = function() { fillPct(id);};
    row.appendChild(input);
 
    input = document.createElement('input')
@@ -293,7 +331,8 @@ function getDay(d) {
 
 function updateRunningInfo(operation, index) {
   var val = validateAndBuildInfo(operation);
-  if(!val) {
+  if(val.error != null) {
+    alert(val.error);
     return false;
   }
 
@@ -382,5 +421,24 @@ function deleteRow(num) {
   num += '';
   if(window.confirm("Are you sure you want to delete this fact?" + num)) { 
     $(num).remove(); 
+  }
+}
+
+function validateTimeFormat(ele) {
+  time = $F(ele);
+  var regex = /[0-9][0-9]\.[0-9][0-9]/;
+  if(!regex.test(time)) {
+    alert("Please enter the time in the format hh.mm");
+    return false;
+  }
+
+  return true;
+}
+
+function fillPct(ele) {
+  if($F(ele) == "Full/Normal") {
+    // ele id is ttc_operation_counter. Replace ttc with pct and fill it with the value
+    var pct = ele.replace('ttc', 'pct');
+    $(pct).value = 100;
   }
 }
