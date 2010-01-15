@@ -9,9 +9,9 @@ function pad(val) {
 
 function buildDateTime(input_date, input_time, input_type) {
   var dateTime = {
-    error: null 
+    error: null, 
     parsedDate: null
-  };
+  }
   var parsedDate= Date.parseExact(input_date, "dd.MM.yy");
 
   if(parsedDate == null) {
@@ -44,9 +44,9 @@ function validateAndBuildInfo(operation) {
     return validity;
   }
 
-  if(validity.error != null) {
-    return validity;
-  }
+  //if(validity.error != null && validity.error != "") {
+  //  return validity;
+  //}
 
   var usedMins = validity.mins;
 
@@ -55,12 +55,12 @@ function validateAndBuildInfo(operation) {
     var sof2 = rows[i+1];
 
     var validity = doSofValidation(rows[i], operation);
-    if(validity.error != null) {
+    if(validity.error != "") {
        return validity;
     }
 
     validity = doSofValidation(rows[i + 1], operation);
-    if(validity != null) {
+    if(validity.error != "") {
        return validity;
     }
 
@@ -121,7 +121,7 @@ function doSofValidation(row, operation) {
      commence = dateTime.parsedDate;
    }
    
-   var complete = buildDateTime($F(operation + '_time_end_date'), 
+   dateTime = buildDateTime($F(operation + '_time_end_date'), 
       $F(operation + '_time_end_time'),
       "complete Date");
 
@@ -177,8 +177,9 @@ function doSofValidation(row, operation) {
 function addRow(operation, action) {
   
   var val = validateAndBuildInfo(operation);
-  if(action == "link")
-  if(!val) {
+
+  if(val.error != "") {
+    alert(val.error);
     return false;
   }
   var from_date = val.from;
@@ -193,7 +194,11 @@ function addRow(operation, action) {
   var length = sofSet.getElementsByClassName('row').length;
 
   if(complete.compareTo(to) == 0) {
-    alert("To is equal to Complete date");
+    // Don't error out if the action is a tab. We want to display the 
+    // error only if user explicitly clicked on add row.
+    if(action == "link") {
+       alert("To is equal to Complete date");
+    }
     return false;
   }
    /* 
@@ -235,11 +240,11 @@ function addRow(operation, action) {
    input.setAttribute('class','time-info-text-time');
    input.setAttribute('className','time-info-text-time');
    input.setAttribute('type','text');
-   var id = 'from_time_' + operation + '_' + length;
-   input.setAttribute('id', id);
+   var fromTimeId = 'from_time_' + operation + '_' + length;
+   input.setAttribute('id', fromTimeId);
    input.setAttribute('name',operation+'[][from_time]');
    input.setAttribute('value',to_time);
-   input.onblur = function() { validateTimeFormat(id)};
+   input.onblur = function() { validateTimeFormat(fromTimeId)};
    row.appendChild(input);
 
    var label = document.createElement('label');
@@ -264,17 +269,17 @@ function addRow(operation, action) {
    input.setAttribute('class','time-info-text-time');
    input.setAttribute('className','time-info-text-time');
    input.setAttribute('type','text');
-   var id = 'to_time_' + operation + '_' + length;
-   input.setAttribute('id', id);
+   var toTimeId = 'to_time_' + operation + '_' + length;
+   input.setAttribute('id', toTimeId);
    input.setAttribute('name',operation+'[][to_time]');
    input.setAttribute('value',"hh.mm");
    input.onfocus = function() {if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}};
-   input.onblur = function() { validateTimeFormat(id)};
+   input.onblur = function() { validateTimeFormat(toTimeId)};
    row.appendChild(input);
 
    input = document.createElement('select')
-   var id = 'ttc_' + operation + '_' + length;
-   input.setAttribute('id', id);
+   var ttcId = 'ttc_' + operation + '_' + length;
+   input.setAttribute('id', ttcId);
    input.setAttribute('name',operation+'[][timeToCount]');
    var TIME_TO_COUNT = ['Full/Normal', 'Rain/Bad Weather', 'Not to count', 'Shifting', 'Half', 'Partial', 'Always partial','Always excluded', 'Waiting','Full even if S/H', 'Partial even if S/H']
    for(var i=0; i<TIME_TO_COUNT.length; i++) {
@@ -283,15 +288,14 @@ function addRow(operation, action) {
    row.appendChild(input);
 
    input = document.createElement('input')
-   var id = 'pct_' + operation + '_' + length;
-   input.setAttribute('id', id);
+   var pctId = 'pct_' + operation + '_' + length;
+   input.setAttribute('id', pctId);
    input.setAttribute('class','pct');
    input.setAttribute('className','pct');
    input.setAttribute('type','text');
    input.setAttribute('name',operation+'[][val]');
    input.onblur = function() { updateRunningInfo(operation, length);};
-   id = 'ttc_' + operation + '_' + length;
-   input.onfocus = function() { fillPct(id);};
+   input.onfocus = function() { fillPct(ttcId);};
    row.appendChild(input);
 
    input = document.createElement('input')
@@ -299,6 +303,7 @@ function addRow(operation, action) {
    input.setAttribute('className','rem');
    input.setAttribute('type','text');
    input.setAttribute('name',operation+'[][remarks]');
+   input.onblur = function() { addRow(operation, 'tab')};
    row.appendChild(input);
    sofSet.appendChild(row);
 }
@@ -331,7 +336,7 @@ function getDay(d) {
 
 function updateRunningInfo(operation, index) {
   var val = validateAndBuildInfo(operation);
-  if(val.error != null) {
+  if(val.error != "") {
     alert(val.error);
     return false;
   }
@@ -425,13 +430,22 @@ function deleteRow(num) {
 }
 
 function validateTimeFormat(ele) {
-  time = $F(ele);
+  var time = $F(ele);
   var regex = /[0-9][0-9]\.[0-9][0-9]/;
   if(!regex.test(time)) {
-    alert("Please enter the time in the format hh.mm");
+    alert("Please enter the time in format hh.mm");
     return false;
   }
+  return true;
+}
 
+function validateDateFormat(ele) {
+  var enteredDate = $F(ele);
+  var regex = /[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]/;
+  if(!regex.test(enteredDate)) {
+    alert("Please enter the date in format dd.mm.yy");
+    return false;
+  }
   return true;
 }
 

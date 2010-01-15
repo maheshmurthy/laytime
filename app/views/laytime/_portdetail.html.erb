@@ -58,12 +58,12 @@
    </li>
    <li>
     <%= f.label :time_start, 'Laytime Commenced', :class => 'stdlabel' %>
-    <%= f.text_field 'time_start_date_' + operation, :id => operation + '_time_start_date', :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => portdetail.time_start_date_string, :maxlength => 10, :onfocus => "if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}" %>
+    <%= f.text_field 'time_start_date_' + operation, :id => operation + '_time_start_date', :name => 'portdetail[][time_start_date]', :class => 'stdtextbox', :value => portdetail.time_start_date_string, :maxlength => 10, :onfocus => "if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}", :onblur => "validateDateFormat('"  + operation + "_time_start_date');" %>
     <%= f.text_field 'time_start_time_' + operation, :id => operation + '_time_start_time', :name => 'portdetail[][time_start_time]', :class => 'stdtextbox', :value => portdetail.time_start_time_string, :maxlength => 10, :onfocus => "if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}", :onblur => "validateTimeFormat('"  + operation + "_time_start_time');" %>
     </li>
     <li>
     <%= f.label :time_end, 'Laytime Completed', :class => 'stdlabel'  %>
-    <%= f.text_field 'time_end_date_' + operation, :id => operation + '_time_end_date', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10, :onfocus => "if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}" %>
+    <%= f.text_field 'time_end_date_' + operation, :id => operation + '_time_end_date', :name => 'portdetail[][time_end_date]', :class => 'stdtextbox', :value => portdetail.time_end_date_string, :maxlength => 10, :onfocus => "if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}", :onblur => "validateDateFormat('"  + operation + "_time_end_date');"  %>
     <%= f.text_field 'time_end_time_' + operation, :id => operation + '_time_end_time', :name => 'portdetail[][time_end_time]', :class => 'stdtextbox', :value => portdetail.time_end_time_string, :maxlength => 10, :onfocus => "if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}", :onblur => "validateTimeFormat('"  + operation + "_time_end_time');" %>
     </li>
     <li>
