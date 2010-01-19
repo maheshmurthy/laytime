@@ -76,6 +76,11 @@ span.fieldwithErrors input {
   border: 1px solid red;
 }
 
+.error {
+  color: red;
+  font-size: 12px;
+}
+
 .summary-heading {
   font-style: italic;
   font-size: 20px;

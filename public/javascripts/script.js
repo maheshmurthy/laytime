@@ -9,23 +9,26 @@ function pad(val) {
 
 function buildDateTime(input_date, input_time, input_type) {
   var dateTime = {
-    error: null, 
-    parsedDate: null
+    error: null,
+    parsedDate: null,
+    obj: null
   }
-  var parsedDate= Date.parseExact(input_date, "dd.MM.yy");
+  var parsedDate= Date.parseExact(input_date.value, "dd.MM.yy");
 
   if(parsedDate == null) {
-    dateTime.error = 'Please enter the date in format dd.mm.yy for ' + input_type;
+    dateTime.error = 'Please enter the date in format dd.mm.yy';
+    dateTime.obj = input_date;
     return dateTime;
   }
 
-  var hr = parseInt(input_time.split('.')[0], 10);
-  var min = parseInt(input_time.split('.')[1], 10);
+  var hr = parseInt(input_time.value.split('.')[0], 10);
+  var min = parseInt(input_time.value.split('.')[1], 10);
 
   try {
     parsedDate.set({hour: hr, minute: min});
   } catch(error) {
-    dateTime.error = 'Please make sure the hour and minute values are valid for ' + input_type;
+    dateTime.error = 'Please make sure the hour and minute values are valid';
+    dateTime.obj = input_time;
     return dateTime;
   }
   dateTime.parsedDate = parsedDate;
@@ -55,12 +58,12 @@ function validateAndBuildInfo(operation) {
     var sof2 = rows[i+1];
 
     var validity = doSofValidation(rows[i], operation);
-    if(validity.error != "") {
+    if(validity.error != "" && validity.error != null) {
        return validity;
     }
 
     validity = doSofValidation(rows[i + 1], operation);
-    if(validity.error != "") {
+    if(validity.error != "" && validity.error != null) {
        return validity;
     }
 
@@ -73,7 +76,10 @@ function validateAndBuildInfo(operation) {
 
     if((to_date != from_date) || (to_time != from_time)) {
       validity.error = "The facts should be continuous. Please correct the from date of fact " + (i + 2) + " to match the until date of fact " + (i + 1) + " for " + operation;
+      validity.obj = rows[i+1];
       return validity;
+    } else {
+      removeErrorNode(rows[i+1]);
     }
   }
   validity.mins = usedMins;
@@ -82,24 +88,27 @@ function validateAndBuildInfo(operation) {
 
 function doSofValidation(row, operation) {
   var info = {
-    error: ''
+    error: null,
+    obj: null
   }
 
-  var dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[0].value, 
-       row.getElementsByClassName('time-info-text-time')[0].value,
+  var dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[0],
+       row.getElementsByClassName('time-info-text-time')[0],
        "From");
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
+     info.obj = dateTime.obj;
      return info;
    } else {
      from = dateTime.parsedDate;
    }
 
-   dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[1].value, 
-      row.getElementsByClassName('time-info-text-time')[1].value,
+   dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[1],
+      row.getElementsByClassName('time-info-text-time')[1],
       "Until");
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
+     info.obj = dateTime.obj;
      return info;
    } else {
      to = dateTime.parsedDate;
@@ -107,26 +116,29 @@ function doSofValidation(row, operation) {
 
    if(from > to) {
      info.error = 'From can not be greater than Until. Please correct and try again';
+     info.obj = row.obj;
      return info;
    }
 
-   dateTime = buildDateTime($F(operation + '_time_start_date'), 
-      $F(operation + '_time_start_time'),
+   dateTime = buildDateTime($(operation + '_time_start_date'),
+      $(operation + '_time_start_time'),
       "Commence Date");
 
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
+     info.obj = dateTime.obj;
      return info;
    } else {
      commence = dateTime.parsedDate;
    }
    
-   dateTime = buildDateTime($F(operation + '_time_end_date'), 
-      $F(operation + '_time_end_time'),
+   dateTime = buildDateTime($(operation + '_time_end_date'),
+      $(operation + '_time_end_time'),
       "complete Date");
 
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
+     info.obj = dateTime.obj;
      return info;
    } else {
      complete = dateTime.parsedDate;
@@ -137,32 +149,44 @@ function doSofValidation(row, operation) {
 
    if(from < commence) {
      info.error = 'From can not be less than laytime commence date';
+     info.obj = row;
      return info;
    }
 
    if(from >= complete) {
      info.error = 'From can not be greater than laytime complete date';
+     info.obj = row;
      return info;
    }
 
    if(to <= commence) {
-     info.error = 'To can not be less than laytime commence date';
+     info.error = 'Until can not be less than laytime commence date';
+     info.obj = row;
      return info;
    }
 
    if(to > complete) {
-     info.error = 'To can not be greater than laytime complete date';
+     info.error = 'Until can not be greater than laytime complete date';
+     info.obj = row;
      return info;
    }
 
-   var pct = row.getElementsByClassName('pct')[0].value;
+   // If control reached here, that means everything looks fine. Remove row error node if there is one.
 
-   if(pct == "") {
+   removeErrorNode(row);
+
+   var pct = row.getElementsByClassName('pct')[0];
+
+   if(pct.value == "") {
      info.error = "Please enter percentage"; 
+     info.obj = pct;
      return info;
+   } else {
+     removeErrorNode(pct);
    }
 
-   var used = Math.round(((to - from)*(pct/100))/(1000*60));
+
+   var used = Math.round(((to - from)*(pct.value/100))/(1000*60));
 
    info.from = from;
    info.to = to;
@@ -178,8 +202,8 @@ function addRow(operation, action) {
   
   var val = validateAndBuildInfo(operation);
 
-  if(val.error != "") {
-    alert(val.error);
+  if(val.error != "" && val.error != null) {
+    addErrorNode(val.obj, val.error);
     return false;
   }
   var from_date = val.from;
@@ -197,7 +221,7 @@ function addRow(operation, action) {
     // Don't error out if the action is a tab. We want to display the 
     // error only if user explicitly clicked on add row.
     if(action == "link") {
-       alert("To is equal to Complete date");
+       alert("Until is equal to Complete date. You can not add any more facts");
     }
     return false;
   }
@@ -261,7 +285,7 @@ function addRow(operation, action) {
    input.setAttribute('id','to_date_'+operation+'_'+length);
    input.setAttribute('name',operation+'[][to_date]');
    input.setAttribute('value',"dd.mm.yy");
-   input.onblur = function() { displayDayLabel(this.value, 'to', operation, length); };
+   input.onblur = function() { displayDayLabel(this, 'to', operation, length); };
    input.onfocus = function() {if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}};
    row.appendChild(input);
 
@@ -308,9 +332,16 @@ function addRow(operation, action) {
    sofSet.appendChild(row);
 }
 
-function displayDayLabel(value, type, operation, index) {
+function displayDayLabel(node, type, operation, index) {
+  value = node.value;
   var element = $(type + '_' + operation + '_' + index);
-  var d = Date.parseExact(value, "dd.MM.yy");
+  var d = Date.parseExact(value, "dd.mm.yy");
+  if(d == null) {
+    addErrorNode(node, "Please enter the date in format dd.mm.yy");
+    return;
+  } else {
+    removeErrorNode(node);
+  }
   element.innerHTML = getDay(d);
 }
 
@@ -336,8 +367,8 @@ function getDay(d) {
 
 function updateRunningInfo(operation, index) {
   var val = validateAndBuildInfo(operation);
-  if(val.error != "") {
-    alert(val.error);
+  if(val.error != "" && val.error != null) {
+    addErrorNode(val.obj, val.error);
     return false;
   }
 
@@ -354,12 +385,12 @@ function updateRunningInfo(operation, index) {
   var allowance = $F(operation+'_allowance');
 
   if(quantity == "") {
-    alert("Please fill the cargo quantity");
+    addErrorNode($(operation + '_quantity'), "Please fill the cargo quantity");
     return false;
   }
 
   if(allowance == "") {
-    alert("Please fill the allowance");
+    addErrorNode($(operation + '_allowance'), "Please fill the allowance");
     return false;
   }
 
@@ -405,14 +436,6 @@ function calculateAmount(availMins, demurrage, despatch) {
   }
 }
 
-function validateAndUpdateFields(operation) {
-  if($F(operation + '_demurrage') == "") {
-    alert("Please enter the demurrage value");
-  } else {
-    $(operation + '_despatch').value = $F(operation + '_demurrage')/2;
-  }
-}
-
 function getDateDiffString(totalMins) {
   totalMins = Math.abs(totalMins)
   var days = parseInt(totalMins/(60*24));
@@ -433,20 +456,24 @@ function validateTimeFormat(ele) {
   var time = $F(ele);
   var regex = /[0-9][0-9]\.[0-9][0-9]/;
   if(!regex.test(time)) {
-    alert("Please enter the time in format hh.mm");
+    addErrorNode($(ele), "Enter the time in format hh.mm");
     return false;
+  } else {
+    removeErrorNode($(ele));
+    return true;
   }
-  return true;
 }
 
 function validateDateFormat(ele) {
   var enteredDate = $F(ele);
   var regex = /[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]/;
   if(!regex.test(enteredDate)) {
-    alert("Please enter the date in format dd.mm.yy");
+    addErrorNode($(ele), "Enter the date in format dd.mm.yy");
     return false;
+  } else {
+    removeErrorNode($(ele));
+    return true;
   }
-  return true;
 }
 
 function fillPct(ele) {
@@ -454,5 +481,36 @@ function fillPct(ele) {
     // ele id is ttc_operation_counter. Replace ttc with pct and fill it with the value
     var pct = ele.replace('ttc', 'pct');
     $(pct).value = 100;
+  }
+}
+
+function addErrorNode(obj, message) {
+  if(obj.hasError == null) {
+    var sp = document.createElement('span');
+    sp.setAttribute('class', 'error');
+    sp.appendChild(document.createTextNode(message));
+    obj.hasError = sp;
+    obj.parentNode.appendChild(sp);
+  }
+}
+
+function removeErrorNode(obj) {
+  if(obj.hasError) {
+    obj.parentNode.removeChild(obj.hasError);
+    obj.hasError = null;
+  }
+}
+
+function validateExistence(obj) {
+  if(obj.value == '') {
+    addErrorNode(obj, 'The field can not be empty');
+  } else {
+    removeErrorNode(obj);
+  }
+}
+
+function autoFillDespatch(operation) {
+  if(($F(operation + '_despatch') == '')) {
+    $(operation + '_despatch').value = $F(operation + '_demurrage')/2;
   }
 }
