@@ -333,9 +333,9 @@ function addRow(operation, action) {
 }
 
 function displayDayLabel(node, type, operation, index) {
-  value = node.value;
+  var value = node.value;
   var element = $(type + '_' + operation + '_' + index);
-  var d = Date.parseExact(value, "dd.mm.yy");
+  var d = Date.parseExact(value, "dd.MM.yy");
   if(d == null) {
     addErrorNode(node, "Please enter the date in format dd.mm.yy");
     return;
