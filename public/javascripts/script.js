@@ -210,7 +210,7 @@ function addRow(operation, action) {
   var from_time = from_date.getHours() + '.' + from_date.getMinutes();
   var to = val.to;
   var to_date = pad(to.getDate()) + "." + pad((to.getMonth() + 1)) + "." + (to.getFullYear()+'').substring(2);
-  var to_time = to.getHours() + '.' + to.getMinutes();
+  var to_time = pad(to.getHours()) + '.' + pad(to.getMinutes());
   var commence = val.commence;
   var complete = val.complete;
   var operationType = $(operation);
@@ -319,6 +319,7 @@ function addRow(operation, action) {
    input.setAttribute('className','pct');
    input.setAttribute('type','text');
    input.setAttribute('name',operation+'[][val]');
+   input.setAttribute('value', "100");
    input.onblur = function() { updateRunningInfo(operation, length);};
    row.appendChild(input);
 
