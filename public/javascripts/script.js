@@ -309,6 +309,7 @@ function addRow(operation, action) {
    for(var i=0; i<TIME_TO_COUNT.length; i++) {
      input.options[i] = new Option(TIME_TO_COUNT[i], TIME_TO_COUNT[i]);
    }
+   input.onChange = function() { fillPct(ttcId);};
    row.appendChild(input);
 
    input = document.createElement('input')
@@ -319,7 +320,6 @@ function addRow(operation, action) {
    input.setAttribute('type','text');
    input.setAttribute('name',operation+'[][val]');
    input.onblur = function() { updateRunningInfo(operation, length);};
-   input.onfocus = function() { fillPct(ttcId);};
    row.appendChild(input);
 
    input = document.createElement('input')
@@ -477,11 +477,19 @@ function validateDateFormat(ele) {
 }
 
 function fillPct(ele) {
+  var unaccounted = ['Rain/Bad Weather', 'Not to count', 'Shifting', 'Waiting'];
+  var pct = ele.replace('ttc', 'pct');
+  var value = "";
   if($F(ele) == "Full/Normal") {
-    // ele id is ttc_operation_counter. Replace ttc with pct and fill it with the value
-    var pct = ele.replace('ttc', 'pct');
-    $(pct).value = 100;
+    /* For a given fact, the id of ele (which is the drop down) is ttc_operation_counter. 
+       The corresponding id of the pct element is pct_operation_counter. So, just
+       replace the substring ttc with pct and you will get the pct element which you want
+       to autofill. */
+    value = 100;
+  } else if(unaccounted.indexOf($F(ele)) > -1) {
+    value = 0;
   }
+  $(pct).value = value;
 }
 
 function addErrorNode(obj, message) {
