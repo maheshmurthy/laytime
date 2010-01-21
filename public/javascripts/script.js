@@ -115,8 +115,8 @@ function doSofValidation(row, operation) {
    }
 
    if(from > to) {
-     info.error = 'From can not be greater than Until. Please correct and try again';
-     info.obj = row.obj;
+     info.error = 'From can not be greater than Until.';
+     info.obj = row;
      return info;
    }
 
@@ -198,7 +198,7 @@ function doSofValidation(row, operation) {
    return info;
 }
 
-function addRow(operation, action, length) {
+function addRow(operation, action, index) {
   
   var val = validateAndBuildInfo(operation);
 
@@ -217,13 +217,27 @@ function addRow(operation, action, length) {
   var sofSet = operationType.getElementsByClassName('sof')[0];
   var length = sofSet.getElementsByClassName('row').length;
 
-  if(complete.compareTo(to) == 0 && action != "insert") {
+  if(action == "insert" && index != length) {
+    /* Override the to_date and to_time because you don't want to autofill 
+    the from of the new row with the last row but with the values in 
+    the row which invoked the insert.
+
+    The condition index != length is required because if the insert was invoked 
+    from last row, let the normal flow happen such as validation because that
+    case is no different from "add fact" link invocation.
+    */
+    var currentRow = document.getElementById(index);
+    to_date = $F('to_date_' + operation + '_' + index);
+    to_time = $F('to_time_' + operation + '_' + index);
+  } else {
+    if(complete.compareTo(to) == 0) {
     // Don't error out if the action is a tab. We want to display the 
     // error only if user explicitly clicked on add row.
-    if(action == "link") {
-       alert("Until is equal to Complete date. You can not add any more facts");
+      if(action == "link") {
+        alert("Until is equal to Complete date. You can not add any more facts");
+      }
+      return false;
     }
-    return false;
   }
 
    /*
@@ -242,6 +256,7 @@ function addRow(operation, action, length) {
    img.setAttribute('className', 'cancel');
    img.setAttribute('id', length);
    img.setAttribute('src', '/images/add.png');
+   img.setAttribute('title', 'Delete Fact');
    img.onclick = function() { addRow(operation, 'insert', length)};
    row.appendChild(img);
 
@@ -251,6 +266,7 @@ function addRow(operation, action, length) {
    img.setAttribute('className', 'cancel');
    img.setAttribute('id', length);
    img.setAttribute('src', '/images/delete.png');
+   img.setAttribute('title', 'Insert Fact');
    img.onclick = function() { deleteRow(length)};
    row.appendChild(img);
 
@@ -271,7 +287,7 @@ function addRow(operation, action, length) {
    input.setAttribute('value',to_date);
    row.appendChild(input);
 
-   input = document.createElement('input')
+   input = document.createElement('input');
    input.setAttribute('class','time-info-text-time');
    input.setAttribute('className','time-info-text-time');
    input.setAttribute('type','text');
@@ -342,9 +358,9 @@ function addRow(operation, action, length) {
    input.onblur = function() { addRow(operation, 'tab')};
    row.appendChild(input);
 
-   if(value != null) {
-     // This is a node being inserted in between two facts.
-     var existingRow = $(value);
+   if(action == "insert") {
+     // This row needs to be inserted in between two facts.
+     var existingRow = document.getElementById(index);
      insertAfter(existingRow, row);
    } else {
      sofSet.appendChild(row);
