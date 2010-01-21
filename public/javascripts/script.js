@@ -198,7 +198,7 @@ function doSofValidation(row, operation) {
    return info;
 }
 
-function addRow(operation, action) {
+function addRow(operation, action, length) {
   
   var val = validateAndBuildInfo(operation);
 
@@ -217,7 +217,7 @@ function addRow(operation, action) {
   var sofSet = operationType.getElementsByClassName('sof')[0];
   var length = sofSet.getElementsByClassName('row').length;
 
-  if(complete.compareTo(to) == 0) {
+  if(complete.compareTo(to) == 0 && action != "insert") {
     // Don't error out if the action is a tab. We want to display the 
     // error only if user explicitly clicked on add row.
     if(action == "link") {
@@ -225,7 +225,8 @@ function addRow(operation, action) {
     }
     return false;
   }
-   /* 
+
+   /*
     To of this sof is the from of next. 
     Get the to of the last sof and populate the from of new sof
    */
@@ -240,9 +241,19 @@ function addRow(operation, action) {
    img.setAttribute('class', 'cancel');
    img.setAttribute('className', 'cancel');
    img.setAttribute('id', length);
-   img.setAttribute('src', '/images/cancel.png');
+   img.setAttribute('src', '/images/add.png');
+   img.onclick = function() { addRow(operation, 'insert', length)};
+   row.appendChild(img);
+
+   var img = document.createElement('img');
+   img.setAttribute('alt', 'Cancel');
+   img.setAttribute('class', 'cancel');
+   img.setAttribute('className', 'cancel');
+   img.setAttribute('id', length);
+   img.setAttribute('src', '/images/delete.png');
    img.onclick = function() { deleteRow(length)};
    row.appendChild(img);
+
 
    var label = document.createElement('label');
    label.setAttribute('id', 'from_' + operation + '_' + length);
@@ -330,7 +341,18 @@ function addRow(operation, action) {
    input.setAttribute('name',operation+'[][remarks]');
    input.onblur = function() { addRow(operation, 'tab')};
    row.appendChild(input);
-   sofSet.appendChild(row);
+
+   if(value != null) {
+     // This is a node being inserted in between two facts.
+     var existingRow = $(value);
+     insertAfter(existingRow, row);
+   } else {
+     sofSet.appendChild(row);
+   }
+}
+
+function insertAfter(referenceNode, newNode) {
+    referenceNode.parentNode.insertBefore( newNode, referenceNode.nextSibling );
 }
 
 function displayDayLabel(node, type, operation, index) {

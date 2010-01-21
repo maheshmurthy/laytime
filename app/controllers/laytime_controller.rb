@@ -42,13 +42,7 @@ class LaytimeController < ApplicationController
     end
   end
 
-
   def load
-    unless current_user
-      redirect_to login_path
-      return
-    end
-
     clear_session
     cp_detail = CpDetail.find(params[:id])
 
@@ -103,7 +97,6 @@ class LaytimeController < ApplicationController
     report.loading_fact_report_list = loading_fact_report_list
     report.discharging_fact_report_list = discharging_fact_report_list
 
-    #create_pdf(cp_detail.id.to_s+".pdf", report)
     return report
   end
 
@@ -113,6 +106,7 @@ class LaytimeController < ApplicationController
 
   def portdetails
     unless is_cpdetails_valid
+      logger.info session[:cp_detail].errors.inspect
       redirect_to :action => 'cpdetails'
       return
     end
@@ -178,6 +172,7 @@ class LaytimeController < ApplicationController
 
   def result
     unless is_portdetails_valid
+      logger.info session[:port_details].errors.inspect
       redirect_to :action => 'portdetails'
       return
     end
