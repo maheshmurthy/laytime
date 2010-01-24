@@ -1,1 +1,4 @@
+<div id="notice" <% if flash[:warning] %>class="warning"<% end %>>
+  <%= flash[:warning] || flash[:notice] %>
+</div>
 Your 7 day trial has expired. Kindly choose a plan and signup to continue the service.
