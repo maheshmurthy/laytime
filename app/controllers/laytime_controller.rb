@@ -106,7 +106,6 @@ class LaytimeController < ApplicationController
 
   def portdetails
     unless is_cpdetails_valid
-      logger.info session[:cp_detail].errors.inspect
       redirect_to :action => 'cpdetails'
       return
     end
@@ -172,7 +171,6 @@ class LaytimeController < ApplicationController
 
   def result
     unless is_portdetails_valid
-      logger.info session[:port_details].errors.inspect
       redirect_to :action => 'portdetails'
       return
     end
@@ -231,7 +229,6 @@ class LaytimeController < ApplicationController
     end
     @cpdetail = session[:cp_detail]
       if @cpdetail.save
-        logger.info "Saved!"
         @portdetail = session[:port_details][0]
         @portdetail.cp_detail_id = @cpdetail.id
         @portdetail.save

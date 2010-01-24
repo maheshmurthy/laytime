@@ -202,10 +202,18 @@ function addRow(operation, action, index) {
   
   var val = validateAndBuildInfo(operation);
 
+  if(action == "insert") {
+    /* Just validate this row. Other rows will be validated eventually. This condition 
+       is required for the scenario when user is in the middle of filling facts and want
+       to go up and insert a new row. */
+    val = doSofValidation(document.getElementById(index), operation);
+  } 
+
   if(val.error != "" && val.error != null) {
     addErrorNode(val.obj, val.error);
     return false;
   }
+
   var from_date = val.from;
   var from_time = from_date.getHours() + '.' + from_date.getMinutes();
   var to = val.to;
@@ -251,12 +259,12 @@ function addRow(operation, action, index) {
    row.setAttribute('id', length);
 
    var img = document.createElement('img');
-   img.setAttribute('alt', 'Cancel');
-   img.setAttribute('class', 'cancel');
-   img.setAttribute('className', 'cancel');
+   img.setAttribute('alt', 'Insert');
+   img.setAttribute('class', 'insert');
+   img.setAttribute('className', 'insert');
    img.setAttribute('id', length);
    img.setAttribute('src', '/images/add.png');
-   img.setAttribute('title', 'Delete Fact');
+   img.setAttribute('title', 'Insert Fact');
    img.onclick = function() { addRow(operation, 'insert', length)};
    row.appendChild(img);
 
@@ -266,7 +274,7 @@ function addRow(operation, action, index) {
    img.setAttribute('className', 'cancel');
    img.setAttribute('id', length);
    img.setAttribute('src', '/images/delete.png');
-   img.setAttribute('title', 'Insert Fact');
+   img.setAttribute('title', 'Delete Fact');
    img.onclick = function() { deleteRow(length)};
    row.appendChild(img);
 
@@ -309,6 +317,7 @@ function addRow(operation, action, index) {
    input.setAttribute('class','time-info-text-date');
    input.setAttribute('className','time-info-text-date');
    input.setAttribute('type','text');
+   var toDateId = 'to_date_'+operation+'_'+length;
    input.setAttribute('id','to_date_'+operation+'_'+length);
    input.setAttribute('name',operation+'[][to_date]');
    input.setAttribute('value',"dd.mm.yy");
@@ -325,7 +334,13 @@ function addRow(operation, action, index) {
    input.setAttribute('name',operation+'[][to_time]');
    input.setAttribute('value',"hh.mm");
    input.onfocus = function() {if(this.value == 'hh.mm' || this.value == 'dd.mm.yy') {this.value = '';}};
-   input.onblur = function() { validateTimeFormat(toTimeId)};
+
+   if(action == "insert") {
+     input.onblur = function() { validateTimeFormatAndFixNextRow(toTimeId, toDateId)};
+   } else {
+     input.onblur = function() { validateTimeFormat(toTimeId)};
+   }
+
    row.appendChild(input);
 
    input = document.createElement('select')
@@ -491,6 +506,22 @@ function deleteRow(num) {
   }
 }
 
+function validateTimeFormatAndFixNextRow(toTime, toDate) {
+  if(validateTimeFormat(toTime)) {
+    /* This element is a to_time textbox. This method is invoked only
+       when a row is inserted in middle. See if there is a row next
+       to it. If there is one, update it's from date and time with this row's
+       to date and time.*/
+    var nextRow = $(toTime).parentNode.nextSibling;
+    if(nextRow != null) {
+       var fromDate = nextRow.getElementsByClassName('time-info-text-date')[0];
+       fromDate.value = $F(toDate);
+       var fromTime = nextRow.getElementsByClassName('time-info-text-time')[0];
+       fromTime.value = $F(toTime);
+    }
+  }
+}
+
 function validateTimeFormat(ele) {
   var time = $F(ele);
   var regex = /[0-9][0-9]\.[0-9][0-9]/;
@@ -516,14 +547,15 @@ function validateDateFormat(ele) {
 }
 
 function fillPct(ele) {
-  var unaccounted = ['Rain/Bad Weather', 'Not to count', 'Shifting', 'Waiting'];
+  var unaccounted = ['Rain/Bad Weather', 'Not to count', 'Shifting', 'Waiting', 'Always excluded'];
+  var accounted = ['Full/Normal', 'Full even if S/H']
+  /* For a given fact, the id of ele (which is the drop down) is ttc_operation_counter. 
+     The corresponding id of the pct element is pct_operation_counter. So, just
+     replace the substring ttc with pct and you will get the pct element which you want
+     to autofill. */
   var pct = ele.replace('ttc', 'pct');
   var value = "";
-  if($F(ele) == "Full/Normal") {
-    /* For a given fact, the id of ele (which is the drop down) is ttc_operation_counter. 
-       The corresponding id of the pct element is pct_operation_counter. So, just
-       replace the substring ttc with pct and you will get the pct element which you want
-       to autofill. */
+  if(accounted.indexOf($F(ele)) > -1) {
     value = 100;
   } else if(unaccounted.indexOf($F(ele)) > -1) {
     value = 0;

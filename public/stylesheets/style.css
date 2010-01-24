@@ -72,10 +72,6 @@ html, body {
   margin-right: 100px;
 }
 
-span.fieldwithErrors input {
-  border: 1px solid red;
-}
-
 .error {
   color: red;
   font-size: 12px;
@@ -250,8 +246,9 @@ span.fieldwithErrors input {
     width: 30px;
 }
 
-.cancel {
+.cancel, .insert {
   margin-right: 5px;
+  margin-left: 5px;
 }
 
 #notice {
