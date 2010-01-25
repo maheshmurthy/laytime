@@ -34,8 +34,19 @@
     <%= @report.balance.abs %>
     </li>
 </fieldset>
-<div style="margin-top: 20px; margin-left: 100px;">
+<div style="margin-top: 20px; margin-left: 50px;">
 <%= link_to "View PDF", :action => "generate" %>
+</br>
+<div id="msg"></div>
+  <script>
+  setTimeout("new Effect.Fade('msg');", 2000)
+  </script>
+<%= link_to_remote "Email Report", 
+  :url => {:action => "email_report"}, 
+  :before => "$('spinner').show()",
+  :complete => "$('spinner').hide();",
+  :update => :msg %><img id='spinner' src='../images/spinner.gif' style='display:none;'/>
+</br>
 If you are satisfied with the result, you can save. You can also hit the back button in your browser and make any changes and recalculate.
   <%= button_to "Save", :action => "save_to_db" %>
 </div>

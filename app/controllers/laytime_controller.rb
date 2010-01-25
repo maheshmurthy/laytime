@@ -42,6 +42,26 @@ class LaytimeController < ApplicationController
     end
   end
 
+  def email_report
+    # This involves saving the pdf to the file system
+    # and then sending an email.
+    unless session[:report]
+      redirect_to root_url
+      return
+    end
+    @report = session[:report]
+    Prawn::Document.generate("testme.pdf") do |pdf|
+      generate_pdf(pdf, @report)
+    end
+
+    begin 
+    Notifier.deliver_pdf_report
+      render :text => "The report has been emailed successfully"
+    rescue
+      render :text => "There was an error sending email. Please try again later"
+    end
+  end
+
   def load
     clear_session
     cp_detail = CpDetail.find(params[:id])
