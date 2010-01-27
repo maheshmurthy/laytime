@@ -41,11 +41,9 @@
   <script>
   setTimeout("new Effect.Fade('msg');", 2000)
   </script>
-<%= link_to_remote "Email Report", 
-  :url => {:action => "email_report"}, 
-  :before => "$('spinner').show()",
-  :complete => "$('spinner').hide();",
-  :update => :msg %><img id='spinner' src='../images/spinner.gif' style='display:none;'/>
+<%= link_to "Email Report", 
+    :controller => "report", 
+    :action => "email_report" %>
 </br>
 If you are satisfied with the result, you can save. You can also hit the back button in your browser and make any changes and recalculate.
   <%= button_to "Save", :action => "save_to_db" %>

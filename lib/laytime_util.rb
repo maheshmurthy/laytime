@@ -76,4 +76,11 @@ module LaytimeUtil
     fact_report_list << fact_report
     return fact_report_list
   end
+
+  def ensure_user_logged_in
+    unless current_user
+      redirect_to login_path
+      return
+    end
+  end
 end

@@ -13,13 +13,6 @@ class LaytimeController < ApplicationController
     end
   end
 
-  def ensure_user_logged_in
-    unless current_user
-      redirect_to login_path
-      return
-    end
-  end
-
   def clear_session 
       session[:cp_detail] = nil
       session[:port_details] = nil
