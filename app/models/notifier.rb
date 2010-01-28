@@ -8,15 +8,15 @@ class Notifier < ActionMailer::Base
     body          :edit_password_reset_url => edit_password_reset_url(user.perishable_token)  
   end
 
-  def pdf_report
+  def pdf_report(to, body, filename)
     subject       "Laytime Calculation Report"
     from          "mahesh@mmurthy.com"
-    recipients    "searchmahesh@gmail.com"
+    recipients    to 
     sent_on       Time.now
     part          :content_type => "text/html",
-                  :body => "Please find the attached report with the details."
+                  :body => body
 
-    attachment    :body => File.read("testme.pdf"),
-                  :filename => "testme.pdf"
+    attachment    :body => File.read(filename),
+                  :filename => filename
   end
 end

@@ -1,0 +1,26 @@
+<% if flash[:warning] or flash[:notice] %>
+  <div id="notice" <% if flash[:warning] %>class="warning"<% end %>>
+    <%= flash[:warning] || flash[:notice] %>
+  </div>
+<% end %>
+
+<% form_for @email, :url => { :action => "send_email" } do |f| %>
+
+  <fieldset id="mainset">
+  <ol>
+    <li>
+    <%= f.label :recipients, 'Recipients', :class => 'stdlabel' %> 
+      <%= f.text_field :recipients, :class => 'stdtextbox' %>
+      Enter email addresses separated by comma
+    </li>
+    <li>
+      <%= f.label :body, 'Body', :class => 'stdlabel' %>
+      <%= f.text_area :body, :rows => 10, :cols => 30 %>
+    </li>
+    <%= f.hidden_field :file_name %>
+  <div id="submit">
+    <%= f.submit "Send Email", :class => "submit" %>
+  </div>
+</ol>
+</fieldset>
+<% end %>
