@@ -184,10 +184,10 @@ class LaytimeController < ApplicationController
 
   def result
     unless is_portdetails_valid
+      logger.info "Portdetails invalid. Redirecting"
       redirect_to :action => 'portdetails'
       return
     end
-    #save_to_db
 
     # Do whatever calculations you need to do and then send only those to generate report
     # which are required for display
@@ -205,8 +205,6 @@ class LaytimeController < ApplicationController
                               session[:port_details][1],
                               session[:cp_detail])
     session[:report] = @report
-    #TODO Uncomment this.
-    #clear_session
     respond_to do |format|
       format.html
     end
@@ -387,7 +385,7 @@ class LaytimeController < ApplicationController
     # if the first one satisfies, it wouldn't even go to the
     # second object's invalid method
     
-    # Do Statement of Facts validation as well here because both of they
+    # Do Statement of Facts validation as well here because both of them
     # are in the same page.
 
     loading_facts_invalid = is_facts_invalid('loading')

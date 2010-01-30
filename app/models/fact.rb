@@ -6,6 +6,36 @@ class Fact < ActiveRecord::Base
 
   TIME_TO_COUNT = ['Full/Normal', 'Rain/Bad Weather', 'Not to count', 'Shifting', 'Half', 'Partial', 'Always partial','Always excluded', 'Waiting','Full even if S/H', 'Partial even if S/H']
 
+   def validate
+     begin
+       parse_date(from_date)
+     rescue
+       errors.add_to_base "Fact From date is invalid"
+     end
+
+     begin
+       time = from_time.split('.')
+       Integer(time[0])
+       Integer(time[1])
+     rescue
+       errors.add_to_base "Fact From time is invalid"
+     end
+
+     begin
+       parse_date(to_date)
+     rescue
+       errors.add_to_base "Fact To date is invalid"
+     end
+
+     begin
+       to_time.split('.')
+       Integer(time[0])
+       Integer(time[1])
+     rescue
+       errors.add_to_base "Fact To time is invalid"
+     end
+   end
+
    def from_date_string
      if from
        from.to_s(:custom_date)
@@ -71,12 +101,19 @@ class Fact < ActiveRecord::Base
    end
 
    def merge_fact_date
-     self.from = DateTime.strptime(self.from_date, "%d.%m.%y")
+     self.from = parse_date(from_date)
      time = from_time.split('.')
      self.from = self.from.advance(:hours => time[0].to_i, :minutes => time[1].to_i)
 
-     self.to = DateTime.strptime(self.to_date, "%d.%m.%y")
+     self.to = parse_date(to_date)
      time = to_time.split('.')
      self.to = self.to.advance(:hours => time[0].to_i, :minutes => time[1].to_i)
    end
+
+   private
+
+   def parse_date(date_string)
+     DateTime.strptime(date_string, "%d.%m.%y")
+   end
+
 end

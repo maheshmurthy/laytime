@@ -19,24 +19,12 @@
   <ol class="tab">
     <li><a href="#loading">Loading at <%= session[:cp_detail].from %></a></li>
     <li><a href="#discharging">Discharging at <%= session[:cp_detail].to %></a></li>
-
-  <% unless @portdetails[0].errors.empty?  %>
-    <li>Please correct all the errors in loading port details</li>
-  <% end %>
-
-  <% unless @portdetails[1].errors.empty?  %>
+  </ol>
+  </fieldset>
+  <fieldset id="mainset">
+  <% if !@portdetails[1].errors.empty? || facts_has_errors(@discharging_facts) %>
     <li>Please correct all the errors in discharging port details</li>
   <% end %>
-
-  <% if facts_has_errors(@loading_facts) %>
-    <li>Please correct all the errors in loading facts </li>
-  <% end %>
-
-  <% if facts_has_errors(@discharging_facts) %>
-    <li>Please correct all the errors in discharging facts </li>
-  <% end %>
-
-  </ol>
   </fieldset>
   <%= render :partial => 'portdetail', :locals => {:f => f, :loading_facts => @loading_facts, :discharging_facts => @discharging_facts, :additional_time => @additional_time, :after_pre_advise => @after_pre_advise, :report_card => @report_card}, :collection => @portdetails %>
     <div id="submit">

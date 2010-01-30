@@ -75,7 +75,7 @@ function validateAndBuildInfo(operation) {
     var from_time = sof2.getElementsByClassName('time-info-text-time')[0].value;
 
     if((to_date != from_date) || (to_time != from_time)) {
-      validity.error = "The facts should be continuous. Please correct the from date of fact " + (i + 2) + " to match the until date of fact " + (i + 1) + " for " + operation;
+      validity.error = "The facts should be continuous. Please correct the from date of fact " + (i + 2) + " to match the To date of fact " + (i + 1) + " for " + operation;
       validity.obj = rows[i+1];
       return validity;
     } else {
@@ -93,8 +93,7 @@ function doSofValidation(row, operation) {
   }
 
   var dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[0],
-       row.getElementsByClassName('time-info-text-time')[0],
-       "From");
+       row.getElementsByClassName('time-info-text-time')[0]);
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
      info.obj = dateTime.obj;
@@ -104,8 +103,7 @@ function doSofValidation(row, operation) {
    }
 
    dateTime = buildDateTime(row.getElementsByClassName('time-info-text-date')[1],
-      row.getElementsByClassName('time-info-text-time')[1],
-      "Until");
+      row.getElementsByClassName('time-info-text-time')[1]);
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
      info.obj = dateTime.obj;
@@ -115,14 +113,13 @@ function doSofValidation(row, operation) {
    }
 
    if(from > to) {
-     info.error = 'From can not be greater than Until.';
+     info.error = 'From can not be greater than To.';
      info.obj = row;
      return info;
    }
 
    dateTime = buildDateTime($(operation + '_time_start_date'),
-      $(operation + '_time_start_time'),
-      "Commence Date");
+      $(operation + '_time_start_time'));
 
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
@@ -133,8 +130,7 @@ function doSofValidation(row, operation) {
    }
    
    dateTime = buildDateTime($(operation + '_time_end_date'),
-      $(operation + '_time_end_time'),
-      "complete Date");
+      $(operation + '_time_end_time'));
 
    if(dateTime.parsedDate == null) {
      info.error = dateTime.error;
@@ -160,13 +156,13 @@ function doSofValidation(row, operation) {
    }
 
    if(to <= commence) {
-     info.error = 'Until can not be less than laytime commence date';
+     info.error = 'To can not be less than laytime commence date';
      info.obj = row;
      return info;
    }
 
    if(to > complete) {
-     info.error = 'Until can not be greater than laytime complete date';
+     info.error = 'To can not be greater than laytime complete date';
      info.obj = row;
      return info;
    }
@@ -242,7 +238,7 @@ function addRow(operation, action, index) {
     // Don't error out if the action is a tab. We want to display the 
     // error only if user explicitly clicked on add row.
       if(action == "link") {
-        alert("Until is equal to Complete date. You can not add any more facts");
+        alert("To is equal to Complete date. You can not add any more facts");
       }
       return false;
     }

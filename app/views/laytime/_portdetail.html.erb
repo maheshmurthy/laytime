@@ -11,7 +11,7 @@
     amount = report_card.loading_amount
   %>
   <ol id="loading">
-    <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
+    <%= error_messages_for 'portdetail', :object => [portdetail, facts], :header_message => 'Please correct the following errors and try again' %>
   <% else %>
   <% 
     facts = discharging_facts 
@@ -24,7 +24,7 @@
     amount = report_card.discharging_amount
   %>
   <ol id="discharging">
-    <%= error_messages_for 'portdetail', :object => portdetail, :header_message => 'Please correct the following errors and try again' %>
+    <%= error_messages_for 'portdetail', :object => [portdetail, facts], :header_message => 'Please correct the following errors and try again' %>
 <% end %>
     <%= f.hidden_field :id, :name => 'portdetail[][id]', :value => portdetail.id %>
     <%= f.hidden_field :operation, :name => 'portdetail[][operation]', :value => portdetail.operation %>
@@ -106,7 +106,7 @@
       <table id="softable">
         <tr>
         <th style="width: 170px;">From</th>
-        <th style="width: 170px;">Until</th>
+        <th style="width: 170px;">To</th>
         <th style="width: 110px;">Time To Count</th>
         <th style="width: 50px;">Pct (%)</th>
         <th style="width: 170px;">Remarks</th>
