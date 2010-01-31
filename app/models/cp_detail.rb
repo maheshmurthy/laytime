@@ -10,7 +10,7 @@ class CpDetail < ActiveRecord::Base
 
    default_value_for :once_on_demurrage, DEMURRAGE[0]
 
-   HUMANIZED_COLLUMNS = {:cpName => "Form name", :number => "No."}
+   HUMANIZED_COLLUMNS = {:cpName => "Charter Party Name", :number => "No."}
    def self.human_attribute_name(attribute)
      HUMANIZED_COLLUMNS[attribute.to_sym] || super
    end
