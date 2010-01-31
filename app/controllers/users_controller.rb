@@ -37,10 +37,15 @@ class UsersController < ApplicationController
     @user.password = password
     @user.password_confirmation = password
 
-      @user.save!
+    respond_to do |format|
+    if @user.save
       @user.deliver_confirmation_email!
-      flash[:notice] = "An email notification has been sent to the new user"
-    redirect_to manage_users_path
+      flash[:notice] = 'Succesffully added! An email has been sent to the user.'
+      format.html { redirect_to manage_users_path }
+    else
+      format.html { render :action => "new_user" }
+    end
+    end
   end
 
   def manage_users
