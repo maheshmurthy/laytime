@@ -32,7 +32,14 @@ class UsersController < ApplicationController
   end
 
   def add_new_user
-    flash[:notice] = "An email notification has been sent to the new user"
+    @user = User.new(params[:user])
+    password = random_password(10)
+    @user.password = password
+    @user.password_confirmation = password
+
+      @user.save!
+      @user.deliver_confirmation_email!
+      flash[:notice] = "An email notification has been sent to the new user"
     redirect_to manage_users_path
   end
 
@@ -109,5 +116,11 @@ class UsersController < ApplicationController
       format.html { redirect_to(users_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+  def random_password(len)
+    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+    return Array.new(10){||chars[rand(chars.size)]}.join
   end
 end
