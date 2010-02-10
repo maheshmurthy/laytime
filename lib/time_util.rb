@@ -26,12 +26,6 @@ module TimeUtil
     time.strftime("%d-%m-%Y %H.%M") if time
   end
 
-  def to_hr_min(value)                                                                  
-    hr = value/60                                                                       
-    min = value % 60                                                                    
-    "%02d.%02d" % [hr,min]                                                              
-  end                                                                                   
-
   def pretty_time_mins(mins)
     time_info = to_time_info(mins)
     time_info.to_s

@@ -1,7 +1,7 @@
 module PdfUtil
   def write_summary(pdf, time_available, time_used, diff, amt)
     pdf.text "<b>Time Allowed</b> " + time_available.to_s
-    pdf.text "<b>Time Used</b> " + pad(time_used.hours) +  "." + pad(time_used.mins)
+    pdf.text "<b>Time Used</b> " + time_used.to_s
     if time_available.greater_than(time_used)
       pdf.text "<b>Time saved</b> " + diff.to_s
     else
