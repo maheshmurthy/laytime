@@ -17,6 +17,11 @@ class PortDetail < ActiveRecord::Base
    include TimeUtil
    include LaytimeUtil 
 
+   HUMANIZED_COLLUMNS = {:quantity => "Cargo Quantity"}
+   def self.human_attribute_name(attribute)
+     HUMANIZED_COLLUMNS[attribute.to_sym] || super
+   end
+
    def time_start_date_string
      if time_start
        time_start.to_s(:custom_date)
